@@ -1204,6 +1204,85 @@
     </div>
   </div>
 
+  <!-- Add Minor Family Member Modal Dialog -->
+  <div class="circle-modal-overlay" id="circleAddMinorModal">
+    <div class="circle-modal-box">
+      <div class="circle-modal-header">
+        <h3>➕ Add Minor to UPI Circle</h3>
+        <button class="circle-modal-close" onclick="window.EasyCircle.closeAddMinorModal()">✕</button>
+      </div>
+      <div class="circle-modal-body">
+        <form id="addMinorForm" onsubmit="window.EasyCircle.handleFormSubmit(event)">
+          <div class="circle-form-group">
+            <label class="circle-form-label">Minor's Full Name</label>
+            <input type="text" id="mName" class="circle-form-input" placeholder="e.g. Aarav Chandra" required autocomplete="off">
+          </div>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+            <div class="circle-form-group">
+              <label class="circle-form-label">Relationship</label>
+              <select id="mRel" class="circle-form-select" required>
+                <option value="Grandson">Grandson</option>
+                <option value="Granddaughter">Granddaughter</option>
+                <option value="Son">Son</option>
+                <option value="Daughter">Daughter</option>
+                <option value="Ward">Ward / Nephew / Niece</option>
+              </select>
+            </div>
+
+            <div class="circle-form-group">
+              <label class="circle-form-label">Age (5 - 17 Years)</label>
+              <input type="number" id="mAge" class="circle-form-input" min="5" max="17" placeholder="e.g. 14" required>
+            </div>
+          </div>
+
+          <div class="circle-form-group">
+            <label class="circle-form-label">Minor's Mobile Number (Optional)</label>
+            <input type="tel" id="mPhone" class="circle-form-input" maxlength="10" placeholder="e.g. 9811223344">
+            <span style="font-size:11.5px; color:var(--text-muted); display:block; margin-top:3px;">
+              Used to assign a delegated UPI ID (e.g. name.last4@easycoin)
+            </span>
+          </div>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+            <div class="circle-form-group">
+              <label class="circle-form-label">Monthly Limit (₹)</label>
+              <input type="number" id="mLimit" class="circle-form-input" min="100" max="15000" placeholder="e.g. 2000" value="2000" required>
+            </div>
+
+            <div class="circle-form-group">
+              <label class="circle-form-label">Per-Spend Cap (₹)</label>
+              <input type="number" id="mPerTx" class="circle-form-input" min="50" max="5000" placeholder="e.g. 500" value="500" required>
+            </div>
+          </div>
+
+          <div class="circle-form-group">
+            <label class="circle-form-label">Delegation Control Mode</label>
+            <select id="mMode" class="circle-form-select">
+              <option value="PRE_APPROVED">⚡ Pre-Approved Allowance (Auto-approve up to spend cap)</option>
+              <option value="APPROVAL_REQUIRED">🛡️ Ask Elder (Require my 1-tap approval for each spend)</option>
+            </select>
+          </div>
+
+          <div class="circle-form-checkbox-row">
+            <input type="checkbox" id="mTcCheck" required checked>
+            <label for="mTcCheck" style="font-size:13px; color:var(--text-main); cursor:pointer;">
+              I certify this minor is under 18 years and accept the <a href="javascript:void(0)" onclick="window.EasyCircle.openTermsModal()" style="color:var(--circle-primary); font-weight:700;">NPCI UPI Circle Terms &amp; Conditions</a>.
+            </label>
+          </div>
+
+          <!-- Submit & Done Button Row -->
+          <div style="margin-top:20px; display:flex; justify-content:flex-end; gap:10px;">
+            <button type="button" class="ctrl-btn" onclick="window.EasyCircle.closeAddMinorModal()">Cancel</button>
+            <button type="submit" class="btn-circle-done" style="width:auto; padding:11px 24px;">
+              <span>✓ Done · Add Minor to Circle</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <!-- Core JavaScript Modules -->
   <script src="assets/js/theme-toggle.js"></script>
   <script src="assets/js/audio-synth.js"></script>

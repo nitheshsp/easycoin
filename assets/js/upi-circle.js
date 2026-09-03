@@ -7,6 +7,7 @@ class EasyUPICircleEngine {
   constructor() {
     this.storageKey = 'easycoin_upi_circle_data';
     this.loadState();
+    this.initToastElement();
   }
 
   loadState() {
@@ -14,9 +15,11 @@ class EasyUPICircleEngine {
     if (saved) {
       try {
         var parsed = JSON.parse(saved);
-        this.members = parsed.members || [];
-        this.pendingRequests = parsed.pendingRequests || [];
-        return;
+        if (parsed.members && parsed.members.length > 0) {
+          this.members = parsed.members;
+          this.pendingRequests = parsed.pendingRequests || [];
+          return;
+        }
       } catch (e) {
         console.warn('Could not parse saved UPI Circle data, resetting to defaults.', e);
       }
@@ -29,8 +32,9 @@ class EasyUPICircleEngine {
         name: 'Aarav Chandra',
         relation: 'Grandson',
         age: 14,
+        phone: '9811223344',
         avatar: '👦',
-        vpa: 'aarav.minor@easycoin',
+        vpa: 'aarav.3344@easycoin',
         monthlyLimit: 2000,
         spentThisMonth: 850,
         perTxLimit: 500,
@@ -47,8 +51,9 @@ class EasyUPICircleEngine {
         name: 'Diya Chandra',
         relation: 'Granddaughter',
         age: 16,
+        phone: '9822334455',
         avatar: '👧',
-        vpa: 'diya.minor@easycoin',
+        vpa: 'diya.4455@easycoin',
         monthlyLimit: 3000,
         spentThisMonth: 1200,
         perTxLimit: 1000,
@@ -86,6 +91,37 @@ class EasyUPICircleEngine {
     } catch (e) {
       console.warn('Failed to save UPI Circle data', e);
     }
+  }
+
+  // --- Accessible In-App Toast Notification ---
+  initToastElement() {
+    if (document.getElementById('circleToastNotice')) return;
+    var toast = document.createElement('div');
+    toast.id = 'circleToastNotice';
+    toast.className = 'circle-toast';
+    toast.innerHTML = `
+      <span class="circle-toast-icon" id="circleToastIcon">🔔</span>
+      <span id="circleToastMsg">Notification</span>
+    `;
+    document.body.appendChild(toast);
+  }
+
+  showToast(msg, icon) {
+    this.initToastElement();
+    var toast = document.getElementById('circleToastNotice');
+    var msgEl = document.getElementById('circleToastMsg');
+    var iconEl = document.getElementById('circleToastIcon');
+
+    if (!toast || !msgEl) return;
+
+    msgEl.textContent = msg;
+    if (iconEl && icon) iconEl.textContent = icon;
+
+    toast.classList.add('show');
+    clearTimeout(this.toastTimer);
+    this.toastTimer = setTimeout(function () {
+      toast.classList.remove('show');
+    }, 3800);
   }
 
   // --- Voice Narration for Seniors ---
@@ -137,90 +173,104 @@ class EasyUPICircleEngine {
 
     if (member.isFrozen) {
       var frozenMsg = `Cannot process: ${member.name}'s UPI Circle card is frozen. Tap Unfreeze to restore access.`;
-      alert(frozenMsg);
+      this.showToast(frozenMsg, '❄️');
       if (window.EasyAudio) window.EasyAudio.speak(frozenMsg);
       return;
     }
 
     var sampleSpends = [
       { merchant: 'School Book Stall', amount: 120, category: 'Books' },
-      { merchant: 'School Canteen', amount: 65, category: 'Food' },
+      { merchant: 'School Canteen Lunch', amount: 65, category: 'Food' },
       { merchant: 'Bus Ticket Transit', amount: 40, category: 'Travel' },
       { merchant: 'Geometry Box & Pens', amount: 95, category: 'Stationery' },
       { merchant: 'Badminton Shuttlecocks', amount: 180, category: 'Sports' }
     ];
 
-    var randomSpend = sampleSpends[Math.floor(Math.random() * sampleSpends.length)];
     var rem = member.monthlyLimit - member.spentThisMonth;
 
-    if (randomSpend.amount > rem) {
-      var limitExceededMsg = `Monthly allowance limit reached for ${member.name}. Remaining allowance is only ₹${rem}.`;
-      alert(limitExceededMsg);
+    if (rem <= 0) {
+      var limitExceededMsg = `Monthly allowance limit reached for ${member.name}. Remaining allowance is ₹0.`;
+      this.showToast(limitExceededMsg, '⚠️');
       if (window.EasyAudio) window.EasyAudio.speak(limitExceededMsg);
       return;
     }
 
-    // If member requires approval for transactions above limit
-    if (member.delegationMode === 'APPROVAL_REQUIRED' && randomSpend.amount > member.perTxLimit) {
+    // Filter spends that fit or use smaller amount
+    var eligibleSpends = sampleSpends.filter(s => s.amount <= rem);
+    var spendToExecute = eligibleSpends.length > 0
+      ? eligibleSpends[Math.floor(Math.random() * eligibleSpends.length)]
+      : { merchant: 'Stationery Supplies', amount: rem, category: 'Stationery' };
+
+    // If member requires approval for transactions above single tx limit
+    if (member.delegationMode === 'APPROVAL_REQUIRED' && spendToExecute.amount > member.perTxLimit) {
       this.pendingRequests.unshift({
         id: 'req-' + Date.now(),
         memberId: member.id,
         name: member.name,
         avatar: member.avatar,
-        amount: randomSpend.amount,
-        merchant: randomSpend.merchant,
-        category: randomSpend.category,
+        amount: spendToExecute.amount,
+        merchant: spendToExecute.merchant,
+        category: spendToExecute.category,
         timestamp: 'Just now'
       });
       this.saveState();
       this.renderAll();
 
-      var reqMsg = `Payment request received: ${member.name} wants to spend ₹${randomSpend.amount} at ${randomSpend.merchant}. Please review and approve.`;
-      alert('🔔 ' + reqMsg);
+      var reqMsg = `Payment request received: ${member.name} requested ₹${spendToExecute.amount} for ${spendToExecute.merchant}.`;
+      this.showToast('🔔 ' + reqMsg, '🔔');
       if (window.EasyAudio) {
         window.EasyAudio.playAlert();
-        window.EasyAudio.speak(reqMsg);
+        window.EasyAudio.speak(reqMsg + ' Please tap Approve to authorize.');
       }
       return;
     }
 
     // Auto-approve within allowance
-    member.spentThisMonth += randomSpend.amount;
+    member.spentThisMonth += spendToExecute.amount;
     member.spends.unshift({
-      merchant: randomSpend.merchant,
-      amount: randomSpend.amount,
+      merchant: spendToExecute.merchant,
+      amount: spendToExecute.amount,
       time: 'Just now',
-      category: randomSpend.category
+      category: spendToExecute.category
     });
 
     this.saveState();
     this.renderAll();
 
-    // Deduct from primary balance in banking engine if present
+    // 1. Deduct from Standalone Banking Engine if on app.html
     if (window.EasyBanking) {
       var currentBal = window.EasyBanking.getBalance();
-      if (currentBal >= randomSpend.amount) {
-        window.EasyBanking.updateBalance(currentBal - randomSpend.amount);
-        window.EasyBanking.addPassbookEntry(
-          `UPI Circle · ${member.name}`,
-          'out',
-          randomSpend.amount,
-          member.avatar,
-          randomSpend.merchant
-        );
-      }
+      window.EasyBanking.updateBalance(currentBal - spendToExecute.amount);
+      window.EasyBanking.addPassbookEntry(
+        `UPI Circle · ${member.name}`,
+        'out',
+        spendToExecute.amount,
+        member.avatar,
+        spendToExecute.merchant
+      );
     }
 
-    // Spoken voice notification
-    var successSpeech = `UPI Circle Alert: ${member.relation} ${member.name} paid ${randomSpend.amount} Rupees for ${randomSpend.merchant}. Remaining monthly allowance is ${member.monthlyLimit - member.spentThisMonth} Rupees.`;
+    // 2. Deduct from Phone Simulator if on index.html
+    if (window.EasyPhone) {
+      window.EasyPhone.deductBalance(
+        spendToExecute.amount,
+        member.name + ' (Minor)',
+        member.avatar,
+        spendToExecute.merchant
+      );
+    }
+
+    // Show non-blocking toast and trigger smooth spoken alert
+    var remainingNow = member.monthlyLimit - member.spentThisMonth;
+    var toastText = `Verified: ${member.name} paid ₹${spendToExecute.amount} at ${spendToExecute.merchant} (₹${remainingNow} left)`;
+    this.showToast(toastText, '💳');
+
+    var successSpeech = `UPI Circle Alert: ${member.relation} ${member.name} paid ${spendToExecute.amount} Rupees for ${spendToExecute.merchant}. Remaining monthly allowance is ${remainingNow} Rupees.`;
     
     if (window.EasyAudio) {
       window.EasyAudio.playCoinSound();
       window.EasyAudio.speak(successSpeech);
     }
-
-    // Also display notification toast
-    alert(`💳 Minor Payment Verified:\n${member.name} spent ₹${randomSpend.amount} at ${randomSpend.merchant}.\nRemaining Allowance: ₹${member.monthlyLimit - member.spentThisMonth}`);
   }
 
   // --- 1-Tap Freeze / Unfreeze Minor ---
@@ -233,14 +283,15 @@ class EasyUPICircleEngine {
     this.renderAll();
 
     var statusMsg = member.isFrozen
-      ? `UPI access for ${member.relation} ${member.name} has been frozen. They cannot make any purchases until you unfreeze.`
+      ? `UPI access for ${member.relation} ${member.name} has been frozen. They cannot make purchases until you unfreeze.`
       : `UPI access for ${member.relation} ${member.name} has been restored and unfreezed.`;
+
+    this.showToast(member.isFrozen ? `❄️ Frozen: ${member.name}'s card is locked` : `🔓 Unfrozen: ${member.name}'s card is active`, member.isFrozen ? '❄️' : '🔓');
 
     if (window.EasyAudio) {
       window.EasyAudio.playClick();
       window.EasyAudio.speak(statusMsg);
     }
-    alert(member.isFrozen ? `❄️ Frozen: ${member.name}'s UPI Circle is locked.` : `🔓 Unfrozen: ${member.name}'s UPI Circle is active.`);
   }
 
   // --- Approve / Reject Pending Request ---
@@ -262,16 +313,23 @@ class EasyUPICircleEngine {
 
       if (window.EasyBanking) {
         var currentBal = window.EasyBanking.getBalance();
-        if (currentBal >= req.amount) {
-          window.EasyBanking.updateBalance(currentBal - req.amount);
-          window.EasyBanking.addPassbookEntry(
-            `UPI Circle Approved · ${member.name}`,
-            'out',
-            req.amount,
-            member.avatar,
-            req.merchant
-          );
-        }
+        window.EasyBanking.updateBalance(currentBal - req.amount);
+        window.EasyBanking.addPassbookEntry(
+          `UPI Circle Approved · ${member.name}`,
+          'out',
+          req.amount,
+          member.avatar,
+          req.merchant
+        );
+      }
+
+      if (window.EasyPhone) {
+        window.EasyPhone.deductBalance(
+          req.amount,
+          member.name + ' (Approved)',
+          member.avatar,
+          req.merchant
+        );
       }
     }
 
@@ -279,12 +337,12 @@ class EasyUPICircleEngine {
     this.saveState();
     this.renderAll();
 
+    this.showToast(`Approved ₹${req.amount} for ${req.name}`, '✅');
     var speech = `Approved payment of ${req.amount} Rupees for ${req.name} at ${req.merchant}.`;
     if (window.EasyAudio) {
       window.EasyAudio.playCoinSound();
       window.EasyAudio.speak(speech);
     }
-    alert(`✅ Request Approved: ₹${req.amount} sent for ${req.name}`);
   }
 
   rejectRequest(requestId) {
@@ -296,46 +354,77 @@ class EasyUPICircleEngine {
     this.saveState();
     this.renderAll();
 
+    this.showToast(`Declined request of ₹${req.amount} from ${req.name}`, '✕');
     var speech = `Declined payment request from ${req.name}.`;
     if (window.EasyAudio) {
       window.EasyAudio.playClick();
       window.EasyAudio.speak(speech);
     }
-    alert(`❌ Request Declined: ${req.name}'s request for ₹${req.amount} was rejected.`);
   }
 
-  // --- Add New Minor Member ---
-  addMinorMember(name, relation, age, monthlyLimit, delegationMode) {
-    if (!name || !relation) {
-      alert('Please enter minor name and family relationship.');
-      return false;
+  // --- Add New Minor Member with Detailed Validation ---
+  addMinorMember(name, relation, age, phone, monthlyLimit, perTxLimit, delegationMode, customAvatar) {
+    if (!name || name.trim().length < 2) {
+      alert('Please enter a valid minor full name.');
+      return null;
+    }
+
+    if (!relation) {
+      alert('Please select family relationship.');
+      return null;
     }
 
     age = parseInt(age, 10);
-    if (isNaN(age) || age >= 18 || age < 5) {
-      alert('Invalid Age: In accordance with NPCI & RBI guidelines, UPI Circle minor delegation is only for children between 5 and 17 years of age.');
-      return false;
+    if (isNaN(age) || age < 5 || age >= 18) {
+      alert('Age Requirement: In compliance with RBI & NPCI guidelines, UPI Circle minor delegation is exclusively for children between 5 and 17 years old. Individuals 18 or older must open an independent bank account.');
+      return null;
     }
 
-    monthlyLimit = parseInt(monthlyLimit, 10) || 1500;
-    if (monthlyLimit > 15000) {
-      alert('NPCI Regulatory Ceiling: Maximum allowable monthly limit per UPI Circle member cannot exceed ₹15,000.');
-      return false;
+    monthlyLimit = parseInt(monthlyLimit, 10) || 2000;
+    if (monthlyLimit < 100 || monthlyLimit > 15000) {
+      alert('Limit Error: Monthly spending allowance must be between ₹100 and ₹15,000 (NPCI regulatory maximum).');
+      return null;
     }
 
-    var avatars = age < 12 ? ['🧒', '👦', '👧'] : ['🧑', '👦', '👧'];
-    var avatar = avatars[Math.floor(Math.random() * avatars.length)];
+    perTxLimit = parseInt(perTxLimit, 10) || Math.min(500, monthlyLimit);
+    if (perTxLimit < 50 || perTxLimit > monthlyLimit || perTxLimit > 5000) {
+      alert(`Per-Transaction Limit: Must be between ₹50 and ₹${Math.min(5000, monthlyLimit)}.`);
+      return null;
+    }
+
+    // Clean phone number
+    var cleanPhone = (phone || '').replace(/\D/g, '');
+    if (cleanPhone && cleanPhone.length !== 10) {
+      alert('Please enter a valid 10-digit mobile number for the minor or leave blank.');
+      return null;
+    }
+    if (!cleanPhone) {
+      cleanPhone = '98' + Math.floor(10000000 + Math.random() * 90000000);
+    }
+
+    var last4 = cleanPhone.slice(-4);
+    var cleanVpa = name.toLowerCase().replace(/[^a-z0-9]/g, '') + '.' + last4 + '@easycoin';
+
+    var avatar = customAvatar;
+    if (!avatar) {
+      if (relation.toLowerCase().includes('daughter') || relation.toLowerCase().includes('granddaughter') || relation.toLowerCase().includes('niece')) {
+        avatar = age < 12 ? '👧' : '🧑';
+      } else {
+        avatar = age < 12 ? '👦' : '🧑';
+      }
+    }
 
     var newMember = {
       id: 'minor-' + Date.now(),
       name: name.trim(),
       relation: relation.trim(),
       age: age,
+      phone: cleanPhone,
       avatar: avatar,
-      vpa: name.toLowerCase().replace(/\s+/g, '.') + '.minor@easycoin',
+      vpa: cleanVpa,
       monthlyLimit: monthlyLimit,
       spentThisMonth: 0,
-      perTxLimit: Math.min(500, monthlyLimit),
+      perTxLimit: perTxLimit,
       delegationMode: delegationMode || 'PRE_APPROVED',
       isFrozen: false,
       spends: []
@@ -345,32 +434,222 @@ class EasyUPICircleEngine {
     this.saveState();
     this.renderAll();
 
-    var welcomeSpeech = `Added ${newMember.relation} ${newMember.name} to your Family UPI Circle with a monthly allowance of ${newMember.monthlyLimit} Rupees.`;
-    if (window.EasyAudio) {
-      window.EasyAudio.playClick();
-      window.EasyAudio.speak(welcomeSpeech);
-    }
-
-    return true;
+    return newMember;
   }
 
-  // --- Adjust Allowance Limit ---
+  // --- Show In-Modal Success Screen with Done Button ---
+  showSuccessConfirmation(member) {
+    // Find all modal bodies (in app.html and index.html)
+    var modalBodies = document.querySelectorAll('#circleAddMinorModal .circle-modal-body');
+    modalBodies.forEach(body => {
+      body.innerHTML = `
+        <div class="circle-success-screen">
+          <div class="circle-success-badge">✓</div>
+          <div class="circle-success-title">Minor Linked Successfully!</div>
+          <div class="circle-success-sub">
+            ${member.relation} <b>${member.name}</b> is now connected to your Family UPI Circle with safe parental oversight.
+          </div>
+
+          <!-- Summary Grid -->
+          <div class="circle-summary-grid">
+            <div class="circle-summary-row">
+              <span class="circle-summary-lbl">Member Profile:</span>
+              <span class="circle-summary-val">${member.avatar} ${member.name} (${member.relation} · Age ${member.age})</span>
+            </div>
+            <div class="circle-summary-row">
+              <span class="circle-summary-lbl">UPI ID (VPA):</span>
+              <span class="circle-summary-val" style="font-family:monospace; color:#0047E0;">${member.vpa}</span>
+            </div>
+            <div class="circle-summary-row">
+              <span class="circle-summary-lbl">Monthly Allowance:</span>
+              <span class="circle-summary-val" style="color:#059669;">₹ ${member.monthlyLimit.toLocaleString('en-IN')} / month</span>
+            </div>
+            <div class="circle-summary-row">
+              <span class="circle-summary-lbl">Per-Spend Cap:</span>
+              <span class="circle-summary-val">₹ ${member.perTxLimit.toLocaleString('en-IN')} per transaction</span>
+            </div>
+            <div class="circle-summary-row">
+              <span class="circle-summary-lbl">Delegation Mode:</span>
+              <span class="circle-summary-val">${member.delegationMode === 'PRE_APPROVED' ? '⚡ Pre-Approved (< ₹' + member.perTxLimit + ')' : '🛡️ Elder 1-Tap Approval'}</span>
+            </div>
+            <div class="circle-summary-row">
+              <span class="circle-summary-lbl">Safety Filter:</span>
+              <span class="circle-summary-val" style="color:#059669;">🛡️ Anti-Gambling & Adult Merchant Block Active</span>
+            </div>
+          </div>
+
+          <!-- Large Accessible Done Button -->
+          <button class="btn-circle-done" onclick="window.EasyCircle.completeAddMinorFlow('${member.id}')">
+            <span>✓ Done &amp; View Circle</span>
+          </button>
+        </div>
+      `;
+    });
+
+    if (window.EasyAudio) {
+      window.EasyAudio.playCoinSound();
+      window.EasyAudio.speak(`Done! ${member.relation} ${member.name} has been added with a monthly allowance of ${member.monthlyLimit} Rupees.`);
+    }
+  }
+
+  // Completes the flow upon clicking Done button
+  completeAddMinorFlow(newMemberId) {
+    this.closeAddMinorModal();
+    this.renderAll();
+
+    // Reset form HTML in modal so it is fresh next time
+    this.resetAddMinorModalForm();
+
+    // Smoothly scroll and highlight new card if on app.html
+    var cards = document.querySelectorAll('.circle-member-card');
+    if (cards.length > 0) {
+      var lastCard = cards[cards.length - 1];
+      lastCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      lastCard.classList.add('just-added');
+      setTimeout(() => lastCard.classList.remove('just-added'), 2500);
+    }
+
+    this.showToast('✓ Family Circle updated with new minor', '👨‍👩‍👧‍👦');
+  }
+
+  resetAddMinorModalForm() {
+    var modalBodies = document.querySelectorAll('#circleAddMinorModal .circle-modal-body');
+    modalBodies.forEach(body => {
+      body.innerHTML = this.getAddMinorFormHTML();
+    });
+  }
+
+  getAddMinorFormHTML() {
+    return `
+      <form id="addMinorForm" onsubmit="window.EasyCircle.handleFormSubmit(event)">
+        <div class="circle-form-group">
+          <label class="circle-form-label">Minor's Full Name</label>
+          <input type="text" id="mName" class="circle-form-input" placeholder="e.g. Aarav Chandra" required autocomplete="off">
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+          <div class="circle-form-group">
+            <label class="circle-form-label">Relationship</label>
+            <select id="mRel" class="circle-form-select" required>
+              <option value="Grandson">Grandson</option>
+              <option value="Granddaughter">Granddaughter</option>
+              <option value="Son">Son</option>
+              <option value="Daughter">Daughter</option>
+              <option value="Ward">Ward / Nephew / Niece</option>
+            </select>
+          </div>
+
+          <div class="circle-form-group">
+            <label class="circle-form-label">Age (5 - 17 Years)</label>
+            <input type="number" id="mAge" class="circle-form-input" min="5" max="17" placeholder="e.g. 14" required>
+          </div>
+        </div>
+
+        <div class="circle-form-group">
+          <label class="circle-form-label">Minor's Mobile Number (Optional)</label>
+          <input type="tel" id="mPhone" class="circle-form-input" maxlength="10" placeholder="e.g. 9811223344">
+          <span style="font-size:11.5px; color:var(--text-muted); display:block; margin-top:3px;">
+            Used to assign a delegated UPI ID (e.g. name.last4@easycoin)
+          </span>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+          <div class="circle-form-group">
+            <label class="circle-form-label">Monthly Limit (₹)</label>
+            <input type="number" id="mLimit" class="circle-form-input" min="100" max="15000" placeholder="e.g. 2000" value="2000" required>
+          </div>
+
+          <div class="circle-form-group">
+            <label class="circle-form-label">Per-Spend Cap (₹)</label>
+            <input type="number" id="mPerTx" class="circle-form-input" min="50" max="5000" placeholder="e.g. 500" value="500" required>
+          </div>
+        </div>
+
+        <div class="circle-form-group">
+          <label class="circle-form-label">Delegation Control Mode</label>
+          <select id="mMode" class="circle-form-select">
+            <option value="PRE_APPROVED">⚡ Pre-Approved Allowance (Auto-approve up to spend cap)</option>
+            <option value="APPROVAL_REQUIRED">🛡️ Ask Elder (Require my 1-tap approval for each spend)</option>
+          </select>
+        </div>
+
+        <div class="circle-form-checkbox-row">
+          <input type="checkbox" id="mTcCheck" required checked>
+          <label for="mTcCheck" style="font-size:13px; color:var(--text-main); cursor:pointer;">
+            I certify this minor is under 18 years and accept the <a href="javascript:void(0)" onclick="window.EasyCircle.openTermsModal()" style="color:var(--circle-primary); font-weight:700;">NPCI UPI Circle Terms &amp; Conditions</a>.
+          </label>
+        </div>
+
+        <!-- Submit & Done Button Row -->
+        <div style="margin-top:20px; display:flex; justify-content:flex-end; gap:10px;">
+          <button type="button" class="ctrl-btn" onclick="window.EasyCircle.closeAddMinorModal()">Cancel</button>
+          <button type="submit" class="btn-circle-done" style="width:auto; padding:11px 24px;">
+            <span>✓ Done · Add Minor to Circle</span>
+          </button>
+        </div>
+      </form>
+    `;
+  }
+
+  handleFormSubmit(event) {
+    event.preventDefault();
+
+    var name = document.getElementById('mName') ? document.getElementById('mName').value : '';
+    var rel = document.getElementById('mRel') ? document.getElementById('mRel').value : '';
+    var age = document.getElementById('mAge') ? document.getElementById('mAge').value : '';
+    var phone = document.getElementById('mPhone') ? document.getElementById('mPhone').value : '';
+    var limit = document.getElementById('mLimit') ? document.getElementById('mLimit').value : '';
+    var perTx = document.getElementById('mPerTx') ? document.getElementById('mPerTx').value : '';
+    var mode = document.getElementById('mMode') ? document.getElementById('mMode').value : 'PRE_APPROVED';
+    var tcCheck = document.getElementById('mTcCheck');
+
+    if (!tcCheck || !tcCheck.checked) {
+      alert('Please agree to the NPCI Terms & Conditions to enable delegated access.');
+      return;
+    }
+
+    var member = this.addMinorMember(name, rel, age, phone, limit, perTx, mode);
+    if (member) {
+      this.showSuccessConfirmation(member);
+    }
+  }
+
+  // --- Adjust Allowance Limit Sanitized ---
   updateLimit(memberId, newLimit) {
     var member = this.members.find(m => m.id === memberId);
     if (!member) return;
 
+    if (typeof newLimit === 'string') {
+      newLimit = newLimit.replace(/[^0-9]/g, '');
+    }
+
     newLimit = parseInt(newLimit, 10);
     if (isNaN(newLimit) || newLimit < 100 || newLimit > 15000) {
-      alert('Limit must be between ₹100 and ₹15,000 (NPCI limit).');
+      alert('Allowance Limit must be between ₹100 and ₹15,000 as per NPCI rules.');
       return;
     }
 
     member.monthlyLimit = newLimit;
+    if (member.perTxLimit > newLimit) {
+      member.perTxLimit = newLimit;
+    }
+
     this.saveState();
     this.renderAll();
 
+    this.showToast(`Updated limit for ${member.name}: ₹${newLimit}`, '✏️');
     var speech = `Updated ${member.name}'s monthly allowance to ${newLimit} Rupees.`;
     if (window.EasyAudio) window.EasyAudio.speak(speech);
+  }
+
+  promptChangeLimit(memberId) {
+    var member = this.members.find(m => m.id === memberId);
+    if (!member) return;
+
+    var input = prompt(`Enter new monthly allowance limit for ${member.name} (Max ₹15,000 as per NPCI guidelines):`, member.monthlyLimit);
+    if (input !== null) {
+      this.updateLimit(memberId, input);
+    }
   }
 
   // --- Modals Management ---
@@ -391,6 +670,7 @@ class EasyUPICircleEngine {
   }
 
   openAddMinorModal() {
+    this.resetAddMinorModalForm();
     var m = document.getElementById('circleAddMinorModal');
     if (m) {
       m.classList.add('active');
@@ -454,6 +734,7 @@ class EasyUPICircleEngine {
 
         var card = document.createElement('div');
         card.className = `circle-member-card ${m.isFrozen ? 'frozen' : ''}`;
+        card.id = `card-${m.id}`;
         card.innerHTML = `
           <div class="circle-card-top">
             <div class="circle-member-profile">
@@ -463,7 +744,9 @@ class EasyUPICircleEngine {
                 <div class="circle-member-meta">
                   <span>${m.relation}</span>
                   <span>•</span>
-                  <span class="circle-age-pill">${m.age} Years (Minor)</span>
+                  <span class="circle-age-pill">${m.age} Yrs (Minor)</span>
+                  <span>•</span>
+                  <span style="font-family:monospace; font-size:11px; color:var(--text-muted);">${m.vpa}</span>
                 </div>
               </div>
             </div>
@@ -528,19 +811,9 @@ class EasyUPICircleEngine {
       addCard.innerHTML = `
         <div class="circle-add-icon-box">+</div>
         <div class="circle-add-title">Add Minor Family Member</div>
-        <div class="circle-add-desc">Link grandson or daughter under 18 with delegated spending allowance</div>
+        <div class="circle-add-desc">Link child or grandchild under 18 with delegated spending allowance</div>
       `;
       gridEl.appendChild(addCard);
-    }
-  }
-
-  promptChangeLimit(memberId) {
-    var member = this.members.find(m => m.id === memberId);
-    if (!member) return;
-
-    var newLimit = prompt(`Enter new monthly allowance limit for ${member.name} (Max ₹15,000 as per NPCI guidelines):`, member.monthlyLimit);
-    if (newLimit !== null) {
-      this.updateLimit(memberId, newLimit);
     }
   }
 
@@ -553,6 +826,7 @@ class EasyUPICircleEngine {
     this.members.forEach(m => {
       var pct = Math.min(100, Math.round((m.spentThisMonth / m.monthlyLimit) * 100));
       var rem = Math.max(0, m.monthlyLimit - m.spentThisMonth);
+      var simAmt = Math.min(120, rem > 0 ? rem : 0);
 
       var card = document.createElement('div');
       card.className = `phone-circle-card ${m.isFrozen ? 'frozen' : ''}`;
@@ -580,12 +854,28 @@ class EasyUPICircleEngine {
           </div>
         </div>
 
-        <button class="phone-circle-sim-btn" onclick="window.EasyCircle.simulateMinorSpend('${m.id}')">
-          ⚡ Simulate Minor Spend (₹120)
-        </button>
+        <div style="display:flex; gap:6px;">
+          <button class="phone-circle-sim-btn" style="flex:1;" onclick="window.EasyCircle.simulateMinorSpend('${m.id}')">
+            ${rem > 0 ? `⚡ Test Spend (₹${simAmt})` : '⚠️ Cap Reached (₹0)'}
+          </button>
+          <button class="phone-circle-sim-btn" style="width:auto; padding:10px 12px; background:${m.isFrozen ? '#059669' : '#EF4444'};" onclick="window.EasyCircle.toggleFreeze('${m.id}')" title="${m.isFrozen ? 'Unfreeze' : 'Freeze'}">
+            ${m.isFrozen ? '🔓' : '❄️'}
+          </button>
+        </div>
       `;
       phoneListEl.appendChild(card);
     });
+
+    // Add Minor button inside Phone Simulator
+    var phoneAddBtn = document.createElement('button');
+    phoneAddBtn.className = 'phone-circle-sim-btn';
+    phoneAddBtn.style.background = 'rgba(0, 71, 224, 0.08)';
+    phoneAddBtn.style.color = '#0047E0';
+    phoneAddBtn.style.border = '1.5px dashed rgba(0, 71, 224, 0.3)';
+    phoneAddBtn.style.marginTop = '10px';
+    phoneAddBtn.innerHTML = '➕ Add Minor to Circle';
+    phoneAddBtn.onclick = () => this.openAddMinorModal();
+    phoneListEl.appendChild(phoneAddBtn);
   }
 }
 

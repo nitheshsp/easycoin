@@ -65,7 +65,7 @@ exports.getCircleData = (req, res) => {
 
 // Add minor member to circle
 exports.addMinorMember = (req, res) => {
-  const { name, relation, age, monthlyLimit, delegationMode } = req.body;
+  const { name, relation, age, phone, monthlyLimit, perTxLimit, delegationMode } = req.body;
 
   if (!name || !relation) {
     return res.status(400).json({ success: false, error: 'Name and relation are required.' });
@@ -80,23 +80,29 @@ exports.addMinorMember = (req, res) => {
   }
 
   const limitNum = parseInt(monthlyLimit, 10) || 2000;
-  if (limitNum > 15000) {
+  if (limitNum < 100 || limitNum > 15000) {
     return res.status(400).json({
       success: false,
-      error: 'NPCI Regulatory Limit: Maximum monthly limit is ₹15,000.'
+      error: 'NPCI Regulatory Limit: Monthly limit must be between ₹100 and ₹15,000.'
     });
   }
+
+  const perTx = parseInt(perTxLimit, 10) || Math.min(500, limitNum);
+  const cleanPhone = (phone || '').replace(/\D/g, '') || '98' + Math.floor(10000000 + Math.random() * 90000000);
+  const last4 = cleanPhone.slice(-4);
+  const cleanVpa = `${name.toLowerCase().replace(/[^a-z0-9]/g, '')}.${last4}@easycoin`;
 
   const newMember = {
     id: 'minor-' + Date.now(),
     name: name.trim(),
     relation: relation.trim(),
     age: ageNum,
+    phone: cleanPhone,
     avatar: ageNum < 12 ? '🧒' : '👦',
-    vpa: `${name.toLowerCase().replace(/\s+/g, '.')}.minor@easycoin`,
+    vpa: cleanVpa,
     monthlyLimit: limitNum,
     spentThisMonth: 0,
-    perTxLimit: Math.min(500, limitNum),
+    perTxLimit: perTx,
     delegationMode: delegationMode || 'PRE_APPROVED',
     isFrozen: false,
     spends: []

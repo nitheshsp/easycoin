@@ -773,3 +773,147 @@ body.dark-theme .tc-clause-body {
   justify-content: center;
   gap: 6px;
 }
+
+/* --- Success Confirmation Screen after Form Submission --- */
+.circle-success-screen {
+  text-align: center;
+  padding: 16px 8px;
+  animation: modal-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.circle-success-badge {
+  width: 72px;
+  height: 72px;
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  color: #FFFFFF;
+  border-radius: 50%;
+  font-size: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 25px rgba(16, 185, 129, 0.35);
+  margin-bottom: 16px;
+  animation: pulse-soft 2s infinite alternate;
+}
+
+.circle-success-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text-main, #0F172A);
+  margin-bottom: 6px;
+}
+
+.circle-success-sub {
+  font-size: 14px;
+  color: var(--text-muted, #64748B);
+  margin-bottom: 20px;
+}
+
+.circle-summary-grid {
+  background: rgba(248, 250, 252, 0.9);
+  border: 1.5px solid #E2E8F0;
+  border-radius: 16px;
+  padding: 16px 20px;
+  text-align: left;
+  margin-bottom: 24px;
+}
+
+body.dark-theme .circle-summary-grid {
+  background: rgba(15, 23, 42, 0.7);
+  border-color: rgba(51, 65, 85, 0.7);
+}
+
+.circle-summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+  font-size: 13.5px;
+}
+
+.circle-summary-row:last-child {
+  border-bottom: none;
+}
+
+.circle-summary-lbl {
+  color: var(--text-muted, #64748B);
+  font-weight: 600;
+}
+
+.circle-summary-val {
+  color: var(--text-main, #0F172A);
+  font-weight: 800;
+}
+
+/* Explicit Large 'Done' Action Button */
+.btn-circle-done {
+  background: linear-gradient(135deg, #0047E0 0%, #0037B3 100%);
+  color: #FFFFFF;
+  border: none;
+  font-size: 16px;
+  font-weight: 800;
+  padding: 14px 32px;
+  border-radius: 14px;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(0, 71, 224, 0.3);
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  justify-content: center;
+}
+
+.btn-circle-done:hover {
+  background: linear-gradient(135deg, #0037B3 0%, #002B8C 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(0, 71, 224, 0.4);
+}
+
+.btn-circle-done:active {
+  transform: scale(0.98);
+}
+
+/* In-App Accessible Senior Toast Notification */
+.circle-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: #0F172A;
+  color: #FFFFFF;
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  padding: 14px 22px;
+  font-size: 14.5px;
+  font-weight: 700;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
+  z-index: 11000;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: none;
+  max-width: 90vw;
+}
+
+.circle-toast.show {
+  transform: translateX(-50%) translateY(0);
+}
+
+.circle-toast-icon {
+  font-size: 24px;
+}
+
+/* Card highlight animation when newly added */
+@keyframes card-just-added {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 4px #10B981; }
+  50% { transform: scale(1.02); box-shadow: 0 0 0 6px #10B981; }
+  100% { transform: scale(1); }
+}
+
+.circle-member-card.just-added {
+  animation: card-just-added 1.5s ease;
+}
+

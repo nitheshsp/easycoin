@@ -450,6 +450,28 @@
         if (window.EasyAudio) window.EasyAudio.playClick();
       });
     });
+
+    // Expose Phone Interface for UPI Circle & external triggers
+    window.EasyPhone = {
+      getBalance: function () {
+        return balance;
+      },
+      deductBalance: function (amount, title, icon, note) {
+        balance = Math.max(0, balance - amount);
+        var balEl = phoneEl.querySelector('#balanceAmount');
+        if (balEl) balEl.textContent = '₹ ' + balance.toLocaleString('en-IN');
+        transactions.unshift({
+          id: Date.now(),
+          title: title,
+          type: 'out',
+          amount: amount,
+          time: 'Just now',
+          icon: icon || '👤',
+          note: note || 'Minor Spend'
+        });
+        renderPassbook();
+      }
+    };
   }
 
   document.addEventListener('DOMContentLoaded', initPhoneSimulator);

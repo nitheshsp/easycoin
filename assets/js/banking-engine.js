@@ -354,6 +354,29 @@
       });
     }
     renderPassbook();
+
+    // Expose Banking Interface for UPI Circle & Modules
+    window.EasyBanking = {
+      getBalance: function () {
+        return appBalance;
+      },
+      updateBalance: function (newBal) {
+        appBalance = Math.max(0, newBal);
+        if (balEl) balEl.textContent = '₹ ' + appBalance.toLocaleString('en-IN');
+      },
+      addPassbookEntry: function (name, type, amount, icon, desc) {
+        transactions.unshift({
+          id: Date.now(),
+          name: name,
+          type: type || 'out',
+          amount: amount,
+          time: 'Just now',
+          icon: icon || '👤',
+          desc: desc || 'UPI Circle Spend'
+        });
+        renderPassbook();
+      }
+    };
   }
 
   document.addEventListener('DOMContentLoaded', initStandaloneApp);
