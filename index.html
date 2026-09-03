@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EasyCoin – Accessible Digital Payment & Banking for Seniors & Everyone</title>
+  <meta name="description" content="EasyCoin makes digital payments effortless for senior citizens and illiterate users with voice-first banking, symbol navigation, photo transfers, and bank-grade security.">
+  <meta name="theme-color" content="#003DD1">
+  
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/phone.css">
+  <link rel="stylesheet" href="assets/css/liquid-glass.css">
+</head>
+<body>
+
+  <!-- =========================================================================
+       1. Floating Sticky Glassmorphic Header
+       ========================================================================= -->
+  <header class="dlrtt-hdr" id="dlrtt-hdr">
+    <a class="dlrtt-brand" href="#top" aria-label="EasyCoin - Back to top">
+      <div class="brand-icon">₹</div>
+      <span class="brand-title">EasyCoin</span>
+    </a>
+
+    <nav class="dlrtt-links" id="dlrtt-nav">
+      <a class="top" href="#overview">Overview</a>
+      
+      <!-- Dropdown Features -->
+      <div class="dlrtt-drop">
+        <a class="top" href="#highlights" aria-haspopup="true">
+          Features
+          <svg class="chev" viewBox="0 0 10 10" fill="currentColor">
+            <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+          </svg>
+        </a>
+        <div class="dlrtt-panel">
+          <a class="di" href="#phone-stage">
+            <span class="di-icon">🎙️</span>
+            <div>
+              <span class="di-t">Voice-First Banking</span>
+              <span class="di-s">Speak naturally to check balance & send money.</span>
+            </div>
+          </a>
+          <a class="di" href="#phone-stage">
+            <span class="di-icon">🖼️</span>
+            <div>
+              <span class="di-t">Photo Contact Transfers</span>
+              <span class="di-s">Tap family & merchant photos to pay with 0 typing.</span>
+            </div>
+          </a>
+          <a class="di" href="#more-features">
+            <span class="di-icon">🛡️</span>
+            <div>
+              <span class="di-t">Guardian Safety Shield</span>
+              <span class="di-s">Trusted family oversight & 1-tap fraud freeze.</span>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <a class="top" href="#phone-stage">Live Phone Demo</a>
+      <a class="top" href="#reviews">Stories</a>
+      <a class="top" href="#faq">FAQ</a>
+      
+      <!-- Magnetic Sliding Indicator -->
+      <span class="ind" aria-hidden="true"></span>
+    </nav>
+
+    <div class="dlrtt-right">
+      <button type="button" class="dlrtt-btn2" id="toggleContrastBtn" title="Toggle High Contrast Mode">
+        👁️ High Contrast
+      </button>
+      <a href="app.html" class="dlrtt-cta" id="launchAppBtn">
+        Open Web App
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <path d="M2.5 6H9.5M9.5 6L6.5 3M9.5 6L6.5 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+      <button class="dlrtt-burger" aria-label="Toggle navigation" aria-expanded="false">
+        <i></i><i></i><i></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Slide-In Navigation Sheet -->
+  <div class="dlrtt-sheet" id="dlrtt-sheet">
+    <a class="itm" href="#overview">Overview</a>
+    <a class="itm" href="#phone-stage">Interactive Phone Demo</a>
+    <a class="itm" href="#highlights">Accessibility Highlights</a>
+    <a class="itm" href="#more-features">All Features</a>
+    <a class="itm" href="#reviews">User Stories</a>
+    <a class="itm" href="#faq">FAQ</a>
+    
+    <div class="sheet-stores">
+      <a href="app.html" class="dlrtt-btn2" style="justify-content:center;">📱 Launch Web App</a>
+      <button type="button" class="dlrtt-btn2" onclick="document.body.classList.toggle('high-contrast-mode')">👁️ High Contrast</button>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       2. Hero Section (Cinematic Dark + Mouse-Reactive Fluid Shader)
+       ========================================================================= -->
+  <section class="herosec1" id="overview">
+    <div class="hero-flow-bg"></div>
+    <div class="hero-overlay"></div>
+
+    <div class="hero-container">
+      <div class="hero-copy">
+        <div class="hero-badge">
+          <span class="hero-badge-dot"></span>
+          <span>100% Audio & Symbol Assisted Digital Banking</span>
+        </div>
+        <h1>Your dream of effortless banking <br><span class="gradient-txt">starts here.</span></h1>
+        <p>
+          EasyCoin reimagines digital payments for senior citizens and non-readers. 
+          Zero complex forms, zero confusing numbers. Just speak, tap familiar photos, and let voice guidance handle the rest.
+        </p>
+        <div class="hero-actions">
+          <a href="#phone-stage" class="hero-cta-main">
+            Try Interactive Phone
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M3 7H11M11 7L7.5 3.5M11 7L7.5 10.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <a href="app.html" class="hero-cta-sec">
+            Launch Standalone App →
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       3. Interactive Phone Simulator & Senior Banking Showcase
+       ========================================================================= -->
+  <section class="sheetsec1" id="phone-stage">
+    <div class="container">
+      <div class="phone-showcase-layout">
+        
+        <!-- Left: Interactive Explanations -->
+        <div class="showcase-features">
+          <span class="section-tag">Senior-First Design</span>
+          <h2 class="section-title">Experience Banking Without Boundaries.</h2>
+          <p class="section-sub">
+            Test the live EasyCoin phone prototype on the right. Tap the power button, switch between iPhone and Android, speak your balance, and tap family photos to make simulated transfers.
+          </p>
+
+          <div class="showcase-feat-item">
+            <div class="feat-icon-box">🎙️</div>
+            <div class="feat-text">
+              <h4>Voice & Audio Readout</h4>
+              <p>Every balance, transaction, and action is narrated clearly in your local dialect so you never have to guess.</p>
+            </div>
+          </div>
+
+          <div class="showcase-feat-item">
+            <div class="feat-icon-box">🖼️</div>
+            <div class="feat-text">
+              <h4>Photo & Symbol Transfers</h4>
+              <p>Transfer money by simply tapping the face of your son, daughter, or favorite neighborhood grocery store.</p>
+            </div>
+          </div>
+
+          <div class="showcase-feat-item">
+            <div class="feat-icon-box">🔢</div>
+            <div class="feat-text">
+              <h4>Oversized Tactile Keypad</h4>
+              <p>High-contrast, huge number buttons with pitch-audio tones and spoken readback on each tap.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Interactive Smartphone Simulator Widget -->
+        <div class="phone-stage">
+          <div class="stage-sticky">
+            <div class="phone">
+              <div class="phone-frame"></div>
+              
+              <div class="phone-screen">
+                <div class="app">
+                  
+                  <!-- Dynamic Island -->
+                  <div class="dynamic-island">
+                    <div class="di-cam"></div>
+                    <div class="di-sensor"></div>
+                  </div>
+
+                  <!-- Status Bar -->
+                  <div class="statusbar">
+                    <span id="clock">15:15</span>
+                    <div class="sb-right">
+                      <span>5G</span>
+                      <span>📶</span>
+                      <span>100% 🔋</span>
+                    </div>
+                  </div>
+
+                  <!-- Screen 1: Dashboard / Home -->
+                  <div class="screen active" id="s-dash">
+                    <div class="app-header">
+                      <div class="app-brand-pill">
+                        <span>₹ EasyCoin</span>
+                      </div>
+                      <button class="voice-status-btn" onclick="window.EasyAudio.speak('Voice assistant ready. Tap any button to hear instructions.')">
+                        🔊 Voice ON
+                      </button>
+                    </div>
+
+                    <!-- Balance Hero Card -->
+                    <div class="balance-card">
+                      <div class="balance-header">
+                        <span class="balance-label">Savings Balance</span>
+                        <button class="listen-btn" id="listenBalanceBtn">
+                          🔊 Hear Balance
+                        </button>
+                      </div>
+                      <div class="balance-amount" id="balanceAmount">₹ 14,250</div>
+                      <div class="balance-footer">
+                        <span class="verified-badge">PROTECTED</span>
+                        <span>State Bank Direct Sync</span>
+                      </div>
+                    </div>
+
+                    <!-- 4 Big Senior Color Tiles -->
+                    <div class="action-grid">
+                      <div class="action-tile tile-send">
+                        <div class="tile-icon">💸</div>
+                        <div class="tile-title">Send Money</div>
+                        <div class="tile-sub">Voice or photo pay</div>
+                      </div>
+
+                      <div class="action-tile tile-receive">
+                        <div class="tile-icon">📷</div>
+                        <div class="tile-title">Scan & Pay</div>
+                        <div class="tile-sub">Hear merchant QR</div>
+                      </div>
+
+                      <div class="action-tile tile-bills">
+                        <div class="tile-icon">💡</div>
+                        <div class="tile-title">Pay Bills</div>
+                        <div class="tile-sub">Power & Water</div>
+                      </div>
+
+                      <div class="action-tile tile-passbook">
+                        <div class="tile-icon">📖</div>
+                        <div class="tile-title">Passbook</div>
+                        <div class="tile-sub">Audio statement</div>
+                      </div>
+                    </div>
+
+                    <!-- Quick Photo Contacts -->
+                    <div class="section-heading">
+                      <h3>Quick Photo Contacts</h3>
+                      <span class="audio-hint" onclick="window.EasyAudio.speak('Tap Son Rahul, Lakshmi Grocery, Dr Sharma, or Landlord to transfer money.')">🔊 Listen</span>
+                    </div>
+
+                    <div class="contact-avatars">
+                      <div class="contact-item" data-name="Son Rahul" data-rel="Son">
+                        <div class="contact-img-wrap">👨‍🦱</div>
+                        <span class="contact-name">Rahul</span>
+                        <span class="contact-rel">Son</span>
+                      </div>
+                      <div class="contact-item" data-name="Lakshmi Grocery" data-rel="Store">
+                        <div class="contact-img-wrap">🏪</div>
+                        <span class="contact-name">Lakshmi</span>
+                        <span class="contact-rel">Store</span>
+                      </div>
+                      <div class="contact-item" data-name="Dr. Sharma" data-rel="Doctor">
+                        <div class="contact-img-wrap">👨‍⚕️</div>
+                        <span class="contact-name">Dr. Sharma</span>
+                        <span class="contact-rel">Doctor</span>
+                      </div>
+                      <div class="contact-item" data-name="Landlord Verma" data-rel="Rent">
+                        <div class="contact-img-wrap">👴</div>
+                        <span class="contact-name">Verma Ji</span>
+                        <span class="contact-rel">Rent</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Screen 2: Voice Pay & Big Keypad -->
+                  <div class="screen" id="s-send">
+                    <div class="app-header">
+                      <div class="app-brand-pill">
+                        <span>Send to: <b id="recName">Son Rahul</b></span>
+                      </div>
+                      <span style="font-size:24px;" id="recAvatar">👨‍🦱</span>
+                    </div>
+
+                    <!-- Voice Waveform Hero -->
+                    <div class="voice-hero-box">
+                      <div style="font-size:14px; font-weight:700; color:var(--dlr900);">Speak Amount or Tap Mic</div>
+                      <div class="voice-waveform" id="voiceWaveform">
+                        <div class="voice-bar"></div>
+                        <div class="voice-bar"></div>
+                        <div class="voice-bar"></div>
+                        <div class="voice-bar"></div>
+                        <div class="voice-bar"></div>
+                        <div class="voice-bar"></div>
+                      </div>
+                      <button class="mic-action-btn" id="micActionBtn" title="Tap to Speak Amount">
+                        🎤
+                      </button>
+                    </div>
+
+                    <!-- Amount Display Box -->
+                    <div class="amount-display-box">
+                      <div class="amount-val" id="keypadAmount">₹ 0</div>
+                      <div class="amount-words" id="amountWords">Tap numbers or tap Mic to speak</div>
+                    </div>
+
+                    <!-- Senior Keypad -->
+                    <div class="senior-keypad">
+                      <button class="key-btn" data-val="1">1</button>
+                      <button class="key-btn" data-val="2">2</button>
+                      <button class="key-btn" data-val="3">3</button>
+                      <button class="key-btn" data-val="4">4</button>
+                      <button class="key-btn" data-val="5">5</button>
+                      <button class="key-btn" data-val="6">6</button>
+                      <button class="key-btn" data-val="7">7</button>
+                      <button class="key-btn" data-val="8">8</button>
+                      <button class="key-btn" data-val="9">9</button>
+                      <button class="key-btn btn-clear" data-val="clear">CLEAR</button>
+                      <button class="key-btn" data-val="0">0</button>
+                      <button class="key-btn btn-voice" data-val="voice">🎙️</button>
+                    </div>
+
+                    <button class="send-action-btn" id="sendMoneyBtn">
+                      <span>Confirm & Send Payment</span>
+                      <span>→</span>
+                    </button>
+                  </div>
+
+                  <!-- Screen: Scan & Pay / Receive QR -->
+                  <div class="screen" id="s-qr">
+                    <div class="app-header">
+                      <div class="app-brand-pill">
+                        <span>📷 Scan & Receive QR</span>
+                      </div>
+                      <button class="voice-status-btn" onclick="window.EasyAudio.speak('Scan merchant QR code with camera, or show your receive QR code to receive money.')">
+                        🔊 Voice
+                      </button>
+                    </div>
+
+                    <!-- QR Mode Toggle Tabs -->
+                    <div class="qr-tab-nav">
+                      <button class="qr-tab-btn active" id="qrTabScanBtn">📷 Scan Camera</button>
+                      <button class="qr-tab-btn" id="qrTabReceiveBtn">📲 My Receive QR</button>
+                    </div>
+
+                    <!-- View 1: Camera Scanner Simulation -->
+                    <div id="qrScanView">
+                      <div class="camera-viewfinder">
+                        <div class="viewfinder-reticle">
+                          <span class="viewfinder-corner tl"></span>
+                          <span class="viewfinder-corner tr"></span>
+                          <span class="viewfinder-corner bl"></span>
+                          <span class="viewfinder-corner br"></span>
+                          <div class="laser-scanner-line"></div>
+                          <span style="font-size:32px; opacity:0.6;">🏪</span>
+                        </div>
+                      </div>
+
+                      <div style="font-size:13px; font-weight:700; color:var(--dlr900); margin-bottom:8px;">
+                        Point Camera or Tap Sample Merchant:
+                      </div>
+
+                      <div class="merchant-select-list">
+                        <div class="merchant-select-item" data-name="Lakshmi Grocery" data-amt="120" data-avatar="🏪">
+                          <span style="font-size:24px;">🏪</span>
+                          <div style="flex:1;">
+                            <div style="font-weight:700; font-size:13.5px;">Lakshmi Grocery Store</div>
+                            <div style="font-size:11px; color:var(--text2);">Merchant QR · Daily Essentials</div>
+                          </div>
+                          <span style="font-weight:800; color:var(--dlr500); font-size:14px;">₹ 120</span>
+                        </div>
+
+                        <div class="merchant-select-item" data-name="Dr. Sharma Clinic" data-amt="350" data-avatar="👨‍⚕️">
+                          <span style="font-size:24px;">👨‍⚕️</span>
+                          <div style="flex:1;">
+                            <div style="font-weight:700; font-size:13.5px;">Dr. Sharma Clinic</div>
+                            <div style="font-size:11px; color:var(--text2);">Medical QR · Health Check</div>
+                          </div>
+                          <span style="font-weight:800; color:var(--dlr500); font-size:14px;">₹ 350</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- View 2: My Personal Receive QR Code -->
+                    <div id="qrReceiveView" style="display:none;">
+                      <div class="qr-box-wrap">
+                        <div style="font-size:13px; font-weight:700; color:var(--text2); text-transform:uppercase; letter-spacing:0.04em;">
+                          Harish Chandra's Personal QR
+                        </div>
+                        <div class="qr-code-container" id="phoneQrCodeContainer"></div>
+                        <div class="qr-vpa-pill">harish.chandra@easycoin</div>
+                        <div style="font-size:12px; color:var(--text2); margin-top:8px; text-align:center;">
+                          Show this code to receive pension or family money instantly
+                        </div>
+                      </div>
+
+                      <button class="voice-status-btn" style="width:100%; justify-content:center; padding:12px;" onclick="window.EasyAudio.speak('Your EasyCoin Receive QR Code is on screen. Anyone can scan it to send you money.'); alert('📲 QR Ready: Show to sender.');">
+                        🔊 Read Out QR Details
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Screen 3: Visual Passbook -->
+                  <div class="screen" id="s-passbook">
+                    <div class="app-header">
+                      <div class="app-brand-pill">
+                        <span>📖 Audio Passbook</span>
+                      </div>
+                      <button class="voice-status-btn" onclick="window.EasyAudio.speak('Here is your passbook. Tap any row to hear details.')">
+                        🔊 Read All
+                      </button>
+                    </div>
+                    <div class="passbook-list" id="passbookList"></div>
+                  </div>
+
+                  <!-- Screen 4: Guardian & SOS Emergency -->
+                  <div class="screen" id="s-guardian">
+                    <div class="app-header">
+                      <div class="app-brand-pill">
+                        <span>🛡️ Safety Shield</span>
+                      </div>
+                    </div>
+
+                    <div class="sos-card">
+                      <div style="font-size:32px; margin-bottom:8px;">🚨</div>
+                      <h3 style="font-size:18px; color:#ef4444; margin-bottom:6px;">Emergency Panic Lock</h3>
+                      <p style="font-size:13px; color:var(--text2); margin-bottom:16px;">
+                        Suspect fraud or lost your wallet? 1-tap locks your payments instantly.
+                      </p>
+                      <button class="sos-btn" id="sosFreezeBtn">
+                        🔒 Freeze My Account Now
+                      </button>
+                    </div>
+
+                    <div class="guardian-box">
+                      <h4 style="font-size:16px; margin-bottom:8px;">Trusted Family Guardian</h4>
+                      <div style="display:flex; align-items:center; gap:12px; margin-top:12px;">
+                        <div style="font-size:32px;">👩‍⚕️</div>
+                        <div style="flex:1;">
+                          <div style="font-weight:700;">Daughter Ananya</div>
+                          <div style="font-size:12px; color:var(--text2);">Primary Guardian · Auto-Notified</div>
+                        </div>
+                        <button class="voice-status-btn" onclick="window.EasyAudio.speak('Calling daughter Ananya...'); alert('📞 Calling Family Guardian: Daughter Ananya');">
+                          📞 Call
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Bottom Tab Bar -->
+                  <div class="tabbar">
+                    <div class="tab active" data-target="s-dash">
+                      <span class="tab-icon">🏠</span>
+                      <span class="tab-label">Home</span>
+                    </div>
+                    <div class="tab" data-target="s-send">
+                      <span class="tab-icon">💸</span>
+                      <span class="tab-label">Pay</span>
+                    </div>
+                    <div class="tab" data-target="s-passbook">
+                      <span class="tab-icon">📖</span>
+                      <span class="tab-label">Passbook</span>
+                    </div>
+                    <div class="tab" data-target="s-guardian">
+                      <span class="tab-icon">🛡️</span>
+                      <span class="tab-label">Safety</span>
+                    </div>
+                  </div>
+
+                  <!-- Home Bar -->
+                  <div class="home-indicator"></div>
+
+                  <!-- Interactive Lockscreen -->
+                  <div class="lockscreen" id="lockscreen">
+                    <div class="ls-date" id="lsDate">Tuesday, March 3</div>
+                    <div class="ls-time" id="lsTime">15:15</div>
+                    
+                    <div class="ls-notifs">
+                      <div class="ls-notif" id="lsNotif">
+                        <div class="ls-notif-icon">₹</div>
+                        <div>
+                          <div style="font-size:14px; font-weight:700;">EasyCoin Alert</div>
+                          <div style="font-size:12.5px; color:rgba(255,255,255,0.9);">🎁 ₹8,000 Pension Deposit Credited!</div>
+                        </div>
+                      </div>
+                      <div class="ls-unlock-hint">Tap anywhere to unlock</div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+              <!-- Power Button for interactive Lock/Unlock -->
+              <div class="power-btn" id="powerBtn" title="Click to Lock / Unlock Phone"></div>
+            </div>
+
+            <!-- Device Switcher Segmented Control -->
+            <div class="dev-toggle">
+              <button type="button" class="devseg active" data-dev="iphone">iPhone 17 Pro</button>
+              <button type="button" class="devseg" data-dev="android">Android Phone</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       4. Accessibility Highlights (cardssec1)
+       ========================================================================= -->
+  <section class="cardssec1" id="highlights">
+    <div class="container">
+      <span class="section-tag">Why Seniors Love EasyCoin</span>
+      <h2 class="section-title">Built From The Ground Up For Total Independence.</h2>
+      <p class="section-sub">
+        No tiny print, no confusing banking acronyms. Every touchpoint is engineered for clarity, tactile certainty, and voice verification.
+      </p>
+
+      <div class="cards-grid">
+        
+        <!-- Card 1: Voice Navigation -->
+        <div class="card-item">
+          <span class="card-item-tag">Audio Guidance</span>
+          <h3 class="card-item-title">Talk & Listen. Zero Reading Needed.</h3>
+          <p class="card-item-desc">
+            Simply speak: "Send 200 Rupees to Dr. Sharma" or "How much money do I have?". The built-in AI speech engine understands natural accents and reads responses aloud.
+          </p>
+          <div class="gauge-wrap">
+            <div class="gauge-circle" data-score="99">
+              <svg viewBox="0 0 100 100">
+                <circle class="bg" cx="50" cy="50" r="42"></circle>
+                <circle class="progress" cx="50" cy="50" r="42"></circle>
+              </svg>
+              <div class="gauge-val">
+                <span class="gauge-val-num">99%</span>
+                <span class="gauge-val-lbl">Speech Accuracy</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2: Photo Contacts -->
+        <div class="card-item">
+          <span class="card-item-tag">Visual Avatars</span>
+          <h3 class="card-item-title">Photo-Based Transfers With 1 Tap.</h3>
+          <p class="card-item-desc">
+            Never memorize complex 16-digit account numbers or IFSC codes. Choose familiar faces from your contact list and verify transactions with voice reassurance.
+          </p>
+          <div class="gauge-wrap">
+            <div class="gauge-circle" data-score="100">
+              <svg viewBox="0 0 100 100">
+                <circle class="bg" cx="50" cy="50" r="42"></circle>
+                <circle class="progress" cx="50" cy="50" r="42" style="stroke:#22c55e;"></circle>
+              </svg>
+              <div class="gauge-val">
+                <span class="gauge-val-num">100%</span>
+                <span class="gauge-val-lbl">Zero Mis-Transfers</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3: Senior Safety -->
+        <div class="card-item">
+          <span class="card-item-tag">Guardian Shield</span>
+          <h3 class="card-item-title">Family Peace of Mind 24/7.</h3>
+          <p class="card-item-desc">
+            Unusual transfers trigger immediate alerts to designated family guardians. One-tap emergency voice freeze prevents unauthorized withdrawals.
+          </p>
+          <div class="gauge-wrap">
+            <div class="gauge-circle" data-score="98">
+              <svg viewBox="0 0 100 100">
+                <circle class="bg" cx="50" cy="50" r="42"></circle>
+                <circle class="progress" cx="50" cy="50" r="42" style="stroke:#FF9500;"></circle>
+              </svg>
+              <div class="gauge-val">
+                <span class="gauge-val-num">98%</span>
+                <span class="gauge-val-lbl">Senior Usability</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       5. Kinetic Typography Pitch Section (pitchsec1)
+       ========================================================================= -->
+  <section class="dlrtt-pitch">
+    <div class="dlrtt-pitch-sticky">
+      <div class="dlrtt-pitch-inner">
+        <p>
+          <span class="pw">No</span>
+          <span class="pw">more</span>
+          <span class="pw">confusing</span>
+          <span class="pw">forms.</span>
+          <span class="pw">No</span>
+          <span class="pw">more</span>
+          <span class="pw">fear</span>
+          <span class="pw">of</span>
+          <span class="pw">tapping</span>
+          <span class="pw">the</span>
+          <span class="pw">wrong</span>
+          <span class="pw">button.</span>
+        </p>
+        <p>
+          <span class="pw">With</span>
+          <span class="pw">smart</span>
+          <span class="pw">voice</span>
+          <span class="pw">guidance</span>
+          <span class="dlrtt-otgl" role="switch" aria-label="Toggle voice guidance" tabindex="0">
+            <span class="dknob"></span>
+          </span>
+          <span class="pw">and</span>
+          <span class="pw">photo</span>
+          <span class="pw">actions,</span>
+          <span class="pw">digital</span>
+          <span class="pw">payments</span>
+          <span class="pw">become</span>
+          <span class="pw">as</span>
+          <span class="pw">simple</span>
+          <span class="pw">as</span>
+          <span class="pw">a</span>
+          <span class="pw">conversation.</span>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       6. Deep Features Grid (moresec1)
+       ========================================================================= -->
+  <section class="moresec1" id="more-features">
+    <div class="container">
+      <span class="section-tag">Comprehensive Accessibility</span>
+      <h2 class="section-title">Designed For Every Need & Ability.</h2>
+      <p class="section-sub">
+        Every detail is thoughtfully created to empower elderly individuals, rural citizens, and visually challenged users to bank with dignity.
+      </p>
+
+      <div class="feat-grid-9">
+        <div class="feat-box">
+          <span class="feat-box-icon">🗣️</span>
+          <h3>12+ Local Languages</h3>
+          <p>Speaks and understands Hindi, Tamil, Telugu, Bengali, Marathi, Gujarati, Spanish, English, and more.</p>
+        </div>
+
+        <div class="feat-box">
+          <span class="feat-box-icon">🔢</span>
+          <h3>Jumbo Keypad</h3>
+          <p>Oversized numbers with high contrast, acoustic pitch verification, and automatic number narration.</p>
+        </div>
+
+        <div class="feat-box">
+          <span class="feat-box-icon">⚡</span>
+          <h3>Symbol Bill Pay</h3>
+          <p>Pay electricity (⚡), water (💧), or cooking gas (🔥) with simple 1-touch visual bill cards.</p>
+        </div>
+
+        <div class="feat-box">
+          <span class="feat-box-icon">🪙</span>
+          <h3>Visual Coin Counter</h3>
+          <p>See your balance represented in physical gold coins and note stacks for instinctive understanding.</p>
+        </div>
+
+        <div class="feat-box">
+          <span class="feat-box-icon">📷</span>
+          <h3>Scan & Hear QR</h3>
+          <p>Point camera at merchant QR code. The app speaks the shop name and amount before you confirm.</p>
+        </div>
+
+        <div class="feat-box">
+          <span class="feat-box-icon">📶</span>
+          <h3>Offline USSD Fallback</h3>
+          <p>Works smoothly even with poor internet or simple feature phones through SMS & USSD voice dialing.</p>
+        </div>
+
+        <div class="feat-box">
+          <span class="feat-box-icon">👨‍👩‍👧</span>
+          <h3>Guardian Mode</h3>
+          <p>Family members can set safe daily transfer limits and receive instant push receipts for transparency.</p>
+        </div>
+
+        <div class="feat-box">
+          <span class="feat-box-icon">🛑</span>
+          <h3>Voice Fraud Freeze</h3>
+          <p>Say "Stop All Payments" or tap the red SOS button to instantly lock accounts against scam callers.</p>
+        </div>
+
+        <div class="feat-box">
+          <span class="feat-box-icon">🏦</span>
+          <h3>Bank-Grade Encryption</h3>
+          <p>256-bit biometrics, RBI / FDIC insurance compliance, and zero storage of sensitive PINs on device.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       7. Testimonials & Stories (voicesec1)
+       ========================================================================= -->
+  <section class="voicesec1" id="reviews">
+    <div class="container">
+      <span class="section-tag">Real Stories</span>
+      <h2 class="section-title">Loved by Seniors & Trusted by Families.</h2>
+      <p class="section-sub">Read how EasyCoin has restored financial confidence to thousands of elders.</p>
+
+      <div class="voice-grid">
+        <div class="voice-card">
+          <div class="voice-stars">★★★★★</div>
+          <p class="voice-quote">
+            "I never learned to read English, and digital banking apps always terrified me. With EasyCoin, I just tap my son's picture and say the amount. It speaks back to me. It's like having a trusted helper!"
+          </p>
+          <div class="voice-user">
+            <div class="voice-avatar">👵</div>
+            <div>
+              <div class="voice-name">Savitri Devi, 71</div>
+              <div class="voice-role">Retired Teacher · Jaipur</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="voice-card">
+          <div class="voice-stars">★★★★★</div>
+          <p class="voice-quote">
+            "My father has severe cataracts and couldn't read OTP SMS messages. The voice readout and guardian approval feature give me complete peace of mind while keeping him fully independent."
+          </p>
+          <div class="voice-user">
+            <div class="voice-avatar">👨‍💼</div>
+            <div>
+              <div class="voice-name">Amitabh Roy, 44</div>
+              <div class="voice-role">Software Architect & Son · Pune</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="voice-card">
+          <div class="voice-stars">★★★★★</div>
+          <p class="voice-quote">
+            "The big colored buttons and audio click feedback make it so simple. I pay my electricity and grocery bills every month without standing in long post office queues anymore."
+          </p>
+          <div class="voice-user">
+            <div class="voice-avatar">👴</div>
+            <div>
+              <div class="voice-name">Harish Chandra, 78</div>
+              <div class="voice-role">Senior Citizen Pensioner · Delhi</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       8. Guarantee Card & Bank Partners (presec1)
+       ========================================================================= -->
+  <section class="presec1">
+    <div class="container">
+      <div class="dlrtt-pf-container">
+        <div class="pf-content">
+          <h2>100% Free Forever. <br>Guaranteed Safe & Zero Hidden Fees.</h2>
+          <p>
+            EasyCoin is backed by universal public digital infrastructure. There are no monthly charges, no transfer fees, and no minimum balance penalties for senior citizens.
+          </p>
+
+          <ul class="gar-list">
+            <li class="gar-item is-auf">
+              <button class="garbtn">
+                <span>🛡️ Zero Liability Fraud Guarantee</span>
+                <span>▾</span>
+              </button>
+              <div class="gar-desc">
+                Every transaction is backed by automated fraud detection. In the rare event of unauthorized access, your money is 100% insured.
+              </div>
+            </li>
+            <li class="gar-item">
+              <button class="garbtn">
+                <span>📞 Dedicated 24/7 Human Phone Assistance</span>
+                <span>▾</span>
+              </button>
+              <div class="gar-desc">
+                Tired of robotic call centers? EasyCoin connects seniors directly to compassionate human guides within 30 seconds.
+              </div>
+            </li>
+            <li class="gar-item">
+              <button class="garbtn">
+                <span>🔒 Biometric Privacy Protection</span>
+                <span>▾</span>
+              </button>
+              <div class="gar-desc">
+                Your voice samples and fingerprints stay securely encrypted on your device and are never shared or monetized.
+              </div>
+            </li>
+          </ul>
+
+          <div class="payment-badges-row">
+            <span class="badge-pill">UPI Verified</span>
+            <span class="badge-pill">RuPay</span>
+            <span class="badge-pill">Visa</span>
+            <span class="badge-pill">Mastercard</span>
+            <span class="badge-pill">SEPA</span>
+            <span class="badge-pill">Direct Bank Sync</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       9. FAQ Accordion (faqsec1)
+       ========================================================================= -->
+  <section class="faqsec1" id="faq">
+    <div class="container">
+      <span class="section-tag">Got Questions?</span>
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <p class="section-sub">Everything you need to know about EasyCoin's accessibility features.</p>
+
+      <div class="faq-list">
+        <div class="faq-item is-open">
+          <button class="faq-q">
+            <span>Can people who cannot read or write use EasyCoin?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-a">
+            Yes, absolutely! EasyCoin was specifically built for non-readers. Every button has intuitive color coding, voice guidance narrates all actions aloud in local dialects, and money is sent by tapping contact photos without typing words.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q">
+            <span>How does the Voice-to-Pay feature work?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-a">
+            Just tap the big microphone button and speak naturally, for example: "Send 500 Rupees to Son Rahul". The app converts your speech into the transfer amount and asks for your spoken or touch confirmation before sending.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q">
+            <span>How does Family Guardian mode protect against scams?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-a">
+            You can link a trusted child or relative as a Family Guardian. Any transfer above a custom threshold (e.g. ₹2,000) requests a quick approval ping on their phone, preventing scam phone callers from coercing elders into unauthorized transfers.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q">
+            <span>Does it work on older phones or slow internet?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-a">
+            Yes. EasyCoin is ultra-lightweight and includes offline USSD & voice-dial fallback modes that function even in low-connectivity rural areas.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       10. Final Call To Action (ctasec1)
+       ========================================================================= -->
+  <section class="ctasec1">
+    <div class="container">
+      <div class="cta-box">
+        <h2>Start Banking With Dignity & Independence Today.</h2>
+        <p>Join over 250,000 seniors and families who rely on EasyCoin daily.</p>
+        <div class="hero-actions">
+          <a href="app.html" class="hero-cta-main" style="padding:18px 36px; font-size:18px;">
+            🚀 Open Fullscreen EasyCoin Web App
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       11. Footer (dlrtt-ftr)
+       ========================================================================= -->
+  <footer class="dlrtt-ftr">
+    <div class="container">
+      <div class="ftr-grid">
+        <div class="ftr-col">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;">
+            <div class="brand-icon">₹</div>
+            <span style="font-family:var(--font-display); font-size:22px; font-weight:800; color:#fff;">EasyCoin</span>
+          </div>
+          <p style="font-size:14px; line-height:1.6; color:#94A3B8; max-width:320px;">
+            Empowering elderly, illiterate, and visually challenged individuals with intuitive voice and symbol-first digital banking.
+          </p>
+          <div class="status-pill">
+            <span class="status-dot"></span>
+            <span>All systems operational</span>
+          </div>
+        </div>
+
+        <div class="ftr-col">
+          <h5>Product</h5>
+          <ul>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#phone-stage">Interactive Phone</a></li>
+            <li><a href="#highlights">Voice Banking</a></li>
+            <li><a href="app.html">Launch Web App</a></li>
+          </ul>
+        </div>
+
+        <div class="ftr-col">
+          <h5>Accessibility</h5>
+          <ul>
+            <li><a href="#more-features">Local Dialects</a></li>
+            <li><a href="#more-features">Tactile Keypad</a></li>
+            <li><a href="#more-features">Guardian Shield</a></li>
+            <li><a href="#faq">Senior FAQ</a></li>
+          </ul>
+        </div>
+
+        <div class="ftr-col">
+          <h5>Legal & Security</h5>
+          <ul>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Banking Compliance</a></li>
+            <li><a href="#">Security Guarantee</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="ftr-bottom">
+        <div>© 2026 EasyCoin Technologies Inc. All rights reserved.</div>
+        <div class="lang-switch">
+          <span>Language:</span>
+          <a class="lang-opt active" data-lang="en">English</a>
+          <a class="lang-opt" data-lang="hi">हिंदी</a>
+          <a class="lang-opt" data-lang="es">Español</a>
+          <a class="lang-opt" data-lang="de">Deutsch</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Core JavaScript Modules -->
+  <script src="assets/js/audio-synth.js"></script>
+  <script src="assets/js/api-client.js"></script>
+  <script src="assets/js/qr-generator.js"></script>
+  <script src="assets/js/hero-shader.js"></script>
+  <script src="assets/js/pitch-scroll.js"></script>
+  <script src="assets/js/phone-simulator.js"></script>
+  <script src="assets/js/liquid-glass.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EasyCoin App – Accessible Senior Digital Banking</title>
+  
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/accessible-app.css">
+  <link rel="stylesheet" href="assets/css/liquid-glass.css">
+</head>
+<body class="standalone-app-body">
+
+  <!-- Accessible App Top Navigation Bar -->
+  <header class="app-navbar">
+    <a href="index.html" class="app-brand-btn" title="Return to Landing Page">
+      <div class="app-brand-icon">₹</div>
+      <div>
+        <div class="app-brand-name">EasyCoin</div>
+        <div style="font-size:12px; color:var(--text-muted);">Senior & Visual Assist Mode</div>
+      </div>
+    </a>
+
+    <div class="app-controls">
+      <button class="ctrl-btn" onclick="document.body.classList.toggle('high-contrast-mode')">
+        👁️ High Contrast
+      </button>
+      <button class="ctrl-btn" onclick="window.EasyAudio.speak('Welcome to EasyCoin. You are in accessible banking mode. Tap any button to hear details.')">
+        🔊 Voice Help
+      </button>
+      <a href="index.html" class="ctrl-btn">
+        ← Home
+      </a>
+    </div>
+  </header>
+
+  <!-- App Main Content Area -->
+  <main class="standalone-container">
+    
+    <!-- Balance Hero Box -->
+    <section class="senior-balance-box">
+      <div class="bal-top-row">
+        <span class="bal-lbl">Available Savings Balance</span>
+        <button class="bal-speak-btn" id="speakBalBtn">
+          🔊 Hear Balance
+        </button>
+      </div>
+      <div class="bal-number" id="standaloneBal">₹ 14,250</div>
+      <div class="coin-stack-viz">
+        <span>🪙 14 Gold Coins (₹1,000 each) + 25 Silver Coins (₹10 each)</span>
+      </div>
+    </section>
+
+    <!-- 4 Big Senior Colored Tiles -->
+    <section class="senior-action-tiles">
+      <div class="senior-tile st-send" id="tileSend">
+        <div class="st-icon">💸</div>
+        <div class="st-title">Send Money</div>
+        <div class="st-sub">Speak or tap photo</div>
+      </div>
+
+      <div class="senior-tile st-receive" id="tileReceive">
+        <div class="st-icon">📷</div>
+        <div class="st-title">Scan & Pay</div>
+        <div class="st-sub">QR Code Reader</div>
+      </div>
+
+      <div class="senior-tile st-bills" id="tileBills">
+        <div class="st-icon">💡</div>
+        <div class="st-title">Pay Bills</div>
+        <div class="st-sub">Power, Water, Gas</div>
+      </div>
+
+      <div class="senior-tile st-passbook" id="tilePassbook">
+        <div class="st-icon">📖</div>
+        <div class="st-title">Passbook</div>
+        <div class="st-sub">Spoken transactions</div>
+      </div>
+    </section>
+
+    <!-- Quick Photo Contacts Section -->
+    <section class="app-section-card">
+      <div class="app-sec-head">
+        <h3>1-Tap Photo Contacts</h3>
+        <button class="ctrl-btn" onclick="window.EasyAudio.speak('Tap Son Rahul, Lakshmi Grocery, Dr Sharma, or Landlord to transfer money.')">
+          🔊 Read Names
+        </button>
+      </div>
+
+      <div class="app-contact-grid">
+        <div class="app-contact-item" data-name="Son Rahul" data-rel="Son">
+          <div class="app-contact-avatar">👨‍🦱</div>
+          <div class="app-contact-name">Rahul</div>
+          <span class="app-contact-badge">Family · Son</span>
+        </div>
+
+        <div class="app-contact-item" data-name="Lakshmi Grocery" data-rel="Store">
+          <div class="app-contact-avatar">🏪</div>
+          <div class="app-contact-name">Lakshmi Grocery</div>
+          <span class="app-contact-badge">Ration & Milk</span>
+        </div>
+
+        <div class="app-contact-item" data-name="Dr. Sharma" data-rel="Doctor">
+          <div class="app-contact-avatar">👨‍⚕️</div>
+          <div class="app-contact-name">Dr. Sharma</div>
+          <span class="app-contact-badge">Clinic & Meds</span>
+        </div>
+
+        <div class="app-contact-item" data-name="Landlord Verma" data-rel="Rent">
+          <div class="app-contact-avatar">👴</div>
+          <div class="app-contact-name">Verma Ji</div>
+          <span class="app-contact-badge">House Rent</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Visual Passbook Statement Section -->
+    <section class="app-section-card" id="passbookSection">
+      <div class="app-sec-head">
+        <h3>📖 Spoken Audio Passbook</h3>
+        <button class="ctrl-btn" onclick="window.EasyAudio.speak('Here are your recent payments and pension deposits. Tap any row to hear it.')">
+          🔊 Explain
+        </button>
+      </div>
+
+      <div class="passbook-list" id="standalonePassbookList"></div>
+    </section>
+
+    <!-- Emergency Safety & Guardian Box -->
+    <section class="app-section-card" style="border: 2px solid #FCA5A5; background: #FEF2F2;">
+      <div style="display:flex; align-items:center; gap:16px;">
+        <div style="font-size:36px;">🚨</div>
+        <div style="flex:1;">
+          <h4 style="font-size:18px; color:#dc2626; margin-bottom:4px;">Guardian SOS & Safety Protection</h4>
+          <p style="font-size:14px; color:#475569; margin:0;">
+            Need help? Tap to freeze account against scams or call Daughter Ananya.
+          </p>
+        </div>
+        <button class="ctrl-btn" style="background:#dc2626; color:#fff; border-color:#dc2626;" onclick="window.EasyAudio.speak('Emergency lock active. Guardian alerted.'); alert('🚨 Emergency Lock Active: Account is frozen and Daughter Ananya has been notified.');">
+          🔒 Freeze Now
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Payment Modal Dialog -->
+  <div class="pay-modal" id="payModal">
+    <div class="pay-modal-content">
+      <div style="display:flex; align-items:center; justify-content:space-between;">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div style="font-size:36px;" id="modalRecAv">👨‍🦱</div>
+          <div>
+            <div style="font-size:18px; font-weight:800;" id="modalRecName">Son Rahul</div>
+            <div style="font-size:13px; color:var(--text-muted);">Verified Contact</div>
+          </div>
+        </div>
+        <button id="closeModalBtn" style="background:none; border:none; font-size:24px; cursor:pointer;">✕</button>
+      </div>
+
+      <div class="amount-display-box">
+        <div class="amount-val" id="modalAmountVal">₹ 0</div>
+        <div class="amount-words" id="modalAmountWords">Tap numbers or speak</div>
+      </div>
+
+      <div class="senior-keypad">
+        <button class="key-btn m-key-btn" data-val="1">1</button>
+        <button class="key-btn m-key-btn" data-val="2">2</button>
+        <button class="key-btn m-key-btn" data-val="3">3</button>
+        <button class="key-btn m-key-btn" data-val="4">4</button>
+        <button class="key-btn m-key-btn" data-val="5">5</button>
+        <button class="key-btn m-key-btn" data-val="6">6</button>
+        <button class="key-btn m-key-btn" data-val="7">7</button>
+        <button class="key-btn m-key-btn" data-val="8">8</button>
+        <button class="key-btn m-key-btn" data-val="9">9</button>
+        <button class="key-btn m-key-btn btn-clear" data-val="clear">CLEAR</button>
+        <button class="key-btn m-key-btn" data-val="0">0</button>
+        <button class="key-btn m-key-btn btn-voice" data-val="voice">🎙️</button>
+      </div>
+
+      <button class="send-action-btn" id="confirmPayBtn">
+        <span>Confirm & Send Payment</span>
+        <span>→</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Standalone QR Code Modal Dialog (Scan & Receive) -->
+  <div class="pay-modal" id="qrModal">
+    <div class="pay-modal-content">
+      <div style="display:flex; align-items:center; justify-content:space-between;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div style="font-size:32px;">📷</div>
+          <div>
+            <div style="font-size:18px; font-weight:800;">Scan & Receive QR</div>
+            <div style="font-size:12px; color:var(--text-muted);">Camera & Spoken QR Reader</div>
+          </div>
+        </div>
+        <button id="closeQrModalBtn" style="background:none; border:none; font-size:24px; cursor:pointer;">✕</button>
+      </div>
+
+      <!-- Tab Switcher -->
+      <div class="qr-tab-nav">
+        <button class="qr-tab-btn active" id="appQrTabScanBtn">📷 Scan Merchant QR</button>
+        <button class="qr-tab-btn" id="appQrTabReceiveBtn">📲 My Receive QR</button>
+      </div>
+
+      <!-- View 1: Camera Scanner Simulation -->
+      <div id="appQrScanView">
+        <div class="camera-viewfinder" style="height:200px;">
+          <div class="viewfinder-reticle">
+            <span class="viewfinder-corner tl"></span>
+            <span class="viewfinder-corner tr"></span>
+            <span class="viewfinder-corner bl"></span>
+            <span class="viewfinder-corner br"></span>
+            <div class="laser-scanner-line"></div>
+            <span style="font-size:32px; opacity:0.6;">🏪</span>
+          </div>
+        </div>
+
+        <div style="font-size:14px; font-weight:700; color:var(--text-main); margin-bottom:8px;">
+          Tap Merchant to Simulate Scan:
+        </div>
+
+        <div class="merchant-select-list">
+          <div class="merchant-select-item app-scan-sample" data-name="Lakshmi Grocery Store" data-amt="120" data-avatar="🏪">
+            <span style="font-size:24px;">🏪</span>
+            <div style="flex:1;">
+              <div style="font-weight:700; font-size:14px;">Lakshmi Grocery Store</div>
+              <div style="font-size:12px; color:var(--text-muted);">Daily Essentials · Verified QR</div>
+            </div>
+            <span style="font-weight:800; color:var(--primary); font-size:16px;">₹ 120</span>
+          </div>
+
+          <div class="merchant-select-item app-scan-sample" data-name="Dr. Sharma Clinic" data-amt="350" data-avatar="👨‍⚕️">
+            <span style="font-size:24px;">👨‍⚕️</span>
+            <div style="flex:1;">
+              <div style="font-weight:700; font-size:14px;">Dr. Sharma Health Clinic</div>
+              <div style="font-size:12px; color:var(--text-muted);">Prescription & Meds QR</div>
+            </div>
+            <span style="font-weight:800; color:var(--primary); font-size:16px;">₹ 350</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- View 2: My Personal Receive QR -->
+      <div id="appQrReceiveView" style="display:none;">
+        <div class="qr-box-wrap">
+          <div style="font-size:14px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">
+            Harish Chandra's Digital QR
+          </div>
+          <div class="qr-code-container" id="appQrCodeContainer"></div>
+          <div class="qr-vpa-pill">harish.chandra@easycoin</div>
+          <div style="font-size:13px; color:var(--text-muted); margin-top:8px; text-align:center;">
+            Show this code to receive pension or family money instantly
+          </div>
+        </div>
+
+        <button class="send-action-btn" onclick="window.EasyAudio.speak('Your EasyCoin Receive QR Code is on screen. Anyone can scan it to send you money.'); alert('📲 QR Ready: Show to sender to receive payments.');">
+          🔊 Hear Instructions
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Floating Voice Assistant Dock -->
+  <aside class="voice-assistant-dock">
+    <button class="dock-mic-btn" id="dockMicBtn" title="Tap to Speak Command">
+      🎤
+    </button>
+    <div class="dock-status-txt" id="dockStatus">
+      Tap mic to speak: "Check balance" or "Send ₹500"
+    </div>
+  </aside>
+
+  <!-- Core Scripts -->
+  <script src="assets/js/audio-synth.js"></script>
+  <script src="assets/js/api-client.js"></script>
+  <script src="assets/js/qr-generator.js"></script>
+  <script src="assets/js/banking-engine.js"></script>
+  <script src="assets/js/liquid-glass.js"></script>
+</body>
+</html>
