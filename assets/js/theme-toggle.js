@@ -46,7 +46,21 @@
     var initialTheme = getStoredTheme();
     applyTheme(initialTheme, false);
 
-    // Attach listener to all theme toggles
+    // Allow clicking anywhere on the pill container to toggle smoothly
+    document.addEventListener('click', function (e) {
+      var wrap = e.target.closest('.theme-switch-wrap');
+      if (wrap) {
+        if (e.target.tagName !== 'INPUT') {
+          var input = wrap.querySelector('input.theme-toggle-input');
+          if (input) {
+            input.checked = !input.checked;
+            applyTheme(input.checked ? 'dark' : 'light', true);
+          }
+        }
+      }
+    });
+
+    // Direct change event on input
     document.addEventListener('change', function (e) {
       if (e.target && e.target.classList.contains('theme-toggle-input')) {
         var newTheme = e.target.checked ? 'dark' : 'light';

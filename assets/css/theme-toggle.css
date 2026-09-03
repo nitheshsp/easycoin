@@ -1,49 +1,94 @@
 /* ==========================================================================
    EasyCoin Top-Right Liquid Glass Dark / Light Mode Slider Styles
+   Enhanced with ultra-smooth spring physics, liquid elastic stretch & glow
    ========================================================================== */
 
-/* Slider Container */
+/* Smooth Page-Wide Theme Transitions */
+html, body,
+.dlrtt-hdr,
+.dlrtt-fcard,
+.dlrtt-rcard,
+.dlrtt-faq-item,
+.dlrtt-gcard,
+.app-navbar,
+.app-section-card,
+.bill-card-item,
+.theme-switch-wrap {
+  transition: background-color 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              color 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+/* Slider Pill Container */
 .theme-switch-wrap {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  background: rgba(255, 255, 255, 0.65);
+  gap: 9px;
+  background: rgba(255, 255, 255, 0.72);
   border: 1.5px solid rgba(0, 61, 209, 0.18);
   border-radius: 999px;
   padding: 4px 10px;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  box-shadow: 0 4px 14px rgba(0, 8, 27, 0.06);
-  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 4px 16px rgba(0, 8, 27, 0.06), inset 0 1px 1px rgba(255, 255, 255, 0.8);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   user-select: none;
   cursor: pointer;
 }
 
 .theme-switch-wrap:hover {
-  border-color: #003DD1;
-  box-shadow: 0 6px 18px rgba(0, 61, 209, 0.15);
-  transform: translateY(-1px);
+  border-color: rgba(0, 61, 209, 0.4);
+  box-shadow: 0 6px 20px rgba(0, 61, 209, 0.16), 0 0 15px rgba(56, 189, 248, 0.2);
+  transform: translateY(-1.5px) scale(1.02);
 }
 
+.theme-switch-wrap:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Sun & Moon Icons Micro-Animations */
 .theme-icon {
   font-size: 14px;
   line-height: 1;
-  opacity: 0.55;
-  transition: opacity 0.2s, transform 0.2s;
+  opacity: 0.4;
+  transform: scale(0.9);
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   pointer-events: none;
 }
 
-.theme-icon.active {
+.theme-icon.sun.active {
   opacity: 1;
-  transform: scale(1.15);
+  transform: scale(1.16) rotate(0deg);
+  filter: drop-shadow(0 0 6px rgba(251, 191, 36, 0.65));
+}
+
+.theme-icon.sun:not(.active) {
+  opacity: 0.35;
+  transform: scale(0.85) rotate(45deg);
+  filter: none;
+}
+
+.theme-icon.moon.active {
+  opacity: 1;
+  transform: scale(1.18) rotate(0deg);
+  filter: drop-shadow(0 0 7px rgba(56, 189, 248, 0.75));
+}
+
+.theme-icon.moon:not(.active) {
+  opacity: 0.35;
+  transform: scale(0.85) rotate(-30deg);
+  filter: none;
 }
 
 /* Accessible Toggle Slider Switch */
 .theme-slider-switch {
   position: relative;
   display: inline-block;
-  width: 42px;
-  height: 22px;
+  width: 46px;
+  height: 24px;
   cursor: pointer;
   margin: 0;
 }
@@ -55,38 +100,62 @@
   position: absolute;
 }
 
+/* Fluid Liquid Track */
 .theme-slider-knob {
   position: absolute;
   inset: 0;
-  background: #E2E8F0;
+  background: linear-gradient(135deg, #E2E8F0 0%, #CBD5E1 100%);
   border-radius: 999px;
-  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-  border: 1px solid rgba(0, 8, 27, 0.08);
+  transition: background 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid rgba(0, 8, 27, 0.1);
+  box-shadow: inset 0 2px 4px rgba(0, 8, 27, 0.08);
 }
 
+/* Smooth Spring Physics Knob with Liquid Stretch */
 .theme-slider-knob::before {
   position: absolute;
   content: "";
-  height: 16px;
-  width: 16px;
-  left: 2px;
+  height: 18px;
+  width: 18px;
+  left: 3px;
   bottom: 2px;
-  background: #FFFFFF;
+  background: linear-gradient(180deg, #FFFFFF 0%, #F1F5F9 100%);
   border-radius: 50%;
-  box-shadow: 0 2px 6px rgba(0, 8, 27, 0.2);
-  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-shadow: 0 3px 8px rgba(0, 8, 27, 0.22),
+              0 1px 2px rgba(0, 0, 0, 0.1),
+              inset 0 1.5px 1px #FFFFFF;
+  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
+              width 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.4s ease,
+              box-shadow 0.4s ease;
 }
 
-/* Checked (Dark Mode Active) */
+/* Interactive Liquid Elastic Stretch when pressed */
+.theme-slider-switch:active .theme-slider-knob::before {
+  width: 23px;
+}
+
+/* Checked State (Dark Mode Active) */
 .theme-slider-switch input:checked + .theme-slider-knob {
-  background: #003DD1;
-  border-color: #38bdf8;
-  box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+  background: linear-gradient(135deg, #001B6B 0%, #003DD1 60%, #0284C7 100%);
+  border-color: rgba(56, 189, 248, 0.45);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3), 0 0 12px rgba(56, 189, 248, 0.35);
 }
 
 .theme-slider-switch input:checked + .theme-slider-knob::before {
-  transform: translateX(20px);
-  background: #FBFCFF;
+  transform: translateX(21px);
+  background: linear-gradient(180deg, #FFFFFF 0%, #E0F2FE 100%);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35),
+              0 0 8px rgba(56, 189, 248, 0.5),
+              inset 0 1.5px 1px #FFFFFF;
+}
+
+/* Checked Stretch Leftwards on Press */
+.theme-slider-switch input:checked:active + .theme-slider-knob::before {
+  transform: translateX(17px);
+  width: 23px;
 }
 
 /* ==========================================================================
