@@ -14,47 +14,134 @@
   <link rel="stylesheet" href="assets/css/theme-toggle.css">
   <link rel="stylesheet" href="assets/css/upi-circle.css">
   <link rel="stylesheet" href="assets/css/transactions.css">
+  <link rel="stylesheet" href="assets/css/sidebar.css">
 </head>
-<body class="standalone-app-body">
+<body class="standalone-app-body app-sidebar-layout">
 
-  <!-- Accessible App Top Navigation Bar -->
-  <header class="app-navbar">
-    <a href="index.html" class="app-brand-btn" title="Return to Landing Page">
-      <div class="app-brand-icon">₹</div>
-      <div>
-        <div class="app-brand-name">EasyCoin</div>
-        <div style="font-size:12px; color:var(--text-muted);">Senior & Visual Assist Mode</div>
+  <!-- Left Side Menu Bar (Senior Accessible & Smooth Navigation) -->
+  <aside class="app-sidebar" id="appSidebar" aria-label="Main Navigation">
+    <div class="sidebar-brand">
+      <a href="index.html" class="app-brand-btn" title="Return to Landing Page" style="text-decoration:none; padding:0; background:none; border:none; box-shadow:none;">
+        <div class="app-brand-icon" style="width:42px; height:42px; font-size:22px;">₹</div>
+        <div>
+          <div class="app-brand-name" style="font-size:18px;">EasyCoin</div>
+          <div class="sidebar-brand-sub">Senior &amp; Visual Assist</div>
+        </div>
+      </a>
+    </div>
+
+    <!-- Quick Balance Widget -->
+    <div class="sidebar-balance-widget">
+      <div class="sidebar-bal-lbl">Available Balance</div>
+      <div class="sidebar-bal-val" id="sidebarBalVal">₹ 14,250</div>
+      <button class="sidebar-bal-btn" onclick="if(window.EasyAudio){window.EasyAudio.playClick(); window.EasyAudio.speak('Your current balance is ' + (window.EasyBanking ? window.EasyBanking.getBalance().toLocaleString('en-IN') : '14,250') + ' Rupees.');}">
+        🔊 Hear Balance
+      </button>
+    </div>
+
+    <!-- Main Navigation Links -->
+    <nav class="sidebar-nav">
+      <a href="#balanceSection" class="sidebar-nav-item active" id="navBalance">
+        <span class="sidebar-nav-icon">🏠</span>
+        <span class="sidebar-nav-text">
+          <span>Balance &amp; Actions</span>
+        </span>
+      </a>
+
+      <a href="#contactsSection" class="sidebar-nav-item" id="navContacts">
+        <span class="sidebar-nav-icon">💸</span>
+        <span class="sidebar-nav-text">
+          <span>Send &amp; Contacts</span>
+        </span>
+      </a>
+
+      <a href="#billsSection" class="sidebar-nav-item" id="navBills">
+        <span class="sidebar-nav-icon">⚡</span>
+        <span class="sidebar-nav-text">
+          <span>Pay Bills</span>
+          <span class="sidebar-badge" id="sideBillsBadge">2 Due</span>
+        </span>
+      </a>
+
+      <a href="#circleSection" class="sidebar-nav-item" id="navCircle">
+        <span class="sidebar-nav-icon">👨‍👩‍👧‍👦</span>
+        <span class="sidebar-nav-text">
+          <span>UPI Family Circle</span>
+          <span class="sidebar-badge circle" id="sideCircleBadge">2 Minors</span>
+        </span>
+      </a>
+
+      <a href="#txHistorySection" class="sidebar-nav-item" id="navHistory">
+        <span class="sidebar-nav-icon">📜</span>
+        <span class="sidebar-nav-text">
+          <span>Transaction History</span>
+        </span>
+      </a>
+
+      <a href="#guardianSection" class="sidebar-nav-item danger" id="navGuardian">
+        <span class="sidebar-nav-icon">🛡️</span>
+        <span class="sidebar-nav-text">
+          <span>Safety &amp; SOS Shield</span>
+        </span>
+      </a>
+    </nav>
+
+    <!-- Sidebar Footer Controls -->
+    <div class="sidebar-footer">
+      <div class="sidebar-theme-row">
+        <span>Theme Mode</span>
+        <div class="theme-switch-wrap" title="Toggle Light / Dark Mode">
+          <span class="theme-icon sun active">☀️</span>
+          <label class="theme-slider-switch">
+            <input type="checkbox" class="theme-toggle-input" aria-label="Toggle Dark and Light mode">
+            <span class="theme-slider-knob"></span>
+          </label>
+          <span class="theme-icon moon">🌙</span>
+        </div>
       </div>
-    </a>
 
-    <div class="app-controls">
-      <!-- Top-Right Dark / Light Mode Slider -->
+      <button class="sidebar-ctrl-btn" onclick="document.body.classList.toggle('high-contrast-mode')">
+        <span>👁️</span>
+        <span>High Contrast</span>
+      </button>
+
+      <button class="sidebar-ctrl-btn" onclick="window.EasyAudio.speak('Welcome to EasyCoin left menu. Tap any section to jump directly: Balance, Send Money, Pay Bills, Family Circle, History, or SOS.')">
+        <span>🔊</span>
+        <span>Voice Guide</span>
+      </button>
+
+      <a href="index.html" class="sidebar-ctrl-btn" style="color:var(--text-muted);">
+        <span>←</span>
+        <span>Exit to Home</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- Mobile Drawer Overlay -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- Right-Hand Main Content Area -->
+  <div class="app-main-content">
+    <!-- Top Mobile Header (<992px) -->
+    <header class="mobile-top-bar">
+      <button class="mobile-menu-btn" id="sidebarToggleBtn" aria-label="Open Navigation Menu">
+        <span>☰</span>
+        <span>Menu</span>
+      </button>
+      <div style="font-weight:900; color:var(--primary-navy, #00174E); font-size:16px;">EasyCoin Banking</div>
       <div class="theme-switch-wrap" title="Toggle Light / Dark Mode">
-        <span class="theme-icon sun active">☀️</span>
         <label class="theme-slider-switch">
           <input type="checkbox" class="theme-toggle-input" aria-label="Toggle Dark and Light mode">
           <span class="theme-slider-knob"></span>
         </label>
-        <span class="theme-icon moon">🌙</span>
       </div>
+    </header>
 
-      <button class="ctrl-btn" onclick="document.body.classList.toggle('high-contrast-mode')">
-        👁️ High Contrast
-      </button>
-      <button class="ctrl-btn" onclick="window.EasyAudio.speak('Welcome to EasyCoin. You are in accessible banking mode. Tap any button to hear details.')">
-        🔊 Voice Help
-      </button>
-      <a href="index.html" class="ctrl-btn">
-        ← Home
-      </a>
-    </div>
-  </header>
-
-  <!-- App Main Content Area -->
-  <main class="standalone-container">
-    
-    <!-- Balance Hero Box -->
-    <section class="senior-balance-box">
+    <!-- App Main Content Area -->
+    <main class="standalone-container">
+      
+      <!-- Balance Hero Box -->
+      <section class="senior-balance-box" id="balanceSection">
       <div class="bal-top-row">
         <span class="bal-lbl">Available Savings Balance</span>
         <button class="bal-speak-btn" id="speakBalBtn">
@@ -101,7 +188,7 @@
     </section>
 
     <!-- Quick Photo Contacts Section -->
-    <section class="app-section-card">
+    <section class="app-section-card" id="contactsSection">
       <div class="app-sec-head">
         <h3>1-Tap Photo Contacts</h3>
         <button class="ctrl-btn" onclick="window.EasyAudio.speak('Tap Son Rahul, Lakshmi Grocery, Dr Sharma, or Landlord to transfer money.')">
@@ -340,6 +427,7 @@
     </section>
 
   </main>
+  </div> <!-- End app-main-content -->
 
   <!-- Payment Modal Dialog -->
   <div class="pay-modal" id="payModal">
@@ -656,5 +744,6 @@
   <script src="assets/js/banking-engine.js"></script>
   <script src="assets/js/upi-circle.js"></script>
   <script src="assets/js/liquid-glass.js"></script>
+  <script src="assets/js/sidebar.js"></script>
 </body>
 </html>

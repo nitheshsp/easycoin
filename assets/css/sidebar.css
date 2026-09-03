@@ -1,0 +1,388 @@
+/* ==========================================================================
+   EasyCoin Left Side Menu Bar (Sidebar Layout)
+   Senior-Accessible Glassmorphism Navigation for Standalone Banking
+   ========================================================================== */
+
+/* Overall Sidebar Layout Wrapper */
+body.standalone-app-body.app-sidebar-layout {
+  display: flex;
+  flex-direction: row;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-app, #F8FAFC);
+  overflow-x: hidden;
+}
+
+/* --- Left Side Menu Bar --- */
+.app-sidebar {
+  width: 290px;
+  min-width: 290px;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.86);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-right: 1.5px solid rgba(0, 61, 209, 0.12);
+  box-shadow: 6px 0 28px rgba(0, 8, 27, 0.04);
+  display: flex;
+  flex-direction: column;
+  padding: 24px 20px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Dark mode adjustments */
+body.dark-theme .app-sidebar {
+  background: rgba(15, 23, 42, 0.88);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 6px 0 28px rgba(0, 0, 0, 0.35);
+}
+
+/* High contrast mode */
+body.high-contrast-mode .app-sidebar {
+  background: #FFFFFF !important;
+  border-right: 3px solid #000000 !important;
+}
+
+/* Custom Thin Scrollbar for Sidebar */
+.app-sidebar::-webkit-scrollbar {
+  width: 5px;
+}
+.app-sidebar::-webkit-scrollbar-thumb {
+  background: rgba(0, 71, 224, 0.2);
+  border-radius: 10px;
+}
+
+/* Brand Header inside Sidebar */
+.sidebar-brand {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1.5px solid rgba(0, 8, 27, 0.07);
+}
+
+body.dark-theme .sidebar-brand {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.sidebar-brand-sub {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--text-muted, #64748B);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+/* Quick Balance Pill Widget in Sidebar */
+.sidebar-balance-widget {
+  background: linear-gradient(135deg, #00174E 0%, #003DD1 100%);
+  color: #FFFFFF;
+  border-radius: 18px;
+  padding: 16px;
+  margin-bottom: 22px;
+  box-shadow: 0 8px 24px rgba(0, 61, 209, 0.25);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sidebar-bal-lbl {
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.sidebar-bal-val {
+  font-size: 24px;
+  font-weight: 900;
+  letter-spacing: -0.01em;
+}
+
+.sidebar-bal-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: #FFFFFF;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  width: fit-content;
+  transition: all 0.2s ease;
+}
+
+.sidebar-bal-btn:hover {
+  background: rgba(255, 255, 255, 0.35);
+  transform: scale(1.02);
+}
+
+/* Sidebar Navigation Items */
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.sidebar-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 16px;
+  border-radius: 16px;
+  text-decoration: none;
+  color: var(--text-main, #0F172A);
+  font-size: 14.5px;
+  font-weight: 700;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+body.dark-theme .sidebar-nav-item {
+  color: #F1F5F9;
+}
+
+.sidebar-nav-item:hover {
+  background: rgba(0, 71, 224, 0.08);
+  color: #0047E0;
+  transform: translateX(3px);
+}
+
+body.dark-theme .sidebar-nav-item:hover {
+  background: rgba(59, 130, 246, 0.15);
+  color: #93C5FD;
+}
+
+/* Active Selected Item */
+.sidebar-nav-item.active {
+  background: #0047E0;
+  color: #FFFFFF;
+  box-shadow: 0 6px 20px rgba(0, 71, 224, 0.3);
+}
+
+body.dark-theme .sidebar-nav-item.active {
+  background: #2563EB;
+  color: #FFFFFF;
+}
+
+.sidebar-nav-icon {
+  font-size: 22px;
+  width: 28px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.sidebar-nav-text {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+}
+
+.sidebar-badge {
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background: #FEF3C7;
+  color: #B45309;
+}
+
+.sidebar-nav-item.active .sidebar-badge {
+  background: rgba(255, 255, 255, 0.25);
+  color: #FFFFFF;
+}
+
+.sidebar-badge.circle {
+  background: #ECFDF5;
+  color: #047857;
+}
+
+.sidebar-nav-item.active .sidebar-badge.circle {
+  background: rgba(255, 255, 255, 0.25);
+  color: #FFFFFF;
+}
+
+/* Emergency item special styling */
+.sidebar-nav-item.danger {
+  color: #DC2626;
+}
+
+.sidebar-nav-item.danger:hover {
+  background: #FEE2E2;
+}
+
+.sidebar-nav-item.danger.active {
+  background: #DC2626;
+  color: #FFFFFF;
+  box-shadow: 0 6px 20px rgba(220, 38, 38, 0.3);
+}
+
+/* Sidebar Footer Controls */
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: 18px;
+  border-top: 1.5px solid rgba(0, 8, 27, 0.07);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+body.dark-theme .sidebar-footer {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.sidebar-theme-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text-muted, #64748B);
+  padding: 6px 4px;
+}
+
+.sidebar-ctrl-btn {
+  background: #F1F5F9;
+  border: 1px solid #CBD5E1;
+  color: var(--text-main, #0F172A);
+  font-size: 13.5px;
+  font-weight: 700;
+  padding: 10px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+  box-sizing: border-box;
+  text-decoration: none;
+}
+
+body.dark-theme .sidebar-ctrl-btn {
+  background: rgba(30, 41, 59, 0.8);
+  border-color: rgba(71, 85, 105, 0.8);
+  color: #F8FAFC;
+}
+
+.sidebar-ctrl-btn:hover {
+  background: #E2E8F0;
+  transform: translateY(-1px);
+}
+
+/* --- Right-Hand Main Application Content Area --- */
+.app-main-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Make standalone-container center smoothly in main area */
+.app-sidebar-layout .standalone-container {
+  max-width: 920px;
+  width: calc(100% - 48px);
+  margin: 28px auto 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* Give all main section cards a smooth scroll-margin for sticky header/sidebar offset */
+.app-section-card,
+.senior-balance-box {
+  scroll-margin-top: 32px;
+}
+
+/* --- Top Mobile Header (Hidden on Desktop, Visible on Mobile/Tablet) --- */
+.mobile-top-bar {
+  display: none;
+  background: #FFFFFF;
+  border-bottom: 1.5px solid #E2E8F0;
+  padding: 12px 18px;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 900;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+body.dark-theme .mobile-top-bar {
+  background: #0F172A;
+  border-color: #334155;
+  color: #F8FAFC;
+}
+
+.mobile-menu-btn {
+  background: #F1F5F9;
+  border: 1px solid #CBD5E1;
+  font-size: 14px;
+  font-weight: 800;
+  padding: 8px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+body.dark-theme .mobile-menu-btn {
+  background: #1E293B;
+  border-color: #475569;
+  color: #FFFFFF;
+}
+
+/* Mobile Drawer Overlay */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 999;
+}
+
+/* --- Responsive Breakpoint for Tablets and Mobiles (< 992px) --- */
+@media (max-width: 992px) {
+  body.standalone-app-body.app-sidebar-layout {
+    flex-direction: column;
+  }
+
+  .mobile-top-bar {
+    display: flex;
+  }
+
+  .app-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    transform: translateX(-100%);
+    box-shadow: 12px 0 40px rgba(0, 0, 0, 0.25);
+  }
+
+  .app-sidebar.open {
+    transform: translateX(0);
+  }
+
+  .sidebar-overlay.active {
+    display: block;
+  }
+
+  .app-sidebar-layout .standalone-container {
+    width: calc(100% - 24px);
+    margin: 16px auto 80px;
+  }
+}

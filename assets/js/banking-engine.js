@@ -24,6 +24,13 @@
     var dockMicBtn = document.getElementById('dockMicBtn');
     var dockStatus = document.getElementById('dockStatus');
 
+    function syncBalanceUI() {
+      if (balEl) balEl.textContent = '₹ ' + appBalance.toLocaleString('en-IN');
+      var sideBal = document.getElementById('sidebarBalVal');
+      if (sideBal) sideBal.textContent = '₹ ' + appBalance.toLocaleString('en-IN');
+    }
+    syncBalanceUI();
+
     // Balance voice readout
     if (speakBalBtn) {
       speakBalBtn.addEventListener('click', function () {
@@ -239,7 +246,7 @@
         }
 
         appBalance -= num;
-        if (balEl) balEl.textContent = '₹ ' + appBalance.toLocaleString('en-IN');
+        syncBalanceUI();
 
         if (window.EasyAudio) {
           window.EasyAudio.playCoinSound();
@@ -374,7 +381,7 @@
       },
       updateBalance: function (newBal) {
         appBalance = Math.max(0, newBal);
-        if (balEl) balEl.textContent = '₹ ' + appBalance.toLocaleString('en-IN');
+        syncBalanceUI();
       },
       addPassbookEntry: function (name, type, amount, icon, desc) {
         transactions.unshift({
