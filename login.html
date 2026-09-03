@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EasyCoin Login – Senior & Accessible Banking</title>
+  <meta name="description" content="Effortless, voice-first digital banking login designed for senior citizens and illiterate users with 1-tap biometrics, spoken voice OTP, and secret picture pins.">
+
+  <!-- Core Stylesheets -->
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/liquid-glass.css">
+  <link rel="stylesheet" href="assets/css/accessible-app.css">
+  <link rel="stylesheet" href="assets/css/login.css">
+</head>
+<body class="login-page-body">
+
+  <!-- Ambient Fluid Glass Orbs -->
+  <div class="login-ambient-orb login-orb-1"></div>
+  <div class="login-ambient-orb login-orb-2"></div>
+
+  <!-- Accessible Top Navigation Bar -->
+  <header class="login-topbar">
+    <a href="index.html" class="login-brand" title="EasyCoin Home">
+      <div class="login-brand-icon">₹</div>
+      <div>
+        <div class="login-brand-name">EasyCoin</div>
+        <div style="font-size:12px; color:var(--login-muted); font-weight:600;">Accessible Senior Banking</div>
+      </div>
+    </a>
+
+    <!-- Senior Accessibility Controls Toolbar -->
+    <div class="login-accessibility-tools">
+      <!-- Language Switcher -->
+      <select class="lang-select-dropdown" id="langSelect" title="Select Voice & Display Language" aria-label="Select Voice and Display Language">
+        <option value="en">🇬🇧 English</option>
+        <option value="hi">🇮🇳 हिन्दी (Hindi)</option>
+        <option value="ta">🇮🇳 தமிழ் (Tamil)</option>
+        <option value="bn">🇮🇳 বাংলা (Bengali)</option>
+        <option value="te">🇮🇳 తెలుగు (Telugu)</option>
+      </select>
+
+      <!-- High Contrast Toggle -->
+      <button class="acc-tool-btn" id="btnHighContrast" title="Toggle High Contrast Mode" aria-label="Toggle High Contrast Mode">
+        👁️ High Contrast
+      </button>
+
+      <!-- Font Zoom Level -->
+      <button class="acc-tool-btn" id="btnFontZoom" title="Change Font Size" aria-label="Change Font Size">
+        🔍 Font: Normal
+      </button>
+
+      <!-- Voice Guidance Button -->
+      <button class="acc-tool-btn" id="btnVoiceHelp" title="Read Page Aloud" aria-label="Read Page Aloud">
+        🔊 Read Aloud
+      </button>
+
+      <!-- Return to Home -->
+      <a href="index.html" class="acc-tool-btn" style="text-decoration:none;" title="Return to Landing Page">
+        ← Home
+      </a>
+    </div>
+  </header>
+
+  <!-- Master Login Presentation Stage -->
+  <main class="login-main-stage">
+    
+    <!-- Welcome Header & Security Badge -->
+    <section class="login-header-banner">
+      <div class="senior-shield-badge">
+        <span>🛡️</span>
+        <span>Simplified & Safe Digital Banking</span>
+      </div>
+      <h1 class="login-page-title">Welcome to EasyCoin</h1>
+      <p class="login-page-subtitle">
+        Designed with large tactile buttons and voice assistance for effortless banking.
+      </p>
+    </section>
+
+    <!-- Spoken Audio Guidance Banner (Speaks Instructions for Non-Readers) -->
+    <aside class="spoken-audio-banner" role="region" aria-label="Spoken Audio Guidance">
+      <div class="spoken-audio-icon" id="spokenBannerIcon" title="Tap to Hear Instructions" aria-label="Tap to Hear Instructions">
+        🔊
+      </div>
+      <div class="spoken-audio-text" id="spokenBannerText">
+        Welcome to EasyCoin simplified banking. Choose how you want to sign in.
+      </div>
+    </aside>
+
+    <!-- Quick Senior Profile Card -->
+    <section class="senior-profile-quickcard" aria-label="Active Senior Account">
+      <div class="senior-user-meta">
+        <div class="senior-avatar-badge" aria-hidden="true">👴</div>
+        <div>
+          <div class="senior-name">Harish Chandra</div>
+          <div class="senior-tag">Age 78 · +91 98765 43210</div>
+        </div>
+      </div>
+      <div style="text-align:right;">
+        <span style="background:#DCFCE7; color:#15803D; font-size:12px; font-weight:800; padding:4px 10px; border-radius:999px; border:1px solid #86EFAC;">
+          ✓ Verified Senior
+        </span>
+      </div>
+    </section>
+
+    <!-- Master Glass Authentication Card -->
+    <article class="login-glass-card">
+      
+      <!-- 4 Accessible Mode Switcher Tabs -->
+      <nav class="auth-mode-tabs" aria-label="Authentication Modes">
+        <button class="auth-tab-btn active" data-mode="biometric" id="tabBiometric" aria-label="Fingerprint and Face Sign In">
+          <span class="tab-icon">👆</span>
+          <span>Biometric</span>
+        </button>
+
+        <button class="auth-tab-btn" data-mode="otp" id="tabOtp" aria-label="Voice Code Keypad Sign In">
+          <span class="tab-icon">🔢</span>
+          <span>Voice Code</span>
+        </button>
+
+        <button class="auth-tab-btn" data-mode="symbol" id="tabSymbol" aria-label="Secret Picture Sign In for Non-Readers">
+          <span class="tab-icon">🎨</span>
+          <span>Picture Lock</span>
+        </button>
+
+        <button class="auth-tab-btn" data-mode="voice" id="tabVoice" aria-label="Voice Phrase Sign In">
+          <span class="tab-icon">🎙️</span>
+          <span>Speak Name</span>
+        </button>
+      </nav>
+
+      <!-- ===================================================================
+           MODE 1: 1-Tap Biometric Sensor (Passkey / Thumbprint & Face)
+           =================================================================== -->
+      <section class="mode-panel active" id="panelBiometric" aria-labelledby="tabBiometric">
+        <div class="biometric-container">
+          <!-- Sensor Visual Pad -->
+          <div class="biometric-sensor-pad" id="biometricSensorPad" title="Touch to Authenticate" role="button" tabindex="0" aria-label="Biometric Fingerprint Sensor">
+            <div class="biometric-ripple"></div>
+            <div class="biometric-sensor-icon">👆</div>
+          </div>
+
+          <h2 class="biometric-headline">Touch Fingerprint Sensor</h2>
+          <p class="biometric-desc">
+            Place your thumb on the glowing sensor or look directly at the camera to sign in without remembering passwords.
+          </p>
+
+          <button class="btn-jumbo-action" id="btnBiometricTrigger" aria-label="Verify Fingerprint or Face ID">
+            <span>✨ Tap to Verify Fingerprint</span>
+            <span>→</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           MODE 2: Senior Voice OTP & Tactile Keypad
+           =================================================================== -->
+      <section class="mode-panel" id="panelOtp" aria-labelledby="tabOtp">
+        <!-- Phone & Voice Call Header -->
+        <div class="otp-header-box">
+          <div class="otp-target-phone">
+            <span style="font-size:24px;">📱</span>
+            <div>
+              <div style="font-size:12px; color:var(--login-muted); font-weight:600;">Registered Mobile</div>
+              <div class="otp-phone-text">+91 98765 43210</div>
+            </div>
+          </div>
+
+          <button class="btn-request-voice-call" id="btnRequestVoiceCall" aria-label="Call my phone and speak security code">
+            📞 Call & Speak Code
+          </button>
+        </div>
+
+        <!-- 4 Giant Digit Boxes -->
+        <div class="otp-digits-display" aria-label="4 digit security code boxes">
+          <div class="otp-digit-slot active" id="otpSlot1" aria-label="Digit 1">-</div>
+          <div class="otp-digit-slot" id="otpSlot2" aria-label="Digit 2">-</div>
+          <div class="otp-digit-slot" id="otpSlot3" aria-label="Digit 3">-</div>
+          <div class="otp-digit-slot" id="otpSlot4" aria-label="Digit 4">-</div>
+        </div>
+
+        <!-- Jumbo Tactile Keypad -->
+        <div class="tactile-keypad-grid" aria-label="Tactile numeric keypad">
+          <button class="key-tactile-btn" data-val="1">1</button>
+          <button class="key-tactile-btn" data-val="2">2</button>
+          <button class="key-tactile-btn" data-val="3">3</button>
+          <button class="key-tactile-btn" data-val="4">4</button>
+          <button class="key-tactile-btn" data-val="5">5</button>
+          <button class="key-tactile-btn" data-val="6">6</button>
+          <button class="key-tactile-btn" data-val="7">7</button>
+          <button class="key-tactile-btn" data-val="8">8</button>
+          <button class="key-tactile-btn" data-val="9">9</button>
+          <button class="key-tactile-btn btn-clear" data-val="clear" aria-label="Clear digits">CLEAR</button>
+          <button class="key-tactile-btn" data-val="0">0</button>
+          <button class="key-tactile-btn btn-speak-key" data-val="voice" title="Speak code aloud" aria-label="Hear Code Aloud">🔊</button>
+        </div>
+
+        <button class="btn-jumbo-action" id="btnVerifyOtp" aria-label="Verify code and open account">
+          <span>✓ Verify & Open Account</span>
+          <span>→</span>
+        </button>
+      </section>
+
+      <!-- ===================================================================
+           MODE 3: Visual Picture / Symbol PIN (For Illiterate Users)
+           =================================================================== -->
+      <section class="mode-panel" id="panelSymbol" aria-labelledby="tabSymbol">
+        <div class="symbol-intro-box">
+          <span style="font-size:26px;">💡</span>
+          <div class="symbol-intro-text">
+            Tap <strong>3 secret pictures</strong> that only you know to open your bank account. No reading required!
+          </div>
+        </div>
+
+        <!-- 3 Selected Picture Slots -->
+        <div class="symbol-slots-tray" aria-label="Selected secret pictures">
+          <div class="symbol-slot" id="symbolSlot1" aria-label="Secret Picture 1">
+            <span style="opacity:0.3;">?</span>
+          </div>
+          <div class="symbol-slot" id="symbolSlot2" aria-label="Secret Picture 2">
+            <span style="opacity:0.3;">?</span>
+          </div>
+          <div class="symbol-slot" id="symbolSlot3" aria-label="Secret Picture 3">
+            <span style="opacity:0.3;">?</span>
+          </div>
+        </div>
+
+        <!-- 3x3 Tactile Picture Grid -->
+        <div class="symbol-grid-3x3" aria-label="Secret picture options">
+          <div class="symbol-card-item" data-symbol="☀️" role="button" tabindex="0" aria-label="Sun">
+            <span class="sym-emoji">☀️</span>
+            <span class="sym-name">Sun</span>
+          </div>
+          <div class="symbol-card-item" data-symbol="🐄" role="button" tabindex="0" aria-label="Cow">
+            <span class="sym-emoji">🐄</span>
+            <span class="sym-name">Cow</span>
+          </div>
+          <div class="symbol-card-item" data-symbol="🪔" role="button" tabindex="0" aria-label="Diya Lamp">
+            <span class="sym-emoji">🪔</span>
+            <span class="sym-name">Diya Lamp</span>
+          </div>
+          <div class="symbol-card-item" data-symbol="🌾" role="button" tabindex="0" aria-label="Wheat">
+            <span class="sym-emoji">🌾</span>
+            <span class="sym-name">Wheat</span>
+          </div>
+          <div class="symbol-card-item" data-symbol="🚜" role="button" tabindex="0" aria-label="Tractor">
+            <span class="sym-emoji">🚜</span>
+            <span class="sym-name">Tractor</span>
+          </div>
+          <div class="symbol-card-item" data-symbol="🐘" role="button" tabindex="0" aria-label="Elephant">
+            <span class="sym-emoji">🐘</span>
+            <span class="sym-name">Elephant</span>
+          </div>
+          <div class="symbol-card-item" data-symbol="🏠" role="button" tabindex="0" aria-label="House">
+            <span class="sym-emoji">🏠</span>
+            <span class="sym-name">House</span>
+          </div>
+          <div class="symbol-card-item" data-symbol="🌸" role="button" tabindex="0" aria-label="Lotus">
+            <span class="sym-emoji">🌸</span>
+            <span class="sym-name">Lotus</span>
+          </div>
+          <div class="symbol-card-item" data-symbol="🔔" role="button" tabindex="0" aria-label="Temple Bell">
+            <span class="sym-emoji">🔔</span>
+            <span class="sym-name">Temple Bell</span>
+          </div>
+        </div>
+
+        <div class="symbol-actions-row">
+          <button class="btn-secondary-action" id="btnClearSymbols" style="flex:1;" aria-label="Clear chosen pictures">
+            🔄 Clear Pictures
+          </button>
+          <button class="btn-jumbo-action" id="btnVerifySymbols" style="flex:2;" aria-label="Confirm secret pictures and enter">
+            <span>✓ Open Account</span>
+            <span>→</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           MODE 4: Spoken Voice Phrase / Speech Recognition
+           =================================================================== -->
+      <section class="mode-panel" id="panelVoice" aria-labelledby="tabVoice">
+        <div class="voice-auth-container">
+          <!-- Big Pulsating Mic -->
+          <div class="voice-mic-orb" id="voiceMicOrb" role="button" tabindex="0" aria-label="Microphone. Tap to speak name" title="Tap to Speak">
+            🎙️
+          </div>
+
+          <!-- Waveform Visualizer -->
+          <div class="voice-waves-visualizer" aria-hidden="true">
+            <span class="voice-wave-bar"></span>
+            <span class="voice-wave-bar"></span>
+            <span class="voice-wave-bar"></span>
+            <span class="voice-wave-bar"></span>
+            <span class="voice-wave-bar"></span>
+            <span class="voice-wave-bar"></span>
+            <span class="voice-wave-bar"></span>
+          </div>
+
+          <div class="voice-transcript-bubble" id="voiceTranscript" aria-live="polite">
+            Tap the red mic and say "Harish" or "Namaste"
+          </div>
+
+          <button class="btn-jumbo-action" id="btnVoiceTrigger" aria-label="Tap to start voice recognition">
+            <span>🎙️ Tap to Speak Secret Word</span>
+            <span>→</span>
+          </button>
+        </div>
+      </section>
+
+    </article>
+
+    <!-- Emergency Guardian Assistance Card -->
+    <footer class="guardian-help-footer" role="contentinfo">
+      <div class="guardian-help-info">
+        <span class="guardian-help-icon" aria-hidden="true">🚨</span>
+        <div>
+          <div class="guardian-help-title">Guardian Assistance Shield</div>
+          <div class="guardian-help-desc">Need help? Daughter Ananya is your registered family guardian.</div>
+        </div>
+      </div>
+
+      <a href="tel:+919811223344" class="btn-call-guardian" aria-label="Call Daughter Ananya for assistance">
+        <span>📞 Call Daughter Ananya</span>
+      </a>
+    </footer>
+
+  </main>
+
+  <!-- Core JavaScript Engines -->
+  <script src="assets/js/audio-synth.js"></script>
+  <script src="assets/js/api-client.js"></script>
+  <script src="assets/js/liquid-glass.js"></script>
+  <script src="assets/js/login-engine.js"></script>
+</body>
+</html>

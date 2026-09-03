@@ -1,0 +1,1079 @@
+/* ==========================================================================
+   EasyCoin Senior & Illiterate Accessible Login Stylesheet
+   Liquid Glassmorphism with Jumbo Tactile Touch Targets & High Contrast
+   ========================================================================== */
+
+:root {
+  --login-primary: #003DD1;
+  --login-primary-dark: #00174E;
+  --login-primary-light: #EBF1FF;
+  --login-accent: #00D4B2;
+  --login-gold: #FFB300;
+  --login-bg: #F4F6FC;
+  --login-card: rgba(255, 255, 255, 0.92);
+  --login-border: rgba(0, 42, 144, 0.12);
+  --login-text: #00081B;
+  --login-muted: #5A6A85;
+  --login-success: #16A34A;
+  --login-danger: #DC2626;
+  --login-shadow: 0 16px 40px -10px rgba(0, 23, 78, 0.1);
+  --login-radius-lg: 28px;
+  --login-radius-md: 18px;
+  --login-radius-sm: 12px;
+  --login-font-base: 16px;
+}
+
+/* Font Zoom Levels */
+body.font-zoom-large {
+  --login-font-base: 20px;
+}
+body.font-zoom-xlarge {
+  --login-font-base: 24px;
+}
+
+/* Master Login Page Container */
+body.login-page-body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: var(--login-font-base);
+  color: var(--login-text);
+  background: radial-gradient(120% 120% at 50% 0%, #E6EEFA 0%, #F5F7FC 60%, #EAEFF9 100%);
+  position: relative;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Ambient Liquid Glass Orbs */
+.login-ambient-orb {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(80px);
+  z-index: 0;
+  opacity: 0.55;
+  animation: orbFloat 14s ease-in-out infinite alternate;
+}
+.login-orb-1 {
+  width: 450px;
+  height: 450px;
+  background: linear-gradient(135deg, #7B9BE8 0%, #003DD1 100%);
+  top: -100px;
+  left: -80px;
+}
+.login-orb-2 {
+  width: 400px;
+  height: 400px;
+  background: linear-gradient(135deg, #00D4B2 0%, #B9CAF4 100%);
+  bottom: -60px;
+  right: -80px;
+  animation-duration: 18s;
+}
+
+@keyframes orbFloat {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(30px, 40px) scale(1.08); }
+  100% { transform: translate(-20px, 20px) scale(0.95); }
+}
+
+/* Accessible Top Navigation Bar */
+.login-topbar {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 16px clamp(16px, 4vw, 36px);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--login-border);
+  box-shadow: 0 4px 20px rgba(0, 23, 78, 0.04);
+}
+
+.login-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: var(--login-text);
+}
+
+.login-brand-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #002A90 0%, #003DD1 100%);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 800;
+  box-shadow: 0 6px 16px rgba(0, 61, 209, 0.3);
+}
+
+.login-brand-name {
+  font-family: 'Outfit', 'Inter', sans-serif;
+  font-size: 1.35em;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #00174E;
+}
+
+.login-accessibility-tools {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Tactical Accessibility Buttons */
+.acc-tool-btn {
+  background: #FFFFFF;
+  border: 1.5px solid #CBD5E1;
+  color: var(--login-text);
+  font-size: 0.9em;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  min-height: 42px;
+  user-select: none;
+}
+
+.acc-tool-btn:hover {
+  background: var(--login-primary-light);
+  border-color: var(--login-primary);
+  transform: translateY(-1px);
+}
+
+.acc-tool-btn:active {
+  transform: scale(0.96);
+}
+
+.acc-tool-btn.active {
+  background: var(--login-primary);
+  border-color: var(--login-primary);
+  color: #FFFFFF;
+}
+
+.lang-select-dropdown {
+  background: #FFFFFF;
+  border: 1.5px solid #CBD5E1;
+  color: var(--login-text);
+  font-size: 0.9em;
+  font-weight: 600;
+  padding: 8px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  min-height: 42px;
+  outline: none;
+}
+
+/* Master Content Container */
+.login-main-stage {
+  position: relative;
+  z-index: 5;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(20px, 4vw, 48px) 16px clamp(40px, 6vw, 70px);
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+/* Reassuring Welcoming Header */
+.login-header-banner {
+  text-align: center;
+  margin-bottom: 24px;
+  width: 100%;
+}
+
+.senior-shield-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 61, 209, 0.08);
+  border: 1px solid rgba(0, 61, 209, 0.2);
+  color: var(--login-primary);
+  font-weight: 700;
+  font-size: 0.88em;
+  padding: 6px 16px;
+  border-radius: 999px;
+  margin-bottom: 12px;
+}
+
+.login-page-title {
+  font-family: 'Outfit', 'Inter', sans-serif;
+  font-size: clamp(1.6em, 4vw, 2.2em);
+  font-weight: 800;
+  color: #00174E;
+  margin: 0 0 6px 0;
+  letter-spacing: -0.02em;
+}
+
+.login-page-subtitle {
+  font-size: 1.05em;
+  color: var(--login-muted);
+  margin: 0;
+}
+
+/* Spoken Voice Banner for Non-Readers */
+.spoken-audio-banner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+  border: 2px solid #93C5FD;
+  border-radius: var(--login-radius-md);
+  padding: 14px 18px;
+  margin-bottom: 20px;
+  width: 100%;
+  box-shadow: 0 4px 14px rgba(59, 130, 246, 0.08);
+}
+
+.spoken-audio-icon {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  background: var(--login-primary);
+  color: #FFFFFF;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  box-shadow: 0 4px 12px rgba(0, 61, 209, 0.25);
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.spoken-audio-icon:hover {
+  transform: scale(1.08);
+}
+
+.spoken-audio-text {
+  flex: 1;
+  font-size: 0.95em;
+  font-weight: 600;
+  color: #1E3A8A;
+  line-height: 1.35;
+}
+
+/* Quick Senior Profile Card */
+.senior-profile-quickcard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #FFFFFF;
+  border: 2px solid #E2E8F0;
+  border-radius: var(--login-radius-md);
+  padding: 14px 18px;
+  margin-bottom: 20px;
+  width: 100%;
+  box-shadow: 0 4px 16px rgba(0, 23, 78, 0.04);
+}
+
+.senior-user-meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.senior-avatar-badge {
+  width: 54px;
+  height: 54px;
+  min-width: 54px;
+  border-radius: 50%;
+  background: #FEF3C7;
+  border: 2px solid #F59E0B;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+}
+
+.senior-name {
+  font-size: 1.15em;
+  font-weight: 800;
+  color: var(--login-text);
+  margin-bottom: 2px;
+}
+
+.senior-tag {
+  font-size: 0.85em;
+  color: var(--login-muted);
+  font-weight: 500;
+}
+
+/* The Main Glass Login Card */
+.login-glass-card {
+  background: var(--login-card);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1.5px solid var(--login-border);
+  border-radius: var(--login-radius-lg);
+  padding: clamp(20px, 4vw, 36px);
+  width: 100%;
+  box-shadow: var(--login-shadow);
+  transition: all 0.3s ease;
+}
+
+/* Accessible Mode Tabs (Big Buttons) */
+.auth-mode-tabs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 28px;
+  background: #EEF2F9;
+  padding: 6px;
+  border-radius: var(--login-radius-md);
+}
+
+.auth-tab-btn {
+  background: transparent;
+  border: none;
+  padding: 12px 6px;
+  border-radius: var(--login-radius-sm);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: var(--login-muted);
+  font-weight: 700;
+  font-size: 0.82em;
+  transition: all 0.2s ease;
+  user-select: none;
+  min-height: 64px;
+  justify-content: center;
+}
+
+.auth-tab-btn .tab-icon {
+  font-size: 24px;
+  transition: transform 0.2s;
+}
+
+.auth-tab-btn:hover {
+  color: var(--login-primary);
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.auth-tab-btn.active {
+  background: #FFFFFF;
+  color: var(--login-primary);
+  box-shadow: 0 4px 12px rgba(0, 23, 78, 0.08);
+  border: 1.5px solid rgba(0, 61, 209, 0.15);
+}
+
+.auth-tab-btn.active .tab-icon {
+  transform: scale(1.15);
+}
+
+/* ==========================================================================
+   Mode 1: 1-Tap Biometric Sensor (Passkey / Thumbprint & Face)
+   ========================================================================== */
+.mode-panel {
+  display: none;
+  animation: fadeInPanel 0.3s ease-out;
+}
+.mode-panel.active {
+  display: block;
+}
+
+@keyframes fadeInPanel {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.biometric-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 12px 0 20px;
+}
+
+.biometric-sensor-pad {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #00174E 0%, #003DD1 100%);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 16px 36px rgba(0, 61, 209, 0.35);
+  margin-bottom: 24px;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s;
+  user-select: none;
+  border: 4px solid #7B9BE8;
+}
+
+.biometric-sensor-pad:hover {
+  transform: scale(1.05);
+  box-shadow: 0 20px 45px rgba(0, 61, 209, 0.45);
+}
+
+.biometric-sensor-pad:active,
+.biometric-sensor-pad.scanning {
+  transform: scale(0.96);
+  border-color: #00D4B2;
+}
+
+/* Ripples */
+.biometric-ripple {
+  position: absolute;
+  top: -12px;
+  left: -12px;
+  right: -12px;
+  bottom: -12px;
+  border: 2px dashed rgba(0, 212, 178, 0.6);
+  border-radius: 50%;
+  animation: rippleSpin 6s linear infinite;
+}
+
+@keyframes rippleSpin {
+  100% { transform: rotate(360deg); }
+}
+
+.biometric-sensor-icon {
+  font-size: 64px;
+  color: #FFFFFF;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));
+}
+
+.biometric-sensor-pad.scanning .biometric-sensor-icon {
+  animation: pulseGlow 0.8s ease-in-out infinite alternate;
+  color: #00D4B2;
+}
+
+@keyframes pulseGlow {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  100% { transform: scale(1.1); opacity: 1; }
+}
+
+.biometric-headline {
+  font-size: 1.3em;
+  font-weight: 800;
+  color: #00174E;
+  margin-bottom: 6px;
+}
+
+.biometric-desc {
+  font-size: 0.95em;
+  color: var(--login-muted);
+  max-width: 380px;
+  line-height: 1.4;
+  margin-bottom: 20px;
+}
+
+/* Big Action Button */
+.btn-jumbo-action {
+  width: 100%;
+  min-height: 60px;
+  background: linear-gradient(135deg, #002A90 0%, #003DD1 100%);
+  color: #FFFFFF;
+  font-size: 1.15em;
+  font-weight: 800;
+  border: none;
+  border-radius: var(--login-radius-md);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  box-shadow: 0 8px 24px rgba(0, 61, 209, 0.3);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+  padding: 12px 24px;
+}
+
+.btn-jumbo-action:hover {
+  background: linear-gradient(135deg, #00174E 0%, #002A90 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(0, 61, 209, 0.38);
+}
+
+.btn-jumbo-action:active {
+  transform: scale(0.97);
+}
+
+/* ==========================================================================
+   Mode 2: Senior Voice OTP & Tactile Keypad
+   ========================================================================== */
+.otp-header-box {
+  background: #F8FAFC;
+  border: 1.5px solid #E2E8F0;
+  border-radius: var(--login-radius-md);
+  padding: 16px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.otp-target-phone {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.otp-phone-text {
+  font-size: 1.15em;
+  font-weight: 800;
+  color: #00174E;
+}
+
+.btn-request-voice-call {
+  background: #22C55E;
+  color: #FFFFFF;
+  border: none;
+  font-size: 0.9em;
+  font-weight: 700;
+  padding: 10px 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+  transition: all 0.2s;
+  min-height: 44px;
+}
+
+.btn-request-voice-call:hover {
+  background: #16A34A;
+  transform: translateY(-1px);
+}
+
+/* 4 Giant OTP Digit Boxes */
+.otp-digits-display {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.otp-digit-slot {
+  width: 64px;
+  height: 72px;
+  border: 2.5px solid #CBD5E1;
+  border-radius: 16px;
+  background: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2em;
+  font-weight: 800;
+  color: #00174E;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.otp-digit-slot.active {
+  border-color: var(--login-primary);
+  box-shadow: 0 0 0 4px rgba(0, 61, 209, 0.15);
+  transform: translateY(-2px);
+}
+
+.otp-digit-slot.filled {
+  border-color: #002A90;
+  background: var(--login-primary-light);
+  color: var(--login-primary);
+}
+
+/* Jumbo Tactile Keypad */
+.tactile-keypad-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.key-tactile-btn {
+  min-height: 64px;
+  background: #FFFFFF;
+  border: 2px solid #E2E8F0;
+  border-radius: 16px;
+  font-size: 1.6em;
+  font-weight: 800;
+  color: #00174E;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 8px rgba(0, 23, 78, 0.04);
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+}
+
+.key-tactile-btn:hover {
+  background: #F1F5F9;
+  border-color: #94A3B8;
+  transform: translateY(-2px);
+}
+
+.key-tactile-btn:active {
+  transform: scale(0.94);
+  background: #E2E8F0;
+}
+
+.key-tactile-btn.btn-clear {
+  background: #FEE2E2;
+  border-color: #FCA5A5;
+  color: #DC2626;
+  font-size: 1em;
+}
+
+.key-tactile-btn.btn-speak-key {
+  background: #FEF3C7;
+  border-color: #FCD34D;
+  color: #D97706;
+  font-size: 1.3em;
+}
+
+/* ==========================================================================
+   Mode 3: Visual Picture / Symbol PIN (For Illiterate Users)
+   ========================================================================== */
+.symbol-intro-box {
+  background: #FFFBEB;
+  border: 1.5px solid #FDE68A;
+  border-radius: var(--login-radius-md);
+  padding: 14px 18px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.symbol-intro-text {
+  font-size: 0.95em;
+  color: #92400E;
+  font-weight: 600;
+}
+
+/* 3 Selected Symbol Slots */
+.symbol-slots-tray {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.symbol-slot {
+  width: 80px;
+  height: 80px;
+  border: 2.5px dashed #CBD5E1;
+  border-radius: 20px;
+  background: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.symbol-slot.filled {
+  border-style: solid;
+  border-color: #F59E0B;
+  background: #FFFBEB;
+  transform: scale(1.05);
+}
+
+.symbol-slot-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #78350F;
+  margin-top: 2px;
+}
+
+/* 3x3 Symbol Selection Grid */
+.symbol-grid-3x3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.symbol-card-item {
+  min-height: 82px;
+  background: #FFFFFF;
+  border: 2px solid #E2E8F0;
+  border-radius: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+  box-shadow: 0 4px 10px rgba(0, 23, 78, 0.03);
+}
+
+.symbol-card-item .sym-emoji {
+  font-size: 36px;
+  transition: transform 0.2s;
+}
+
+.symbol-card-item .sym-name {
+  font-size: 0.85em;
+  font-weight: 700;
+  color: #1E293B;
+  margin-top: 4px;
+}
+
+.symbol-card-item:hover {
+  border-color: #F59E0B;
+  background: #FFFBEB;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 16px rgba(245, 158, 11, 0.15);
+}
+
+.symbol-card-item:hover .sym-emoji {
+  transform: scale(1.2);
+}
+
+.symbol-card-item:active {
+  transform: scale(0.95);
+}
+
+.symbol-actions-row {
+  display: flex;
+  gap: 12px;
+}
+
+.btn-secondary-action {
+  background: #F1F5F9;
+  border: 1.5px solid #CBD5E1;
+  color: #475569;
+  font-weight: 700;
+  font-size: 1em;
+  border-radius: var(--login-radius-md);
+  padding: 12px 20px;
+  cursor: pointer;
+  min-height: 56px;
+  transition: all 0.2s;
+}
+
+.btn-secondary-action:hover {
+  background: #E2E8F0;
+}
+
+/* ==========================================================================
+   Mode 4: Spoken Voice Phrase / Speech Recognition
+   ========================================================================== */
+.voice-auth-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 10px 0 20px;
+}
+
+.voice-mic-orb {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FF6B6B 0%, #DC2626 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 60px;
+  color: #FFFFFF;
+  cursor: pointer;
+  box-shadow: 0 16px 36px rgba(220, 38, 38, 0.35);
+  margin-bottom: 24px;
+  position: relative;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 4px solid #FECACA;
+}
+
+.voice-mic-orb:hover {
+  transform: scale(1.05);
+}
+
+.voice-mic-orb.listening {
+  animation: micPulse 1.2s infinite alternate;
+  background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%);
+  border-color: #BBF7D0;
+  box-shadow: 0 16px 40px rgba(34, 197, 94, 0.4);
+}
+
+@keyframes micPulse {
+  0% { transform: scale(0.96); }
+  100% { transform: scale(1.1); }
+}
+
+/* Audio Waveform Simulator */
+.voice-waves-visualizer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 48px;
+  margin-bottom: 18px;
+}
+
+.voice-wave-bar {
+  width: 6px;
+  height: 16px;
+  background: #CBD5E1;
+  border-radius: 4px;
+  transition: height 0.15s ease, background-color 0.2s ease;
+}
+
+.voice-mic-orb.listening ~ .voice-waves-visualizer .voice-wave-bar {
+  background: #22C55E;
+  animation: waveDance 0.8s ease-in-out infinite alternate;
+}
+
+.voice-waves-visualizer .voice-wave-bar:nth-child(1) { animation-delay: 0.1s; }
+.voice-waves-visualizer .voice-wave-bar:nth-child(2) { animation-delay: 0.3s; }
+.voice-waves-visualizer .voice-wave-bar:nth-child(3) { animation-delay: 0.5s; }
+.voice-waves-visualizer .voice-wave-bar:nth-child(4) { animation-delay: 0.2s; }
+.voice-waves-visualizer .voice-wave-bar:nth-child(5) { animation-delay: 0.4s; }
+.voice-waves-visualizer .voice-wave-bar:nth-child(6) { animation-delay: 0.6s; }
+.voice-waves-visualizer .voice-wave-bar:nth-child(7) { animation-delay: 0.15s; }
+
+@keyframes waveDance {
+  0% { height: 10px; }
+  100% { height: 44px; }
+}
+
+.voice-transcript-bubble {
+  background: #F8FAFC;
+  border: 2px dashed #CBD5E1;
+  border-radius: var(--login-radius-md);
+  padding: 16px 20px;
+  width: 100%;
+  font-size: 1.05em;
+  font-weight: 700;
+  color: #334155;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+/* ==========================================================================
+   Emergency Guardian Support Footer Card
+   ========================================================================== */
+.guardian-help-footer {
+  margin-top: 24px;
+  width: 100%;
+  background: #FEF2F2;
+  border: 2px solid #FECACA;
+  border-radius: var(--login-radius-md);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.guardian-help-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.guardian-help-icon {
+  font-size: 32px;
+}
+
+.guardian-help-title {
+  font-size: 1em;
+  font-weight: 800;
+  color: #991B1B;
+  margin-bottom: 2px;
+}
+
+.guardian-help-desc {
+  font-size: 0.85em;
+  color: #4B5563;
+}
+
+.btn-call-guardian {
+  background: #DC2626;
+  color: #FFFFFF;
+  border: none;
+  font-size: 0.92em;
+  font-weight: 700;
+  padding: 10px 18px;
+  border-radius: 12px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);
+  text-decoration: none;
+  min-height: 44px;
+}
+
+.btn-call-guardian:hover {
+  background: #B91C1C;
+}
+
+/* ==========================================================================
+   High Contrast Mode Overrides (Yellow / Black Crisp Vision)
+   ========================================================================== */
+body.high-contrast-mode {
+  --login-bg: #000000;
+  --login-card: #121212;
+  --login-border: #FFE600;
+  --login-text: #FFFFFF;
+  --login-muted: #CBD5E1;
+  background: #000000 !important;
+  color: #FFFFFF !important;
+}
+
+body.high-contrast-mode .login-ambient-orb {
+  display: none;
+}
+
+body.high-contrast-mode .login-topbar {
+  background: #000000;
+  border-bottom: 2px solid #FFE600;
+}
+
+body.high-contrast-mode .login-brand-name {
+  color: #FFE600;
+}
+
+body.high-contrast-mode .acc-tool-btn,
+body.high-contrast-mode .lang-select-dropdown {
+  background: #000000;
+  border: 2px solid #FFE600;
+  color: #FFE600;
+}
+
+body.high-contrast-mode .acc-tool-btn.active {
+  background: #FFE600;
+  color: #000000;
+  font-weight: 900;
+}
+
+body.high-contrast-mode .login-page-title {
+  color: #FFE600;
+}
+
+body.high-contrast-mode .spoken-audio-banner {
+  background: #1A1A1A;
+  border: 2px solid #FFE600;
+}
+body.high-contrast-mode .spoken-audio-text {
+  color: #FFFFFF;
+}
+
+body.high-contrast-mode .senior-profile-quickcard {
+  background: #1A1A1A;
+  border: 2px solid #FFE600;
+}
+body.high-contrast-mode .senior-name {
+  color: #FFFFFF;
+}
+
+body.high-contrast-mode .login-glass-card {
+  background: #0A0A0A;
+  border: 3px solid #FFE600;
+}
+
+body.high-contrast-mode .auth-mode-tabs {
+  background: #1A1A1A;
+}
+body.high-contrast-mode .auth-tab-btn {
+  color: #FFFFFF;
+}
+body.high-contrast-mode .auth-tab-btn.active {
+  background: #FFE600;
+  color: #000000;
+  font-weight: 900;
+}
+
+body.high-contrast-mode .key-tactile-btn {
+  background: #1A1A1A;
+  border: 2px solid #FFFFFF;
+  color: #FFFFFF;
+}
+body.high-contrast-mode .key-tactile-btn:hover {
+  background: #FFE600;
+  color: #000000;
+}
+
+body.high-contrast-mode .otp-digit-slot {
+  background: #000000;
+  border: 3px solid #FFFFFF;
+  color: #FFE600;
+}
+body.high-contrast-mode .otp-digit-slot.filled {
+  border-color: #FFE600;
+  background: #222222;
+}
+
+body.high-contrast-mode .symbol-card-item {
+  background: #1A1A1A;
+  border: 2px solid #FFFFFF;
+}
+body.high-contrast-mode .symbol-card-item .sym-name {
+  color: #FFFFFF;
+}
+body.high-contrast-mode .symbol-card-item:hover {
+  border-color: #FFE600;
+  background: #333333;
+}
+body.high-contrast-mode .symbol-slot {
+  background: #000000;
+  border: 2px dashed #FFE600;
+}
+
+body.high-contrast-mode .btn-jumbo-action {
+  background: #FFE600;
+  color: #000000;
+  font-weight: 900;
+}
+
+/* ==========================================================================
+   Responsive Adaptations
+   ========================================================================== */
+@media (max-width: 600px) {
+  .auth-mode-tabs {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .otp-digits-display {
+    gap: 8px;
+  }
+  .otp-digit-slot {
+    width: 54px;
+    height: 64px;
+    font-size: 1.6em;
+  }
+  .symbol-slots-tray {
+    gap: 10px;
+  }
+  .symbol-slot {
+    width: 68px;
+    height: 68px;
+    font-size: 28px;
+  }
+  .login-topbar {
+    justify-content: center;
+  }
+}
