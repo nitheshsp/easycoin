@@ -77,6 +77,26 @@
       });
     });
 
+    function updateActiveIndicator() {
+      var indicator = document.getElementById('sidebarActiveIndicator');
+      var activeItem = document.querySelector('.sidebar-nav-item.active');
+      if (indicator && activeItem) {
+        var topPos = activeItem.offsetTop;
+        var itemHeight = activeItem.offsetHeight;
+        indicator.style.transform = 'translateY(' + topPos + 'px)';
+        indicator.style.height = itemHeight + 'px';
+        indicator.style.opacity = '1';
+
+        if (activeItem.classList.contains('danger')) {
+          indicator.classList.add('danger-active');
+        } else {
+          indicator.classList.remove('danger-active');
+        }
+      } else if (indicator) {
+        indicator.style.opacity = '0';
+      }
+    }
+
     function setActiveNav(hash) {
       navItems.forEach(function (link) {
         if (link.getAttribute('href') === hash) {
@@ -85,7 +105,11 @@
           link.classList.remove('active');
         }
       });
+      updateActiveIndicator();
     }
+
+    window.addEventListener('resize', updateActiveIndicator);
+    setTimeout(updateActiveIndicator, 100);
 
     // Scroll-Spy with IntersectionObserver
     if ('IntersectionObserver' in window && sections.length > 0) {
