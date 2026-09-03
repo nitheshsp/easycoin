@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="assets/css/phone.css">
   <link rel="stylesheet" href="assets/css/liquid-glass.css">
   <link rel="stylesheet" href="assets/css/sos.css">
+  <link rel="stylesheet" href="assets/css/bills.css">
 </head>
 <body>
 
@@ -405,6 +406,52 @@
                         🔊 Read Out QR Details
                       </button>
                     </div>
+                  </div>
+
+                  <!-- Screen: Monthly Bills & 1-Tap Pay -->
+                  <div class="screen" id="s-bills">
+                    <div class="app-header">
+                      <div class="app-brand-pill">
+                        <span>⚡ Monthly Bill Reminders</span>
+                      </div>
+                      <button class="voice-status-btn" onclick="window.EasyBills.speakBillSummary()">
+                        🔊 Read Bills
+                      </button>
+                    </div>
+
+                    <!-- Summary Hub Card -->
+                    <div class="bills-summary-card">
+                      <div class="bills-summary-top">
+                        <span class="bills-badge" id="phonePendingBillsCount">2 Due</span>
+                        <button class="bills-readout-btn" onclick="window.EasyBills.speakBillSummary()">
+                          🔊 Hear Summary
+                        </button>
+                      </div>
+                      <div>
+                        <div style="font-size:12px; color:rgba(255,255,255,0.7); text-transform:uppercase; font-weight:700;">
+                          Total Pending This Month
+                        </div>
+                        <div class="bills-summary-amount" id="phonePendingBillsAmt">₹ 749</div>
+                      </div>
+                    </div>
+
+                    <!-- Voice Reminder Alert Toggle -->
+                    <div class="reminder-control-row">
+                      <div class="reminder-txt">
+                        <span>📞 Phone Call Reminders</span>
+                      </div>
+                      <label class="switch-box">
+                        <input type="checkbox" id="phoneBillReminderSwitch" checked onchange="window.EasyBills.toggleVoiceReminders(this.checked)">
+                        <span class="switch-slider"></span>
+                      </label>
+                    </div>
+
+                    <div style="font-size:13px; font-weight:800; color:var(--dlr900); margin: 14px 0 8px;">
+                      Recurring Monthly Bills:
+                    </div>
+
+                    <!-- Dynamic Bills List -->
+                    <div class="bills-list" id="phoneBillsList"></div>
                   </div>
 
                   <!-- Screen 3: Visual Passbook -->
@@ -1014,6 +1061,7 @@
   <script src="assets/js/audio-synth.js"></script>
   <script src="assets/js/api-client.js"></script>
   <script src="assets/js/sos-engine.js"></script>
+  <script src="assets/js/bills-engine.js"></script>
   <script src="assets/js/qr-generator.js"></script>
   <script src="assets/js/hero-shader.js"></script>
   <script src="assets/js/pitch-scroll.js"></script>

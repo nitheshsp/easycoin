@@ -140,11 +140,11 @@
     });
     if (tileBills) {
       tileBills.addEventListener('click', function () {
-        if (window.EasyAudio) {
-          window.EasyAudio.playClick();
-          window.EasyAudio.speak('Select Electricity, Water, or Gas bill to pay.');
+        if (window.EasyBills) {
+          window.EasyBills.renderAll();
+          window.EasyBills.speakBillSummary();
         }
-        switchScreen('s-send');
+        switchScreen('s-bills');
       });
     }
     if (tilePassbook) {

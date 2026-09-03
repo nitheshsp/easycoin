@@ -1,0 +1,274 @@
+/* ==========================================================================
+   EasyCoin Monthly Bill Reminder & 1-Tap Pay Styles
+   Designed for senior accessibility, visual clarity, and engaging liquid glass
+   ========================================================================== */
+
+/* Bills Summary Hub Banner */
+.bills-summary-card {
+  background: linear-gradient(135deg, #001A5C 0%, #00081B 100%);
+  border: 1.5px solid rgba(56, 189, 248, 0.25);
+  border-radius: 24px;
+  padding: 20px 18px;
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 61, 209, 0.2);
+  margin-bottom: 16px;
+}
+
+.bills-summary-card::after {
+  content: '';
+  position: absolute;
+  top: -30px;
+  right: -30px;
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(circle, rgba(0, 61, 209, 0.45) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.bills-summary-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bills-badge {
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #FCA5A5;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.bills-summary-amount {
+  font-size: 26px;
+  font-weight: 800;
+  color: #FFFFFF;
+  letter-spacing: -0.02em;
+}
+
+.bills-readout-btn {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #FFFFFF;
+  border-radius: 12px;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+
+.bills-readout-btn:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+/* Bill Item Cards */
+.bills-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bill-card-item {
+  background: #FFFFFF;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 20px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(0, 8, 27, 0.04);
+  position: relative;
+  overflow: hidden;
+}
+
+.bill-card-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 8, 27, 0.08);
+  border-color: #003DD1;
+}
+
+.bill-card-item.paid {
+  background: #F8FAFC;
+  opacity: 0.85;
+  border-color: #CBD5E1;
+}
+
+.bill-icon-box {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  flex-shrink: 0;
+}
+
+.bill-icon-box.electricity { background: #FEF3C7; color: #D97706; }
+.bill-icon-box.network { background: #E0F2FE; color: #0284C7; }
+.bill-icon-box.water { background: #ECFEFF; color: #0891B2; }
+.bill-icon-box.gas { background: #FEE2E2; color: #DC2626; }
+
+.bill-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.bill-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 3px;
+}
+
+.bill-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--dlr900);
+}
+
+.bill-due-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+
+.bill-due-badge.urgent {
+  background: #FEE2E2;
+  color: #DC2626;
+}
+
+.bill-due-badge.upcoming {
+  background: #FEF3C7;
+  color: #B45309;
+}
+
+.bill-due-badge.paid-badge {
+  background: #DCFCE7;
+  color: #15803D;
+}
+
+.bill-subtext {
+  font-size: 12px;
+  color: var(--text2);
+}
+
+.bill-action-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.bill-amount-txt {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--dlr900);
+}
+
+.bill-pay-btn {
+  background: #003DD1;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 10px;
+  padding: 6px 14px;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 10px rgba(0, 61, 209, 0.2);
+}
+
+.bill-pay-btn:hover {
+  background: #002BB5;
+  transform: scale(1.03);
+}
+
+.bill-pay-btn.paid-btn {
+  background: #E2E8F0;
+  color: #64748B;
+  box-shadow: none;
+  cursor: default;
+}
+
+/* Reminder Alert Switch Section */
+.reminder-control-row {
+  background: #F1F5F9;
+  border-radius: 14px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 14px;
+}
+
+.reminder-txt {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--dlr900);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Custom Accessible Toggle Switch */
+.switch-box {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+}
+
+.switch-box input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.switch-slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: #CBD5E1;
+  transition: .3s;
+  border-radius: 24px;
+}
+
+.switch-slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .3s;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+input:checked + .switch-slider {
+  background-color: #22C55E;
+}
+
+input:checked + .switch-slider:before {
+  transform: translateX(20px);
+}

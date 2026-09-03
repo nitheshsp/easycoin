@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="assets/css/accessible-app.css">
   <link rel="stylesheet" href="assets/css/liquid-glass.css">
   <link rel="stylesheet" href="assets/css/sos.css">
+  <link rel="stylesheet" href="assets/css/bills.css">
 </head>
 <body class="standalone-app-body">
 
@@ -114,6 +115,52 @@
           <span class="app-contact-badge">House Rent</span>
         </div>
       </div>
+    </section>
+
+    <!-- Monthly Bill Reminders & 1-Tap Pay Section -->
+    <section class="app-section-card" id="billsSection">
+      <div class="app-sec-head">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div style="font-size:28px;">⚡</div>
+          <div>
+            <h3 style="margin:0;">Monthly Bill Reminders</h3>
+            <div style="font-size:13px; color:var(--text-muted);">Electricity, Mobile Network, Water & Gas</div>
+          </div>
+        </div>
+        <button class="ctrl-btn" onclick="window.EasyBills.speakBillSummary()">
+          🔊 Hear Bill Status
+        </button>
+      </div>
+
+      <!-- Bill Overview Summary Banner -->
+      <div class="bills-summary-card">
+        <div class="bills-summary-top">
+          <span class="bills-badge" id="appPendingBillsCount">2 Bills Pending</span>
+          <button class="bills-readout-btn" onclick="window.EasyBills.speakBillSummary()">
+            🔊 Voice Readout
+          </button>
+        </div>
+        <div>
+          <div style="font-size:13px; color:rgba(255,255,255,0.7); text-transform:uppercase; font-weight:700;">
+            Total Due This Month
+          </div>
+          <div class="bills-summary-amount" id="appPendingBillsAmt">₹ 749</div>
+        </div>
+      </div>
+
+      <!-- Voice Phone Reminder Alert Switch -->
+      <div class="reminder-control-row" style="margin-bottom:16px;">
+        <div class="reminder-txt">
+          <span>📞 Automated Voice Call Reminders (1 Day Before Due Date)</span>
+        </div>
+        <label class="switch-box">
+          <input type="checkbox" id="appBillReminderSwitch" checked onchange="window.EasyBills.toggleVoiceReminders(this.checked)">
+          <span class="switch-slider"></span>
+        </label>
+      </div>
+
+      <!-- Dynamic Bill Cards List -->
+      <div class="bills-list" id="standaloneBillsList"></div>
     </section>
 
     <!-- Visual Passbook Statement Section -->
@@ -334,6 +381,7 @@
   <script src="assets/js/audio-synth.js"></script>
   <script src="assets/js/api-client.js"></script>
   <script src="assets/js/sos-engine.js"></script>
+  <script src="assets/js/bills-engine.js"></script>
   <script src="assets/js/qr-generator.js"></script>
   <script src="assets/js/banking-engine.js"></script>
   <script src="assets/js/liquid-glass.js"></script>
