@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/phone.css">
   <link rel="stylesheet" href="assets/css/liquid-glass.css">
+  <link rel="stylesheet" href="assets/css/sos.css">
 </head>
 <body>
 
@@ -419,34 +420,68 @@
                     <div class="passbook-list" id="passbookList"></div>
                   </div>
 
-                  <!-- Screen 4: Guardian & SOS Emergency -->
+                  <!-- Screen 4: Guardian & SOS Emergency Hub -->
                   <div class="screen" id="s-guardian">
                     <div class="app-header">
                       <div class="app-brand-pill">
-                        <span>🛡️ Safety Shield</span>
+                        <span>🛡️ Emergency & Safety Shield</span>
                       </div>
-                    </div>
-
-                    <div class="sos-card">
-                      <div style="font-size:32px; margin-bottom:8px;">🚨</div>
-                      <h3 style="font-size:18px; color:#ef4444; margin-bottom:6px;">Emergency Panic Lock</h3>
-                      <p style="font-size:13px; color:var(--text2); margin-bottom:16px;">
-                        Suspect fraud or lost your wallet? 1-tap locks your payments instantly.
-                      </p>
-                      <button class="sos-btn" id="sosFreezeBtn">
-                        🔒 Freeze My Account Now
+                      <button class="voice-status-btn" onclick="window.EasyAudio.speak('Emergency safety shield. Tap the red button to freeze your account if you suspect fraud.')">
+                        🔊 Voice
                       </button>
                     </div>
 
-                    <div class="guardian-box">
-                      <h4 style="font-size:16px; margin-bottom:8px;">Trusted Family Guardian</h4>
-                      <div style="display:flex; align-items:center; gap:12px; margin-top:12px;">
-                        <div style="font-size:32px;">👩‍⚕️</div>
-                        <div style="flex:1;">
-                          <div style="font-weight:700;">Daughter Ananya</div>
-                          <div style="font-size:12px; color:var(--text2);">Primary Guardian · Auto-Notified</div>
+                    <!-- Frozen Account Banner (Hidden by default) -->
+                    <div class="frozen-alert-banner phone-frozen-banner" style="display:none;">
+                      <div class="frozen-title">🚨 ACCOUNT FROZEN</div>
+                      <div class="frozen-desc">All payment withdrawals are locked. Your money is 100% safe.</div>
+                      <button class="unfreeze-action-btn" onclick="window.EasySOS.unfreezeWithPasscode(prompt('Enter 4-Digit Guardian Passcode (1234):'))">
+                        🔓 Unlock with Guardian PIN
+                      </button>
+                    </div>
+
+                    <!-- Main SOS Panic Card -->
+                    <div class="sos-panic-card">
+                      <div class="sos-badge-status">
+                        <span class="sos-pulse-dot"></span> 24/7 Fraud Protection
+                      </div>
+                      <div class="sos-main-title">Emergency Panic Lock</div>
+                      <div class="sos-main-desc">
+                        Scam caller? Lost wallet? 1-tap instantly blocks all payments & alerts your family.
+                      </div>
+                      <button class="sos-big-trigger-btn" onclick="window.EasySOS.triggerSOSFlow('PANIC_FREEZE')">
+                        <span>🔒 1-TAP FREEZE NOW</span>
+                      </button>
+                    </div>
+
+                    <!-- 3 Quick Action Emergency Tiles -->
+                    <div class="sos-actions-grid">
+                      <div class="sos-action-tile" onclick="window.EasySOS.triggerSOSFlow('SCAM_CALL')">
+                        <span class="sos-tile-icon">⚠️</span>
+                        <span class="sos-tile-title">Scam Call</span>
+                        <span class="sos-tile-sub">Lock & Record</span>
+                      </div>
+                      <div class="sos-action-tile" onclick="window.EasySOS.callGuardian()">
+                        <span class="sos-tile-icon">👩‍⚕️</span>
+                        <span class="sos-tile-title">Family Call</span>
+                        <span class="sos-tile-sub">Ananya (Daughter)</span>
+                      </div>
+                      <div class="sos-action-tile" onclick="window.EasySOS.callHelpline()">
+                        <span class="sos-tile-icon">📞</span>
+                        <span class="sos-tile-title">24/7 Helpline</span>
+                        <span class="sos-tile-sub">Senior Agent</span>
+                      </div>
+                    </div>
+
+                    <!-- Guardian Live Info Card -->
+                    <div class="sos-guardian-card" style="margin-top:14px;">
+                      <div class="guardian-row">
+                        <div class="guardian-avatar-large">👩‍⚕️</div>
+                        <div class="guardian-details">
+                          <div class="guardian-name">Daughter Ananya</div>
+                          <div class="guardian-meta">Primary Guardian · Auto-Notified on &gt;₹2,000</div>
                         </div>
-                        <button class="voice-status-btn" onclick="window.EasyAudio.speak('Calling daughter Ananya...'); alert('📞 Calling Family Guardian: Daughter Ananya');">
+                        <button class="guardian-call-btn" onclick="window.EasySOS.callGuardian()">
                           📞 Call
                         </button>
                       </div>
@@ -949,9 +984,36 @@
     </div>
   </footer>
 
+  <!-- Full-Screen SOS Emergency Countdown & Confirmation Modal -->
+  <div class="sos-modal-overlay" id="sosCountdownOverlay">
+    <div class="sos-modal-box">
+      <div style="font-size:36px;">🚨</div>
+      <h3 style="font-size:22px; font-weight:800; color:#991B1B; margin:0;" id="sosPromptText">
+        Emergency Panic Freeze Initiating...
+      </h3>
+      <p style="font-size:14px; color:#7F1D1D; margin:0;">
+        All account debits will be frozen and live GPS coordinates will be dispatched to Daughter Ananya.
+      </p>
+
+      <!-- Animated Circular Countdown -->
+      <div class="countdown-circle-wrap">
+        <svg viewBox="0 0 100 100">
+          <circle class="bg" cx="50" cy="50" r="45"></circle>
+          <circle class="bar" id="sosCountdownCircle" cx="50" cy="50" r="45"></circle>
+        </svg>
+        <div class="countdown-number" id="sosCountdownNum">8</div>
+      </div>
+
+      <button class="sos-cancel-btn" onclick="window.EasySOS.cancelSOS()">
+        ✕ TAP TO CANCEL (ACCIDENTAL)
+      </button>
+    </div>
+  </div>
+
   <!-- Core JavaScript Modules -->
   <script src="assets/js/audio-synth.js"></script>
   <script src="assets/js/api-client.js"></script>
+  <script src="assets/js/sos-engine.js"></script>
   <script src="assets/js/qr-generator.js"></script>
   <script src="assets/js/hero-shader.js"></script>
   <script src="assets/js/pitch-scroll.js"></script>
