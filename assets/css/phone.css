@@ -1072,3 +1072,96 @@
   border-color: var(--dlr500);
 }
 
+/* ==========================================================================
+   Phone Simulator: Spend Money Defined Subparts
+   ========================================================================== */
+
+.spend-subpart.phone-subpart {
+  background: #F8FAFC;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 16px;
+  box-shadow: 0 2px 6px rgba(0, 8, 27, 0.03);
+}
+
+.spend-subpart-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.spend-subpart-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 800;
+  color: #00174E;
+}
+
+.spend-step-tag {
+  background: #003DD1;
+  color: #FFFFFF;
+  font-weight: 800;
+  border-radius: 999px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.spend-recipient-display {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  border-radius: 12px;
+}
+
+.spend-rec-profile {
+  display: flex;
+  align-items: center;
+}
+
+.spend-rec-avatar {
+  border-radius: 10px;
+  background: #EFF6FF;
+  border: 1px solid #BFDBFE;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spend-rec-name {
+  font-weight: 800;
+  color: #00081B;
+}
+
+.spend-rec-badge {
+  color: #003DD1;
+  font-weight: 600;
+}
+
+.spend-purpose-pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 700;
+  color: #334155;
+  transition: all 0.2s;
+}
+
+.spend-purpose-pill:hover {
+  background: #F1F5F9;
+}
+
+.spend-purpose-pill.active {
+  background: #EFF6FF;
+  border-color: #003DD1;
+  color: #003DD1;
+  box-shadow: 0 0 0 2px rgba(0, 61, 209, 0.15);
+}
+
+

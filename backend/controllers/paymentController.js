@@ -149,6 +149,138 @@ exports.scanQRCode = (req, res) => {
   });
 };
 
+exports.getBills = (req, res) => {
+  const bills = db.getBills();
+  const totalPending = bills
+    .filter(b => b.status !== 'PAID')
+    .reduce((sum, b) => sum + b.amount, 0);
+
+  return res.status(200).json({
+    success: true,
+    data: {
+      bills,
+      totalPending,
+      pendingCount: bills.filter(b => b.status !== 'PAID').length
+    }
+  });
+};
+
+exports.addBill = (req, res) => {
+  const { title, provider, amount, dueDate, daysLeft, icon, iconClass, recurring } = req.body;
+
+  if (!title || !amount) {
+    return res.status(400).json({
+      success: false,
+      message: 'Bill title and amount are required.'
+    });
+  }
+
+  const numAmount = parseInt(amount, 10);
+  if (isNaN(numAmount) || numAmount <= 0) {
+    return res.status(400).json({
+      success: false,
+      message: 'Please provide a valid positive bill amount.'
+    });
+  }
+
+  const newBill = db.addBill({
+    title,
+    provider: provider || 'Custom Biller',
+    amount: numAmount,
+    dueDate: dueDate || 'End of Month',
+    daysLeft: daysLeft !== undefined ? parseInt(daysLeft, 10) : 7,
+    icon: icon || '📄',
+    iconClass: iconClass || 'other',
+    recurring: recurring || 'Monthly'
+  });
+
+  return res.status(201).json({
+    success: true,
+    message: 'New bill added successfully.',
+    data: {
+      bill: newBill,
+      spokenResponse: `New ${newBill.title} of ${newBill.amount} Rupees has been added to your payment list.`
+    }
+  });
+};
+
+exports.payBillById = (req, res) => {
+  const { id } = req.params;
+  const bills = db.getBills();
+  const bill = bills.find(b => b.id === id);
+
+  if (!bill) {
+    return res.status(404).json({
+      success: false,
+      message: 'Bill not found.'
+    });
+  }
+
+  if (bill.status === 'PAID') {
+    return res.status(400).json({
+      success: false,
+      message: 'This bill is already paid.'
+    });
+  }
+
+  const currentBalance = db.getBalance();
+  if (bill.amount > currentBalance) {
+    return res.status(400).json({
+      success: false,
+      message: `Insufficient balance (₹ ${currentBalance}) to pay bill of ₹ ${bill.amount}.`
+    });
+  }
+
+  const newBalance = currentBalance - bill.amount;
+  db.setBalance(newBalance);
+  db.payBill(id);
+
+  const tx = {
+    id: 'tx_bill_' + Date.now(),
+    title: `${bill.title} Paid`,
+    type: 'out',
+    amount: bill.amount,
+    timestamp: new Date().toISOString(),
+    formattedTime: 'Just now',
+    icon: bill.icon || '⚡',
+    note: `${bill.provider} Bill Payment`,
+    status: 'SUCCESS'
+  };
+  db.addTransaction(tx);
+
+  return res.status(200).json({
+    success: true,
+    message: `${bill.title} paid successfully.`,
+    data: {
+      bill,
+      transaction: tx,
+      remainingBalance: newBalance,
+      spokenResponse: `Success! Your ${bill.title} of ${bill.amount} Rupees has been paid.`
+    }
+  });
+};
+
+exports.deleteBill = (req, res) => {
+  const { id } = req.params;
+  const removed = db.deleteBill(id);
+
+  if (!removed) {
+    return res.status(404).json({
+      success: false,
+      message: 'Bill not found or cannot be removed.'
+    });
+  }
+
+  return res.status(200).json({
+    success: true,
+    message: 'Bill removed successfully.',
+    data: {
+      removedBill: removed,
+      spokenResponse: `${removed.title} has been removed from your bills list.`
+    }
+  });
+};
+
 exports.payUtilityBill = (req, res) => {
   const { billType, amount } = req.body;
   const numAmount = parseInt(amount, 10) || 450;

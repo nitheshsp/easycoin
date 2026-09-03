@@ -371,3 +371,157 @@
   background: #B91C1C;
   color: #FFFFFF;
 }
+
+/* ==========================================================================
+   In-Website Emergency Lock Active Screen & Checklist
+   ========================================================================== */
+.sos-lock-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+  background: #FEF2F2;
+  border: 1.5px solid #FECACA;
+  border-radius: 18px;
+  padding: 14px 16px;
+  box-sizing: border-box;
+}
+
+.sos-check-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13px;
+  color: #1E293B;
+}
+
+.sos-check-icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #DCFCE7;
+  color: #15803D;
+  border: 1px solid #86EFAC;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 800;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.sos-gotit-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #DC2626 0%, #B91C1C 100%);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 16px;
+  padding: 14px 18px;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 14px rgba(185, 28, 28, 0.3);
+}
+
+.sos-gotit-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(185, 28, 28, 0.4);
+}
+
+.sos-sub-btn {
+  background: #F1F5F9;
+  border: 1.5px solid #CBD5E1;
+  color: #334155;
+  border-radius: 14px;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.sos-sub-btn:hover {
+  background: #E2E8F0;
+  color: #0F172A;
+}
+
+/* Guardian Passcode Unlock Input */
+.pin-input-group {
+  display: flex;
+  justify-content: center;
+  margin: 12px 0 6px;
+}
+
+.pin-code-field {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: 0.35em;
+  text-align: center;
+  width: 180px;
+  border: 2px solid #CBD5E1;
+  border-radius: 16px;
+  padding: 8px 12px;
+  background: #F8FAFC;
+  color: #0F172A;
+  outline: none;
+  font-family: monospace;
+  transition: all 0.2s;
+}
+
+.pin-code-field:focus {
+  border-color: #003DD1;
+  background: #FFFFFF;
+  box-shadow: 0 0 0 4px rgba(0, 61, 209, 0.12);
+}
+
+/* ==========================================================================
+   Universal In-Website Floating Toast Notification
+   ========================================================================== */
+.easy-toast-container {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #0F172A;
+  color: #FFFFFF;
+  border-radius: 999px;
+  padding: 12px 24px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
+  font-size: 14px;
+  font-weight: 700;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  pointer-events: none;
+  max-width: 90%;
+}
+
+.easy-toast-container.active {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.easy-toast-container.success {
+  background: #14532D;
+  border: 1.5px solid #22C55E;
+}
+
+.easy-toast-container.error {
+  background: #7F1D1D;
+  border: 1.5px solid #EF4444;
+}
+
+.easy-toast-container.info {
+  background: #1E3A8A;
+  border: 1.5px solid #3B82F6;
+}
+

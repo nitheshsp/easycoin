@@ -4,6 +4,7 @@
  */
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const { PORT } = require('./config/constants');
 
 // Import Module Routes
@@ -23,6 +24,9 @@ app.use((req, res, next) => {
   console.log(`[${new Date().toLocaleTimeString()}] ${req.method} ${req.originalUrl}`);
   next();
 });
+
+// Serve frontend static files
+app.use(express.static(path.join(__dirname, '..')));
 
 // Health check
 app.get('/api/health', (req, res) => {
@@ -46,22 +50,36 @@ app.use('/api/account', accountRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/guardian', guardianRoutes);
 
-// 404 Handler
-app.use((req, res) => {
+// 404 Handler for undefined API routes
+app.use('/api', (req, res) => {
   res.status(404).json({
     success: false,
     error: `Endpoint ${req.method} ${req.originalUrl} not found.`
   });
 });
 
-// Start Server
+// Start Server with resilient fallback (e.g. if macOS AirPlay uses port 5000)
 if (require.main === module) {
-  app.listen(PORT, () => {
-    console.log(`\n==================================================`);
-    console.log(`🚀 EasyCoin Backend Gateway running on port ${PORT}`);
-    console.log(`🔗 Health Check: http://localhost:${PORT}/api/health`);
-    console.log(`==================================================\n`);
-  });
+  const startServer = (port) => {
+    const server = app.listen(port, () => {
+      console.log(`\n==================================================`);
+      console.log(`🚀 EasyCoin Backend Gateway running on port ${port}`);
+      console.log(`🔗 Health Check: http://localhost:${port}/api/health`);
+      console.log(`🌐 Website Frontend: http://localhost:${port}/`);
+      console.log(`==================================================\n`);
+    });
+
+    server.on('error', (err) => {
+      if (err.code === 'EADDRINUSE') {
+        console.warn(`⚠️ Port ${port} is occupied (macOS AirPlay / ControlCenter). Automatically switching to port ${port + 1}...`);
+        startServer(port + 1);
+      } else {
+        console.error('Server error:', err);
+      }
+    });
+  };
+
+  startServer(Number(PORT));
 }
 
 module.exports = app;

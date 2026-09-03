@@ -1,0 +1,20 @@
+{
+  "name": "easycoin",
+  "version": "1.0.0",
+  "description": "EasyCoin - Accessible Digital Payment & Banking for Senior Citizens and Illiterate Users",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "node backend/server.js",
+    "backend": "cd backend && npm start",
+    "frontend": "python3 -m http.server 8088"
+  },
+  "keywords": [
+    "accessible-banking",
+    "senior-citizens",
+    "voice-first",
+    "liquid-glassmorphism"
+  ],
+  "author": "EasyCoin Team",
+  "license": "MIT"
+}

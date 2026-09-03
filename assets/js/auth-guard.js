@@ -87,8 +87,11 @@
         if (window.EasyAudio) {
           window.EasyAudio.speak('Your session was safely locked due to inactivity to protect your account.');
         }
-        alert('🔒 Auto-Guard: Your session has timed out after 10 minutes of inactivity to safeguard your account.');
-        this.logout();
+        if (window.showEasyToast) {
+          window.showEasyToast('🔒 Auto-Guard: Session timed out after 10 minutes of inactivity.', 'info', '🔒');
+        }
+        sessionStorage.setItem('easycoin_session_timeout', 'true');
+        setTimeout(() => this.logout(), 800);
       }, this.inactivityTimeoutMs);
     }
 

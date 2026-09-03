@@ -4,22 +4,40 @@
  */
 class EasyAPIClient {
   constructor() {
-    this.baseUrl = 'http://localhost:5000/api';
+    this.baseUrl = (typeof window !== 'undefined' && window.location && window.location.protocol.startsWith('http'))
+      ? `${window.location.origin}/api`
+      : 'http://localhost:5001/api';
     this.isLive = false;
     this.checkHealth();
   }
 
   async checkHealth() {
-    try {
-      const res = await fetch(`${this.baseUrl}/health`, { signal: AbortSignal.timeout(1500) });
-      if (res.ok) {
-        this.isLive = true;
-        console.log('✅ EasyCoin Connected to Live Backend Services (Port 5000)');
-      }
-    } catch (e) {
-      this.isLive = false;
-      console.log('ℹ️ Backend offline: EasyCoin running in Smart Local Storage Mode');
+    // Check possible ports: current origin, port 5001, port 5000
+    const candidates = [];
+    if (typeof window !== 'undefined' && window.location && window.location.protocol.startsWith('http')) {
+      candidates.push(`${window.location.origin}/api`);
     }
+    candidates.push('http://localhost:5001/api');
+    candidates.push('http://localhost:5000/api');
+
+    // Deduplicate candidates
+    const uniqueCandidates = [...new Set(candidates)];
+
+    for (const url of uniqueCandidates) {
+      try {
+        const res = await fetch(`${url}/health`, { signal: AbortSignal.timeout(1500) });
+        if (res.ok) {
+          this.baseUrl = url;
+          this.isLive = true;
+          console.log(`✅ EasyCoin Connected to Live Backend Services (${url})`);
+          return;
+        }
+      } catch (e) {
+        // Continue to next candidate
+      }
+    }
+    this.isLive = false;
+    console.log('ℹ️ Backend offline: EasyCoin running in Smart Local Storage Mode');
   }
 
   // Module 1: Auth & User
@@ -209,7 +227,72 @@ class EasyAPIClient {
     return null; // fallback to local memory in phone-simulator
   }
 
-  // Module 3: Payments & Voice
+  // Module 3: Payments, Voice & Bills
+  async getBills() {
+    if (this.isLive) {
+      try {
+        const res = await fetch(`${this.baseUrl}/payments/bills`);
+        const json = await res.json();
+        if (json.success && json.data) {
+          return json.data.bills;
+        }
+      } catch (e) { console.warn(e); }
+    }
+    return null;
+  }
+
+  async addBill(billData) {
+    if (this.isLive) {
+      try {
+        const res = await fetch(`${this.baseUrl}/payments/bills`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(billData)
+        });
+        const json = await res.json();
+        return json;
+      } catch (e) { console.warn(e); }
+    }
+    return {
+      success: true,
+      data: {
+        bill: {
+          id: `bill_custom_${Date.now()}`,
+          ...billData,
+          status: 'DUE',
+          custom: true
+        }
+      }
+    };
+  }
+
+  async payBillById(billId) {
+    if (this.isLive) {
+      try {
+        const res = await fetch(`${this.baseUrl}/payments/bills/${billId}/pay`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        const json = await res.json();
+        return json;
+      } catch (e) { console.warn(e); }
+    }
+    return { success: true, simulated: true };
+  }
+
+  async deleteBill(billId) {
+    if (this.isLive) {
+      try {
+        const res = await fetch(`${this.baseUrl}/payments/bills/${billId}`, {
+          method: 'DELETE'
+        });
+        const json = await res.json();
+        return json;
+      } catch (e) { console.warn(e); }
+    }
+    return { success: true, simulated: true };
+  }
+
   async sendTransfer(recipientName, amount, note = '', avatar = '👤') {
     if (this.isLive) {
       try {

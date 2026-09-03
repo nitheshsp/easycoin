@@ -71,6 +71,61 @@ class DatabaseStore {
     ];
 
     this.guardianPings = [];
+
+    this.bills = [
+      {
+        id: 'bill-elec',
+        title: 'Electricity Bill',
+        provider: 'State Electricity Board',
+        icon: '⚡',
+        iconClass: 'electricity',
+        amount: 450,
+        dueDate: '7th March',
+        daysLeft: 3,
+        status: 'DUE',
+        recurring: 'Every 7th',
+        custom: false
+      },
+      {
+        id: 'bill-net',
+        title: 'Mobile 5G & Fiber',
+        provider: 'Jio Prepaid Monthly Recharge',
+        icon: '📶',
+        iconClass: 'network',
+        amount: 299,
+        dueDate: '10th March',
+        daysLeft: 6,
+        status: 'DUE',
+        recurring: 'Every 10th',
+        custom: false
+      },
+      {
+        id: 'bill-water',
+        title: 'Water Supply',
+        provider: 'City Water Works Department',
+        icon: '💧',
+        iconClass: 'water',
+        amount: 180,
+        dueDate: '15th March',
+        daysLeft: 11,
+        status: 'UPCOMING',
+        recurring: 'Every 15th',
+        custom: false
+      },
+      {
+        id: 'bill-gas',
+        title: 'LPG Gas Cylinder',
+        provider: 'Indane Gas Refill Booking',
+        icon: '🔥',
+        iconClass: 'gas',
+        amount: 850,
+        dueDate: '22nd March',
+        daysLeft: 18,
+        status: 'UPCOMING',
+        recurring: 'Monthly',
+        custom: false
+      }
+    ];
   }
 
   getUser() { return this.user; }
@@ -83,6 +138,43 @@ class DatabaseStore {
   addTransaction(tx) {
     this.transactions.unshift(tx);
     return tx;
+  }
+
+  getBills() { return this.bills; }
+  addBill(bill) {
+    const newBill = {
+      id: bill.id || `bill_custom_${Date.now()}`,
+      title: bill.title || 'Custom Bill',
+      provider: bill.provider || 'Service Provider',
+      icon: bill.icon || '📄',
+      iconClass: bill.iconClass || 'other',
+      amount: parseInt(bill.amount, 10) || 100,
+      dueDate: bill.dueDate || 'End of Month',
+      daysLeft: bill.daysLeft !== undefined ? bill.daysLeft : 7,
+      status: 'DUE',
+      recurring: bill.recurring || 'Monthly',
+      custom: true
+    };
+    this.bills.push(newBill);
+    return newBill;
+  }
+
+  deleteBill(billId) {
+    const idx = this.bills.findIndex(b => b.id === billId);
+    if (idx !== -1) {
+      const removed = this.bills.splice(idx, 1);
+      return removed[0];
+    }
+    return null;
+  }
+
+  payBill(billId) {
+    const bill = this.bills.find(b => b.id === billId);
+    if (bill) {
+      bill.status = 'PAID';
+      return bill;
+    }
+    return null;
   }
 
   freezeAccount() {

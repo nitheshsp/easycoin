@@ -61,8 +61,8 @@
     <section class="senior-action-tiles">
       <div class="senior-tile st-send" id="tileSend">
         <div class="st-icon">💸</div>
-        <div class="st-title">Send Money</div>
-        <div class="st-sub">Speak or tap photo</div>
+        <div class="st-title">Spend Money</div>
+        <div class="st-sub">Send to family, store or doctor</div>
       </div>
 
       <div class="senior-tile st-receive" id="tileReceive">
@@ -130,9 +130,14 @@
             <div style="font-size:13px; color:var(--text-muted);">Electricity, Mobile Network, Water & Gas</div>
           </div>
         </div>
-        <button class="ctrl-btn" onclick="window.EasyBills.speakBillSummary()">
-          🔊 Hear Bill Status
-        </button>
+        <div style="display:flex; gap:8px;">
+          <button class="ctrl-btn" style="background:#003DD1; color:#FFFFFF; border-color:#003DD1;" onclick="window.EasyBills.openAddBillModal('standalone')">
+            ➕ Add Bill
+          </button>
+          <button class="ctrl-btn" onclick="window.EasyBills.speakBillSummary()">
+            🔊 Hear Bill Status
+          </button>
+        </div>
       </div>
 
       <!-- Bill Overview Summary Banner -->
@@ -166,16 +171,83 @@
       <div class="bills-list" id="standaloneBillsList"></div>
     </section>
 
-    <!-- Visual Passbook Statement Section -->
+    <!-- Defined & Clear Passbook Statement Section -->
     <section class="app-section-card" id="passbookSection">
+      <!-- Section Header with Quick Voice Guide -->
       <div class="app-sec-head">
-        <h3>📖 Spoken Audio Passbook</h3>
-        <button class="ctrl-btn" onclick="window.EasyAudio.speak('Here are your recent payments and pension deposits. Tap any row to hear it.')">
-          🔊 Explain
-        </button>
+        <div>
+          <h3 style="margin-bottom:2px;">📖 Senior Passbook & Digital Statement</h3>
+          <span style="font-size:12.5px; color:var(--text-muted);">Verified Transaction Ledger · Safe Senior Banking</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <button type="button" class="ctrl-btn" onclick="window.EasyBanking.speakPassbookSummary()">
+            🔊 Read Summary
+          </button>
+          <button type="button" class="ctrl-btn" style="background:#F1F5F9; color:#334155;" onclick="window.EasyBanking.downloadStatement()">
+            🖨️ Print
+          </button>
+        </div>
       </div>
 
-      <div class="passbook-list" id="standalonePassbookList"></div>
+      <!-- Defined Subpart 1: Passbook Financial Summary Overview -->
+      <div class="pb-summary-grid">
+        <div class="pb-stat-card bal">
+          <div class="pb-stat-label">
+            <span>💳 Account Balance</span>
+          </div>
+          <div class="pb-stat-val" id="pbStatBalance">₹ 14,250</div>
+          <div class="pb-stat-sub">Senior Savings (**** 8921)</div>
+        </div>
+
+        <div class="pb-stat-card in">
+          <div class="pb-stat-label">
+            <span>🟢 Money Received</span>
+          </div>
+          <div class="pb-stat-val" id="pbStatReceived">+ ₹ 10,000</div>
+          <div class="pb-stat-sub" id="pbStatReceivedCount">2 Deposits (Pension, Gift)</div>
+        </div>
+
+        <div class="pb-stat-card out">
+          <div class="pb-stat-label">
+            <span>🔴 Money Spent</span>
+          </div>
+          <div class="pb-stat-val" id="pbStatSpent">- ₹ 840</div>
+          <div class="pb-stat-sub" id="pbStatSpentCount">2 Payments (Grocery, Rahul)</div>
+        </div>
+      </div>
+
+      <!-- Defined Subpart 2: Filter Tabs & Search -->
+      <div class="pb-controls-bar">
+        <div class="pb-tabs-row">
+          <button type="button" class="pb-filter-tab active" data-filter="all" onclick="window.EasyBanking.filterPassbook('all', this)">
+            <span>All Transactions</span>
+            <span class="pb-tab-count" id="pbCountAll">4</span>
+          </button>
+          <button type="button" class="pb-filter-tab" data-filter="in" onclick="window.EasyBanking.filterPassbook('in', this)">
+            <span>🟢 Money In (Received)</span>
+            <span class="pb-tab-count" id="pbCountIn">2</span>
+          </button>
+          <button type="button" class="pb-filter-tab" data-filter="out" onclick="window.EasyBanking.filterPassbook('out', this)">
+            <span>🔴 Money Out (Spent)</span>
+            <span class="pb-tab-count" id="pbCountOut">2</span>
+          </button>
+        </div>
+
+        <div class="pb-search-wrap">
+          <span style="font-size:16px;">🔍</span>
+          <input 
+            type="text" 
+            id="pbSearchInput" 
+            class="pb-search-input" 
+            placeholder="Search transactions by name or purpose (e.g. Rahul, Pension, Groceries)..."
+            oninput="window.EasyBanking.searchPassbook(this.value)"
+          >
+          <button type="button" id="pbClearSearchBtn" style="display:none; background:none; border:none; color:#94A3B8; cursor:pointer; font-size:14px;" onclick="document.getElementById('pbSearchInput').value=''; window.EasyBanking.searchPassbook(''); this.style.display='none';">✕</button>
+        </div>
+      </div>
+
+      <!-- Defined Subpart 3: High-Definition Transaction Cards List -->
+      <div class="pb-defined-list" id="standalonePassbookList"></div>
     </section>
 
     <!-- Emergency Safety & Guardian Box -->
@@ -184,7 +256,7 @@
       <div class="frozen-alert-banner" style="display:none;">
         <div class="frozen-title">🚨 ACCOUNT FROZEN</div>
         <div class="frozen-desc">All payment withdrawals are locked. Your money is 100% safe.</div>
-        <button class="unfreeze-action-btn" onclick="window.EasySOS.unfreezeWithPasscode(prompt('Enter 4-Digit Guardian Passcode (1234):'))">
+        <button class="unfreeze-action-btn" onclick="window.EasySOS.openUnlockModal()">
           🔓 Unlock Account with Guardian PIN
         </button>
       </div>
@@ -224,44 +296,233 @@
 
   </main>
 
-  <!-- Payment Modal Dialog -->
-  <div class="pay-modal" id="payModal">
-    <div class="pay-modal-content">
-      <div style="display:flex; align-items:center; justify-content:space-between;">
-        <div style="display:flex; align-items:center; gap:12px;">
-          <div style="font-size:36px;" id="modalRecAv">👨‍🦱</div>
+  <!-- Payment Modal Dialog: Defined Subparts -->
+  <div class="pay-modal" id="payModal" role="dialog" aria-modal="true" aria-labelledby="spendModalMainTitle">
+    <div class="spend-modal-card">
+      <!-- Modal Header -->
+      <div class="spend-modal-header">
+        <div class="spend-modal-title-group">
+          <div style="font-size:30px;">💸</div>
           <div>
-            <div style="font-size:18px; font-weight:800;" id="modalRecName">Son Rahul</div>
-            <div style="font-size:13px; color:var(--text-muted);">Verified Contact</div>
+            <h3 class="spend-modal-title" id="spendModalMainTitle">Spend Money</h3>
+            <div class="spend-modal-sub">Fast & Safe 4-Step Accessible Payment</div>
           </div>
         </div>
-        <button id="closeModalBtn" style="background:none; border:none; font-size:24px; cursor:pointer;">✕</button>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <button type="button" class="spend-help-btn" style="background:rgba(255,255,255,0.18); color:#FFFFFF; border-color:rgba(255,255,255,0.3);" onclick="window.EasyBanking.speakSpendHelp()">
+            🔊 Voice Guide
+          </button>
+          <button id="closeModalBtn" class="spend-modal-close-btn" title="Close" aria-label="Close dialog">✕</button>
+        </div>
       </div>
 
-      <div class="amount-display-box">
-        <div class="amount-val" id="modalAmountVal">₹ 0</div>
-        <div class="amount-words" id="modalAmountWords">Tap numbers or speak</div>
-      </div>
+      <div class="spend-modal-body">
+        <!-- Subpart 1: Paying To (Recipient) -->
+        <div class="spend-subpart" id="spendSubpartRecipient">
+          <div class="spend-subpart-head">
+            <div class="spend-subpart-title">
+              <span class="spend-step-tag">Step 1</span>
+              <span>Paying To (Recipient)</span>
+            </div>
+            <button type="button" class="spend-help-btn" onclick="window.EasyBanking.speakRecipient()">
+              🔊 Hear Name
+            </button>
+          </div>
 
-      <div class="senior-keypad">
-        <button class="key-btn m-key-btn" data-val="1">1</button>
-        <button class="key-btn m-key-btn" data-val="2">2</button>
-        <button class="key-btn m-key-btn" data-val="3">3</button>
-        <button class="key-btn m-key-btn" data-val="4">4</button>
-        <button class="key-btn m-key-btn" data-val="5">5</button>
-        <button class="key-btn m-key-btn" data-val="6">6</button>
-        <button class="key-btn m-key-btn" data-val="7">7</button>
-        <button class="key-btn m-key-btn" data-val="8">8</button>
-        <button class="key-btn m-key-btn" data-val="9">9</button>
-        <button class="key-btn m-key-btn btn-clear" data-val="clear">CLEAR</button>
-        <button class="key-btn m-key-btn" data-val="0">0</button>
-        <button class="key-btn m-key-btn btn-voice" data-val="voice">🎙️</button>
-      </div>
+          <div class="spend-recipient-display">
+            <div class="spend-rec-profile">
+              <div class="spend-rec-avatar" id="modalRecAv">👨‍🦱</div>
+              <div>
+                <div class="spend-rec-name" id="modalRecName">Son Rahul</div>
+                <div class="spend-rec-badge" id="modalRecRel">Family · Son · Verified 🛡️</div>
+              </div>
+            </div>
+            <button type="button" class="spend-switch-btn" id="toggleContactsPickerBtn" onclick="window.EasyBanking.toggleContactsPicker()">
+              ⇄ Switch
+            </button>
+          </div>
 
-      <button class="send-action-btn" id="confirmPayBtn">
-        <span>Confirm & Send Payment</span>
-        <span>→</span>
-      </button>
+          <!-- Quick Contacts Scroller -->
+          <div class="spend-contacts-scroller" id="spendContactsScroller">
+            <div class="spend-contact-chip active" data-name="Son Rahul" data-av="👨‍🦱" data-rel="Family · Son" onclick="window.EasyBanking.selectRecipient('Son Rahul', '👨‍🦱', 'Family · Son')">
+              <span>👨‍🦱</span> <span>Rahul (Son)</span>
+            </div>
+            <div class="spend-contact-chip" data-name="Lakshmi Grocery" data-av="🏪" data-rel="Store · Daily Ration" onclick="window.EasyBanking.selectRecipient('Lakshmi Grocery', '🏪', 'Store · Daily Ration')">
+              <span>🏪</span> <span>Lakshmi Grocery</span>
+            </div>
+            <div class="spend-contact-chip" data-name="Dr. Sharma" data-av="👨‍⚕️" data-rel="Doctor · Clinic" onclick="window.EasyBanking.selectRecipient('Dr. Sharma', '👨‍⚕️', 'Doctor · Clinic')">
+              <span>👨‍⚕️</span> <span>Dr. Sharma</span>
+            </div>
+            <div class="spend-contact-chip" data-name="Landlord Verma" data-av="👴" data-rel="House Rent" onclick="window.EasyBanking.selectRecipient('Landlord Verma', '👴', 'House Rent')">
+              <span>👴</span> <span>Verma Ji (Rent)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subpart 2: Amount to Spend (Connected to Phone/Laptop Keyboard) -->
+        <div class="spend-subpart" id="spendSubpartAmount">
+          <div class="spend-subpart-head">
+            <div class="spend-subpart-title">
+              <span class="spend-step-tag">Step 2</span>
+              <span>Amount to Spend</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-size:11px; background:#EFF6FF; color:#003DD1; border:1px solid #BFDBFE; padding:2px 8px; border-radius:6px; font-weight:700;">⌨️ Keyboard Active</span>
+              <span style="font-size:12px; color:var(--text-muted);" id="spendCoinPreview">🪙 0 Coins</span>
+            </div>
+          </div>
+
+          <!-- Direct Native Amount Input Card (Click to type on laptop or tap for phone keypad) -->
+          <div class="spend-amount-card" onclick="document.getElementById('spendAmountInput').focus()">
+            <div class="spend-input-field-wrap">
+              <span class="spend-input-currency-symbol">₹</span>
+              <input 
+                type="text" 
+                inputmode="numeric" 
+                pattern="[0-9]*"
+                id="spendAmountInput" 
+                class="spend-native-amount-input" 
+                placeholder="0" 
+                value="" 
+                maxlength="8"
+                autocomplete="off"
+                aria-label="Amount in Rupees"
+              >
+            </div>
+            <div class="spend-amount-words" id="modalAmountWords">Type on keyboard or use keypad below</div>
+          </div>
+
+          <!-- Tactile Quick Amount Chips -->
+          <div class="spend-quick-chips-row">
+            <button type="button" class="spend-amt-preset-btn" onclick="window.EasyBanking.addAmountPreset(100)">+ ₹ 100</button>
+            <button type="button" class="spend-amt-preset-btn" onclick="window.EasyBanking.addAmountPreset(500)">+ ₹ 500</button>
+            <button type="button" class="spend-amt-preset-btn" onclick="window.EasyBanking.addAmountPreset(1000)">+ ₹ 1,000</button>
+            <button type="button" class="spend-amt-preset-btn" onclick="window.EasyBanking.addAmountPreset(2000)">+ ₹ 2,000</button>
+            <button type="button" class="spend-amt-preset-btn" style="color:#DC2626;" onclick="window.EasyBanking.clearAmount()">Clear</button>
+          </div>
+
+          <!-- Normal, Spacious, Clean Phone Dial Keypad -->
+          <div class="normal-dial-keypad" id="spendDialKeypad">
+            <button type="button" class="dial-key-btn" data-val="1">
+              <span class="key-digit">1</span>
+              <span class="key-sub">&nbsp;</span>
+            </button>
+            <button type="button" class="dial-key-btn" data-val="2">
+              <span class="key-digit">2</span>
+              <span class="key-sub">ABC</span>
+            </button>
+            <button type="button" class="dial-key-btn" data-val="3">
+              <span class="key-digit">3</span>
+              <span class="key-sub">DEF</span>
+            </button>
+            <button type="button" class="dial-key-btn" data-val="4">
+              <span class="key-digit">4</span>
+              <span class="key-sub">GHI</span>
+            </button>
+            <button type="button" class="dial-key-btn" data-val="5">
+              <span class="key-digit">5</span>
+              <span class="key-sub">JKL</span>
+            </button>
+            <button type="button" class="dial-key-btn" data-val="6">
+              <span class="key-digit">6</span>
+              <span class="key-sub">MNO</span>
+            </button>
+            <button type="button" class="dial-key-btn" data-val="7">
+              <span class="key-digit">7</span>
+              <span class="key-sub">PQRS</span>
+            </button>
+            <button type="button" class="dial-key-btn" data-val="8">
+              <span class="key-digit">8</span>
+              <span class="key-sub">TUV</span>
+            </button>
+            <button type="button" class="dial-key-btn" data-val="9">
+              <span class="key-digit">9</span>
+              <span class="key-sub">WXYZ</span>
+            </button>
+            <button type="button" class="dial-key-btn dial-btn-action" data-val="clear" title="Clear all">
+              <span class="key-digit" style="font-size:13px; font-weight:800; color:#DC2626;">CLEAR</span>
+            </button>
+            <button type="button" class="dial-key-btn" data-val="0">
+              <span class="key-digit">0</span>
+              <span class="key-sub">+</span>
+            </button>
+            <button type="button" class="dial-key-btn dial-btn-action" data-val="backspace" title="Delete last digit">
+              <span class="key-digit" style="font-size:22px; color:#1E293B;">⌫</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Subpart 3: Purpose / Category -->
+        <div class="spend-subpart" id="spendSubpartPurpose">
+          <div class="spend-subpart-head">
+            <div class="spend-subpart-title">
+              <span class="spend-step-tag">Step 3</span>
+              <span>Spending Purpose / Tag</span>
+            </div>
+            <span style="font-size:12px; color:var(--text-muted);">Optional</span>
+          </div>
+
+          <div class="spend-purpose-grid">
+            <div class="spend-purpose-pill active" data-purpose="Family Allowance" onclick="window.EasyBanking.selectPurpose('Family Allowance', this)">
+              <span>🎁</span> <span>Family</span>
+            </div>
+            <div class="spend-purpose-pill" data-purpose="Groceries & Ration" onclick="window.EasyBanking.selectPurpose('Groceries & Ration', this)">
+              <span>🛒</span> <span>Groceries</span>
+            </div>
+            <div class="spend-purpose-pill" data-purpose="Medicine & Pharmacy" onclick="window.EasyBanking.selectPurpose('Medicine & Pharmacy', this)">
+              <span>💊</span> <span>Medical</span>
+            </div>
+            <div class="spend-purpose-pill" data-purpose="Monthly House Rent" onclick="window.EasyBanking.selectPurpose('Monthly House Rent', this)">
+              <span>🏠</span> <span>Rent</span>
+            </div>
+            <div class="spend-purpose-pill" data-purpose="Utility Bills" onclick="window.EasyBanking.selectPurpose('Utility Bills', this)">
+              <span>💡</span> <span>Bills</span>
+            </div>
+            <div class="spend-purpose-pill" data-purpose="General Expense" onclick="window.EasyBanking.selectPurpose('General Expense', this)">
+              <span>📄</span> <span>Other</span>
+            </div>
+          </div>
+          <input type="text" id="spendNoteInput" class="spend-memo-input" placeholder="Add a short note (e.g. Monthly Allowance)" value="Family Allowance">
+        </div>
+
+        <!-- Subpart 4: Account & Safety Review -->
+        <div class="spend-subpart" id="spendSubpartReview">
+          <div class="spend-subpart-head">
+            <div class="spend-subpart-title">
+              <span class="spend-step-tag">Step 4</span>
+              <span>Account & Safety Review</span>
+            </div>
+            <button type="button" class="spend-help-btn" onclick="window.EasyBanking.speakReview()">
+              🔊 Read Review
+            </button>
+          </div>
+
+          <div class="spend-safety-summary-box">
+            <div class="spend-safety-row">
+              <span>Source Account:</span>
+              <span style="font-weight:700;">EasyCoin Senior Account (₹ 14,250)</span>
+            </div>
+            <div class="spend-safety-row">
+              <span>Balance After Spending:</span>
+              <span style="font-weight:800; color:#003DD1;" id="spendProjectedBal">₹ 14,250</span>
+            </div>
+            <div class="spend-safety-row">
+              <span>Guardian Safety Shield:</span>
+              <span class="spend-safe-badge" id="spendSafetyBadge">🛡️ Safe Contact Transfer</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subpart 5: Action Confirmation -->
+        <div class="spend-modal-actions">
+          <button type="button" class="btn-cancel-spend" onclick="document.getElementById('payModal').classList.remove('active')">
+            Cancel
+          </button>
+          <button type="button" class="btn-confirm-spend" id="confirmPayBtn">
+            <span id="confirmPayBtnText">✓ Confirm & Spend ₹ 0</span>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -336,7 +597,7 @@
           </div>
         </div>
 
-        <button class="send-action-btn" onclick="window.EasyAudio.speak('Your EasyCoin Receive QR Code is on screen. Anyone can scan it to send you money.'); alert('📲 QR Ready: Show to sender to receive payments.');">
+        <button class="send-action-btn" onclick="window.EasyAudio.speak('Your EasyCoin Receive QR Code is on screen. Anyone can scan it to send you money.'); if(window.showEasyToast) window.showEasyToast('📲 QR Ready: Show to sender to receive payments.', 'info', '📲');">
           🔊 Hear Instructions
         </button>
       </div>
@@ -354,30 +615,187 @@
     </div>
   </aside>
 
-  <!-- Full-Screen SOS Emergency Countdown & Confirmation Modal -->
-  <div class="sos-modal-overlay" id="sosCountdownOverlay">
-    <div class="sos-modal-box">
-      <div style="font-size:36px;">🚨</div>
-      <h3 style="font-size:22px; font-weight:800; color:#991B1B; margin:0;" id="sosPromptText">
-        Emergency Panic Freeze Initiating...
-      </h3>
-      <p style="font-size:14px; color:#7F1D1D; margin:0;">
-        All account debits will be frozen and live GPS coordinates will be dispatched to Daughter Ananya.
-      </p>
-
-      <!-- Animated Circular Countdown -->
-      <div class="countdown-circle-wrap">
-        <svg viewBox="0 0 100 100">
-          <circle class="bg" cx="50" cy="50" r="45"></circle>
-          <circle class="bar" id="sosCountdownCircle" cx="50" cy="50" r="45"></circle>
-        </svg>
-        <div class="countdown-number" id="sosCountdownNum">8</div>
+  <!-- Digital Passbook Receipt Modal -->
+  <div class="pay-modal" id="receiptModal" role="dialog" aria-modal="true" aria-labelledby="receiptModalTitle">
+    <div class="receipt-paper">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px; border-bottom:1.5px dashed #CBD5E1; padding-bottom:14px;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div style="width:42px; height:42px; border-radius:12px; background:#003DD1; color:#fff; display:flex; align-items:center; justify-content:center; font-size:22px;">🪙</div>
+          <div>
+            <h4 id="receiptModalTitle" style="font-size:16px; font-weight:800; color:#0F172A; margin:0;">EasyCoin Digital Receipt</h4>
+            <div style="font-size:11px; color:#64748B;">RBI-Compliant Verified Transaction</div>
+          </div>
+        </div>
+        <button type="button" id="closeReceiptBtn" style="background:none; border:none; font-size:22px; cursor:pointer; color:#64748B;">✕</button>
       </div>
 
-      <button class="sos-cancel-btn" onclick="window.EasySOS.cancelSOS()">
-        ✕ TAP TO CANCEL (ACCIDENTAL)
-      </button>
+      <div style="text-align:center; padding:6px 0 16px;">
+        <div style="font-size:13px; font-weight:700; color:#64748B;" id="receiptTypeLabel">Payment Sent</div>
+        <div style="font-size:36px; font-weight:800; letter-spacing:-0.02em; margin:4px 0;" id="receiptAmountVal">₹ 500</div>
+        <div style="display:inline-flex; align-items:center; gap:6px; background:#DCFCE7; color:#15803D; font-size:11.5px; font-weight:800; padding:3px 10px; border-radius:999px;">
+          <span>✓ SUCCESSFUL & PROTECTED</span>
+        </div>
+      </div>
+
+      <!-- Receipt Fields -->
+      <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:16px; padding:14px; display:flex; flex-direction:column; gap:10px; font-size:13px; margin-bottom:16px;">
+        <div style="display:flex; justify-content:space-between;">
+          <span style="color:#64748B;">Party:</span>
+          <span style="font-weight:700; color:#0F172A;" id="receiptPartyName">Son Rahul</span>
+        </div>
+        <div style="display:flex; justify-content:space-between;">
+          <span style="color:#64748B;">Purpose / Memo:</span>
+          <span style="font-weight:700; color:#003DD1;" id="receiptPurpose">Family Allowance</span>
+        </div>
+        <div style="display:flex; justify-content:space-between;">
+          <span style="color:#64748B;">Date & Time:</span>
+          <span style="font-weight:600; color:#0F172A;" id="receiptTime">Today, 2:15 PM</span>
+        </div>
+        <div style="display:flex; justify-content:space-between;">
+          <span style="color:#64748B;">Transaction ID:</span>
+          <span style="font-family:monospace; font-weight:700; color:#475569;" id="receiptTxnId">TXN-8921-01</span>
+        </div>
+        <div style="display:flex; justify-content:space-between;">
+          <span style="color:#64748B;">Account:</span>
+          <span style="font-weight:700; color:#0F172A;">Senior Savings (**** 8921)</span>
+        </div>
+        <div style="display:flex; justify-content:space-between;">
+          <span style="color:#64748B;">Guardian Safety:</span>
+          <span style="font-weight:700; color:#16A34A;">🛡️ 100% Protected</span>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:10px;">
+        <button type="button" class="ctrl-btn" style="flex:1; justify-content:center; padding:12px;" onclick="window.EasyBanking.speakCurrentReceipt()">
+          🔊 Read Aloud
+        </button>
+        <button type="button" class="ctrl-btn" style="background:#003DD1; color:#fff; border:none; padding:12px 18px;" onclick="window.print()">
+          🖨️ Print
+        </button>
+      </div>
     </div>
+  </div>
+
+  <!-- Full-Screen In-Website SOS Emergency Modal (Countdown & Lock Activated Confirmation) -->
+  <div class="sos-modal-overlay" id="sosCountdownOverlay" role="dialog" aria-modal="true">
+    <div class="sos-modal-box" id="sosModalBox">
+      <!-- Countdown State -->
+      <div id="sosCountdownState" style="display:flex; flex-direction:column; align-items:center; gap:14px; width:100%;">
+        <div style="font-size:38px;">🚨</div>
+        <h3 style="font-size:22px; font-weight:800; color:#991B1B; margin:0;" id="sosPromptText">
+          Emergency Panic Freeze Initiating...
+        </h3>
+        <p style="font-size:14px; color:#7F1D1D; margin:0; line-height:1.45;">
+          All account debits will be frozen and live GPS coordinates will be dispatched to Daughter Ananya.
+        </p>
+
+        <!-- Animated Circular Countdown -->
+        <div class="countdown-circle-wrap">
+          <svg viewBox="0 0 100 100">
+            <circle class="bg" cx="50" cy="50" r="45"></circle>
+            <circle class="bar" id="sosCountdownCircle" cx="50" cy="50" r="45"></circle>
+          </svg>
+          <div class="countdown-number" id="sosCountdownNum">8</div>
+        </div>
+
+        <button type="button" class="sos-cancel-btn" onclick="window.EasySOS.cancelSOS()">
+          ✕ TAP TO CANCEL (ACCIDENTAL)
+        </button>
+      </div>
+
+      <!-- Lock Activated State (Replaces the ugly browser alert popup completely!) -->
+      <div id="sosActiveState" style="display:none; flex-direction:column; align-items:center; gap:14px; width:100%;">
+        <div style="width:56px; height:56px; border-radius:20px; background:#FEF2F2; border:2px solid #EF4444; display:flex; align-items:center; justify-content:center; font-size:28px;">
+          🔒
+        </div>
+        <div>
+          <h3 style="font-size:20px; font-weight:800; color:#991B1B; margin:0 0 4px;">EMERGENCY LOCK ACTIVE</h3>
+          <span style="display:inline-block; font-size:11.5px; font-weight:800; color:#15803D; background:#DCFCE7; padding:2px 10px; border-radius:999px;">🛡️ 100% SECURED</span>
+        </div>
+
+        <div class="sos-lock-checklist">
+          <div class="sos-check-row">
+            <span class="sos-check-icon">✓</span>
+            <div>
+              <b>All outgoing transfers & debits frozen</b>
+              <div style="font-size:11.5px; color:#64748B;">No money can leave your account</div>
+            </div>
+          </div>
+          <div class="sos-check-row">
+            <span class="sos-check-icon">✓</span>
+            <div>
+              <b>SMS Alert sent to Daughter Ananya</b>
+              <div style="font-size:11.5px; color:#64748B;">+91 98112 23344 (Primary Guardian)</div>
+            </div>
+          </div>
+          <div class="sos-check-row">
+            <span class="sos-check-icon">✓</span>
+            <div>
+              <b>Live GPS coordinates dispatched</b>
+              <div style="font-size:11.5px; color:#64748B;">28.6139° N, 77.2090° E (Emergency Tracking)</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:8px; width:100%; margin-top:4px;">
+          <button type="button" class="sos-gotit-btn" onclick="window.EasySOS.dismissActiveLock()">
+            ✓ Understood · Return to Safe Screen
+          </button>
+          <div style="display:flex; gap:8px; width:100%;">
+            <button type="button" class="sos-sub-btn" style="flex:1;" onclick="window.EasySOS.callGuardian()">
+              📞 Call Ananya
+            </button>
+            <button type="button" class="sos-sub-btn" style="flex:1;" onclick="window.EasySOS.speakLockStatus()">
+              🔊 Hear Status
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- In-Website Guardian Passcode Unlock Modal -->
+  <div class="sos-modal-overlay" id="unfreezeModal" role="dialog" aria-modal="true" aria-labelledby="unfreezeModalTitle">
+    <div class="sos-modal-box" style="max-width:380px;">
+      <div style="font-size:36px;">🔓</div>
+      <h3 id="unfreezeModalTitle" style="font-size:20px; font-weight:800; color:#0F172A; margin:0;">
+        Unlock Account
+      </h3>
+      <p style="font-size:13px; color:#64748B; margin:0; text-align:center;">
+        Enter the 4-digit Guardian PIN to restore normal banking operations. (Default: <b>1234</b>)
+      </p>
+
+      <div class="pin-input-group">
+        <input 
+          type="password" 
+          id="guardianPinInput" 
+          maxlength="4" 
+          placeholder="••••" 
+          inputmode="numeric" 
+          pattern="[0-9]*" 
+          class="pin-code-field"
+          autocomplete="off"
+        >
+      </div>
+      <div id="unfreezeErrorMsg" style="font-size:12.5px; color:#DC2626; font-weight:700; display:none;">
+        ❌ Incorrect PIN. Please enter 1234.
+      </div>
+
+      <div style="display:flex; gap:8px; width:100%; margin-top:6px;">
+        <button type="button" class="sos-cancel-btn" style="flex:1;" onclick="window.EasySOS.closeUnlockModal()">
+          Cancel
+        </button>
+        <button type="button" class="sos-gotit-btn" style="flex:1; background:#003DD1; margin-top:0;" onclick="window.EasySOS.submitPasscode()">
+          Unlock
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Universal In-Website Floating Toast Notification -->
+  <div class="easy-toast-container" id="easyToast" role="status" aria-live="polite">
+    <span id="easyToastIcon" style="font-size:18px;">✅</span>
+    <span id="easyToastMsg">Notification message</span>
   </div>
 
   <!-- Core Scripts -->

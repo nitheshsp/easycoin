@@ -232,8 +232,8 @@
                     <div class="action-grid">
                       <div class="action-tile tile-send">
                         <div class="tile-icon">💸</div>
-                        <div class="tile-title">Send Money</div>
-                        <div class="tile-sub">Voice or photo pay</div>
+                        <div class="tile-title">Spend Money</div>
+                        <div class="tile-sub">Voice, photo or tap</div>
                       </div>
 
                       <div class="action-tile tile-receive">
@@ -285,56 +285,150 @@
                     </div>
                   </div>
 
-                  <!-- Screen 2: Voice Pay & Big Keypad -->
+                  <!-- Screen 2: Spend Money with Defined Subparts -->
                   <div class="screen" id="s-send">
                     <div class="app-header">
                       <div class="app-brand-pill">
-                        <span>Send to: <b id="recName">Son Rahul</b></span>
+                        <span>💸 Spend Money</span>
                       </div>
-                      <span style="font-size:24px;" id="recAvatar">👨‍🦱</span>
-                    </div>
-
-                    <!-- Voice Waveform Hero -->
-                    <div class="voice-hero-box">
-                      <div style="font-size:14px; font-weight:700; color:var(--dlr900);">Speak Amount or Tap Mic</div>
-                      <div class="voice-waveform" id="voiceWaveform">
-                        <div class="voice-bar"></div>
-                        <div class="voice-bar"></div>
-                        <div class="voice-bar"></div>
-                        <div class="voice-bar"></div>
-                        <div class="voice-bar"></div>
-                        <div class="voice-bar"></div>
-                      </div>
-                      <button class="mic-action-btn" id="micActionBtn" title="Tap to Speak Amount">
-                        🎤
+                      <button class="voice-status-btn" onclick="window.EasyAudio.speak('Step 1: Check recipient. Step 2: Speak or tap amount. Step 3: Select purpose. Step 4: Confirm payment.')">
+                        🔊 Steps
                       </button>
                     </div>
 
-                    <!-- Amount Display Box -->
-                    <div class="amount-display-box">
-                      <div class="amount-val" id="keypadAmount">₹ 0</div>
-                      <div class="amount-words" id="amountWords">Tap numbers or tap Mic to speak</div>
+                    <!-- Subpart 1: Recipient -->
+                    <div class="spend-subpart phone-subpart" style="padding:10px 12px; margin-bottom:10px;">
+                      <div class="spend-subpart-head" style="margin-bottom:6px;">
+                        <div class="spend-subpart-title" style="font-size:12px;">
+                          <span class="spend-step-tag" style="font-size:10px; padding:1px 6px;">Step 1</span>
+                          <span>Paying To</span>
+                        </div>
+                        <span style="font-size:11px; color:#003DD1; font-weight:700;">Verified 🛡️</span>
+                      </div>
+                      <div class="spend-recipient-display" style="padding:8px 10px;">
+                        <div class="spend-rec-profile" style="gap:8px;">
+                          <div class="spend-rec-avatar" id="recAvatar" style="width:36px; height:36px; font-size:20px;">👨‍🦱</div>
+                          <div>
+                            <div class="spend-rec-name" id="recName" style="font-size:14px;">Son Rahul</div>
+                            <div class="spend-rec-badge" style="font-size:10.5px;">Family Contact</div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
 
-                    <!-- Senior Keypad -->
-                    <div class="senior-keypad">
-                      <button class="key-btn" data-val="1">1</button>
-                      <button class="key-btn" data-val="2">2</button>
-                      <button class="key-btn" data-val="3">3</button>
-                      <button class="key-btn" data-val="4">4</button>
-                      <button class="key-btn" data-val="5">5</button>
-                      <button class="key-btn" data-val="6">6</button>
-                      <button class="key-btn" data-val="7">7</button>
-                      <button class="key-btn" data-val="8">8</button>
-                      <button class="key-btn" data-val="9">9</button>
-                      <button class="key-btn btn-clear" data-val="clear">CLEAR</button>
-                      <button class="key-btn" data-val="0">0</button>
-                      <button class="key-btn btn-voice" data-val="voice">🎙️</button>
+                    <!-- Subpart 2: Amount & Keypad -->
+                    <div class="spend-subpart phone-subpart" style="padding:10px 12px; margin-bottom:10px;">
+                      <div class="spend-subpart-head" style="margin-bottom:6px;">
+                        <div class="spend-subpart-title" style="font-size:12px;">
+                          <span class="spend-step-tag" style="font-size:10px; padding:1px 6px;">Step 2</span>
+                          <span>Amount</span>
+                        </div>
+                        <button class="mic-action-btn" id="micActionBtn" title="Speak Amount" style="width:32px; height:32px; font-size:15px;">
+                          🎤
+                        </button>
+                      </div>
+
+                      <div class="amount-display-box" style="padding:10px; margin-bottom:8px; cursor:text;" onclick="var inp = document.getElementById('phoneAmountInput'); if (inp) inp.focus();">
+                        <div style="display:inline-flex; align-items:center; justify-content:center; gap:4px;">
+                          <span style="font-size:26px; font-weight:800; color:#003DD1;">₹</span>
+                          <input 
+                            type="text" 
+                            inputmode="numeric" 
+                            pattern="[0-9]*" 
+                            id="phoneAmountInput" 
+                            class="phone-native-amt-input" 
+                            placeholder="0" 
+                            value="" 
+                            maxlength="7"
+                            autocomplete="off"
+                            style="border:none; background:transparent; font-size:28px; font-weight:800; color:#003DD1; width:120px; outline:none; text-align:left; font-family:inherit;"
+                            aria-label="Amount to spend in Rupees"
+                          >
+                        </div>
+                        <div class="amount-words" id="amountWords" style="font-size:11.5px;">Type with keyboard or tap below</div>
+                      </div>
+
+                      <!-- Quick Chips -->
+                      <div style="display:flex; gap:6px; justify-content:center; margin-bottom:8px;">
+                        <button type="button" class="quick-amt-chip" style="font-size:11px; padding:4px 8px;" onclick="window.phoneAddAmt(100)">+100</button>
+                        <button type="button" class="quick-amt-chip" style="font-size:11px; padding:4px 8px;" onclick="window.phoneAddAmt(500)">+500</button>
+                        <button type="button" class="quick-amt-chip" style="font-size:11px; padding:4px 8px;" onclick="window.phoneAddAmt(1000)">+1k</button>
+                        <button type="button" class="quick-amt-chip" style="font-size:11px; padding:4px 8px; color:#dc2626;" onclick="window.phoneClearAmt()">Clear</button>
+                      </div>
+
+                      <!-- Normal Modern Phone Keypad -->
+                      <div class="senior-keypad" style="gap:6px; margin-bottom:0;">
+                        <button class="key-btn" data-val="1" style="height:44px; display:flex; flex-direction:column; align-items:center; justify-content:center; line-height:1;">
+                          <span style="font-size:17px; font-weight:800;">1</span>
+                          <span style="font-size:8px; color:#94A3B8;">&nbsp;</span>
+                        </button>
+                        <button class="key-btn" data-val="2" style="height:44px; display:flex; flex-direction:column; align-items:center; justify-content:center; line-height:1;">
+                          <span style="font-size:17px; font-weight:800;">2</span>
+                          <span style="font-size:8px; color:#94A3B8;">ABC</span>
+                        </button>
+                        <button class="key-btn" data-val="3" style="height:44px; display:flex; flex-direction:column; align-items:center; justify-content:center; line-height:1;">
+                          <span style="font-size:17px; font-weight:800;">3</span>
+                          <span style="font-size:8px; color:#94A3B8;">DEF</span>
+                        </button>
+                        <button class="key-btn" data-val="4" style="height:44px; display:flex; flex-direction:column; align-items:center; justify-content:center; line-height:1;">
+                          <span style="font-size:17px; font-weight:800;">4</span>
+                          <span style="font-size:8px; color:#94A3B8;">GHI</span>
+                        </button>
+                        <button class="key-btn" data-val="5" style="height:44px; display:flex; flex-direction:column; align-items:center; justify-content:center; line-height:1;">
+                          <span style="font-size:17px; font-weight:800;">5</span>
+                          <span style="font-size:8px; color:#94A3B8;">JKL</span>
+                        </button>
+                        <button class="key-btn" data-val="6" style="height:44px; display:flex; flex-direction:column; align-items:center; justify-content:center; line-height:1;">
+                          <span style="font-size:17px; font-weight:800;">6</span>
+                          <span style="font-size:8px; color:#94A3B8;">MNO</span>
+                        </button>
+                        <button class="key-btn" data-val="7" style="height:44px; display:flex; flex-direction:column; align-items:center; justify-content:center; line-height:1;">
+                          <span style="font-size:17px; font-weight:800;">7</span>
+                          <span style="font-size:8px; color:#94A3B8;">PQRS</span>
+                        </button>
+                        <button class="key-btn" data-val="8" style="height:44px; display:flex; flex-direction:column; align-items:center; justify-content:center; line-height:1;">
+                          <span style="font-size:17px; font-weight:800;">8</span>
+                          <span style="font-size:8px; color:#94A3B8;">TUV</span>
+                        </button>
+                        <button class="key-btn" data-val="9" style="height:44px; display:flex; flex-direction:column; align-items:center; justify-content:center; line-height:1;">
+                          <span style="font-size:17px; font-weight:800;">9</span>
+                          <span style="font-size:8px; color:#94A3B8;">WXYZ</span>
+                        </button>
+                        <button class="key-btn btn-clear" data-val="clear" style="height:44px; font-size:11px; font-weight:800; color:#DC2626;">CLR</button>
+                        <button class="key-btn" data-val="0" style="height:44px; display:flex; flex-direction:column; align-items:center; justify-content:center; line-height:1;">
+                          <span style="font-size:17px; font-weight:800;">0</span>
+                          <span style="font-size:8px; color:#94A3B8;">+</span>
+                        </button>
+                        <button class="key-btn" data-val="backspace" style="height:44px; font-size:18px; color:#1E293B;">⌫</button>
+                      </div>
+                    </div>
+
+                    <!-- Subpart 3: Purpose -->
+                    <div class="spend-subpart phone-subpart" style="padding:8px 12px; margin-bottom:10px;">
+                      <div class="spend-subpart-head" style="margin-bottom:6px;">
+                        <div class="spend-subpart-title" style="font-size:12px;">
+                          <span class="spend-step-tag" style="font-size:10px; padding:1px 6px;">Step 3</span>
+                          <span>Purpose</span>
+                        </div>
+                      </div>
+                      <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:6px;">
+                        <div class="spend-purpose-pill active" style="padding:5px 4px; font-size:11px;" onclick="window.phoneSelectPurpose('Family', this)">🎁 Family</div>
+                        <div class="spend-purpose-pill" style="padding:5px 4px; font-size:11px;" onclick="window.phoneSelectPurpose('Groceries', this)">🛒 Ration</div>
+                        <div class="spend-purpose-pill" style="padding:5px 4px; font-size:11px;" onclick="window.phoneSelectPurpose('Medical', this)">💊 Meds</div>
+                        <div class="spend-purpose-pill" style="padding:5px 4px; font-size:11px;" onclick="window.phoneSelectPurpose('Rent', this)">🏠 Rent</div>
+                      </div>
+                    </div>
+
+                    <!-- Subpart 4: Safety & Review -->
+                    <div class="spend-subpart phone-subpart" style="padding:8px 12px; margin-bottom:12px; background:#eff6ff;">
+                      <div style="display:flex; justify-content:space-between; align-items:center; font-size:11.5px; font-weight:700; color:#1e40af;">
+                        <span>Remaining: <b id="phoneRemBal">₹ 14,250</b></span>
+                        <span style="color:#15803d;">🛡️ 100% Protected</span>
+                      </div>
                     </div>
 
                     <button class="send-action-btn" id="sendMoneyBtn">
-                      <span>Confirm & Send Payment</span>
-                      <span>→</span>
+                      <span id="phoneSendBtnTxt">✓ Confirm & Spend Payment</span>
                     </button>
                   </div>
 
@@ -406,7 +500,7 @@
                         </div>
                       </div>
 
-                      <button class="voice-status-btn" style="width:100%; justify-content:center; padding:12px;" onclick="window.EasyAudio.speak('Your EasyCoin Receive QR Code is on screen. Anyone can scan it to send you money.'); alert('📲 QR Ready: Show to sender.');">
+                      <button class="voice-status-btn" style="width:100%; justify-content:center; padding:12px;" onclick="window.EasyAudio.speak('Your EasyCoin Receive QR Code is on screen. Anyone can scan it to send you money.'); if(window.showEasyToast) window.showEasyToast('📲 QR Ready: Show to sender.', 'info', '📲');">
                         🔊 Read Out QR Details
                       </button>
                     </div>
@@ -418,9 +512,14 @@
                       <div class="app-brand-pill">
                         <span>⚡ Monthly Bill Reminders</span>
                       </div>
-                      <button class="voice-status-btn" onclick="window.EasyBills.speakBillSummary()">
-                        🔊 Read Bills
-                      </button>
+                      <div style="display:flex; gap:6px;">
+                        <button class="voice-status-btn" style="background:#003DD1; color:#FFFFFF; border-color:#003DD1;" onclick="window.EasyBills.openAddBillModal('phone')">
+                          ➕ Add
+                        </button>
+                        <button class="voice-status-btn" onclick="window.EasyBills.speakBillSummary()">
+                          🔊 Read
+                        </button>
+                      </div>
                     </div>
 
                     <!-- Summary Hub Card -->
@@ -458,16 +557,36 @@
                     <div class="bills-list" id="phoneBillsList"></div>
                   </div>
 
-                  <!-- Screen 3: Visual Passbook -->
+                  <!-- Screen 3: Defined Visual Passbook -->
                   <div class="screen" id="s-passbook">
                     <div class="app-header">
                       <div class="app-brand-pill">
-                        <span>📖 Audio Passbook</span>
+                        <span>📖 Senior Passbook</span>
                       </div>
-                      <button class="voice-status-btn" onclick="window.EasyAudio.speak('Here is your passbook. Tap any row to hear details.')">
-                        🔊 Read All
+                      <button class="voice-status-btn" onclick="window.phoneSpeakPassbookSummary()">
+                        🔊 Summary
                       </button>
                     </div>
+
+                    <!-- Mini Summary Card in Phone -->
+                    <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:14px; padding:10px 12px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
+                      <div>
+                        <div style="font-size:11px; color:#64748B; font-weight:700;">Account Balance</div>
+                        <div style="font-size:17px; font-weight:800; color:#003DD1;" id="phonePbBal">₹ 14,250</div>
+                      </div>
+                      <div style="text-align:right;">
+                        <span style="font-size:10.5px; color:#15803D; font-weight:800; background:#DCFCE7; padding:2px 6px; border-radius:6px;" id="phonePbInVal">🟢 In: +₹10,000</span>
+                        <div style="font-size:10.5px; color:#DC2626; font-weight:800; margin-top:3px;" id="phonePbOutVal">🔴 Out: -₹840</div>
+                      </div>
+                    </div>
+
+                    <!-- Filter Tabs in Phone -->
+                    <div style="display:flex; gap:6px; margin-bottom:10px;">
+                      <button type="button" class="quick-amt-chip active" style="font-size:11px; padding:4px 10px;" id="phonePbTabAll" onclick="window.phoneFilterPb('all', this)">All</button>
+                      <button type="button" class="quick-amt-chip" style="font-size:11px; padding:4px 10px;" id="phonePbTabIn" onclick="window.phoneFilterPb('in', this)">🟢 Received</button>
+                      <button type="button" class="quick-amt-chip" style="font-size:11px; padding:4px 10px;" id="phonePbTabOut" onclick="window.phoneFilterPb('out', this)">🔴 Spent</button>
+                    </div>
+
                     <div class="passbook-list" id="passbookList"></div>
                   </div>
 
@@ -486,7 +605,7 @@
                     <div class="frozen-alert-banner phone-frozen-banner" style="display:none;">
                       <div class="frozen-title">🚨 ACCOUNT FROZEN</div>
                       <div class="frozen-desc">All payment withdrawals are locked. Your money is 100% safe.</div>
-                      <button class="unfreeze-action-btn" onclick="window.EasySOS.unfreezeWithPasscode(prompt('Enter 4-Digit Guardian Passcode (1234):'))">
+                      <button class="unfreeze-action-btn" onclick="window.EasySOS.openUnlockModal()">
                         🔓 Unlock with Guardian PIN
                       </button>
                     </div>
@@ -1035,30 +1154,126 @@
     </div>
   </footer>
 
-  <!-- Full-Screen SOS Emergency Countdown & Confirmation Modal -->
-  <div class="sos-modal-overlay" id="sosCountdownOverlay">
-    <div class="sos-modal-box">
-      <div style="font-size:36px;">🚨</div>
-      <h3 style="font-size:22px; font-weight:800; color:#991B1B; margin:0;" id="sosPromptText">
-        Emergency Panic Freeze Initiating...
-      </h3>
-      <p style="font-size:14px; color:#7F1D1D; margin:0;">
-        All account debits will be frozen and live GPS coordinates will be dispatched to Daughter Ananya.
-      </p>
+  <!-- Full-Screen In-Website SOS Emergency Modal (Countdown & Lock Activated Confirmation) -->
+  <div class="sos-modal-overlay" id="sosCountdownOverlay" role="dialog" aria-modal="true">
+    <div class="sos-modal-box" id="sosModalBox">
+      <!-- Countdown State -->
+      <div id="sosCountdownState" style="display:flex; flex-direction:column; align-items:center; gap:14px; width:100%;">
+        <div style="font-size:38px;">🚨</div>
+        <h3 style="font-size:22px; font-weight:800; color:#991B1B; margin:0;" id="sosPromptText">
+          Emergency Panic Freeze Initiating...
+        </h3>
+        <p style="font-size:14px; color:#7F1D1D; margin:0; line-height:1.45;">
+          All account debits will be frozen and live GPS coordinates will be dispatched to Daughter Ananya.
+        </p>
 
-      <!-- Animated Circular Countdown -->
-      <div class="countdown-circle-wrap">
-        <svg viewBox="0 0 100 100">
-          <circle class="bg" cx="50" cy="50" r="45"></circle>
-          <circle class="bar" id="sosCountdownCircle" cx="50" cy="50" r="45"></circle>
-        </svg>
-        <div class="countdown-number" id="sosCountdownNum">8</div>
+        <!-- Animated Circular Countdown -->
+        <div class="countdown-circle-wrap">
+          <svg viewBox="0 0 100 100">
+            <circle class="bg" cx="50" cy="50" r="45"></circle>
+            <circle class="bar" id="sosCountdownCircle" cx="50" cy="50" r="45"></circle>
+          </svg>
+          <div class="countdown-number" id="sosCountdownNum">8</div>
+        </div>
+
+        <button type="button" class="sos-cancel-btn" onclick="window.EasySOS.cancelSOS()">
+          ✕ TAP TO CANCEL (ACCIDENTAL)
+        </button>
       </div>
 
-      <button class="sos-cancel-btn" onclick="window.EasySOS.cancelSOS()">
-        ✕ TAP TO CANCEL (ACCIDENTAL)
-      </button>
+      <!-- Lock Activated State (Replaces the ugly browser alert popup completely!) -->
+      <div id="sosActiveState" style="display:none; flex-direction:column; align-items:center; gap:14px; width:100%;">
+        <div style="width:56px; height:56px; border-radius:20px; background:#FEF2F2; border:2px solid #EF4444; display:flex; align-items:center; justify-content:center; font-size:28px;">
+          🔒
+        </div>
+        <div>
+          <h3 style="font-size:20px; font-weight:800; color:#991B1B; margin:0 0 4px;">EMERGENCY LOCK ACTIVE</h3>
+          <span style="display:inline-block; font-size:11.5px; font-weight:800; color:#15803D; background:#DCFCE7; padding:2px 10px; border-radius:999px;">🛡️ 100% SECURED</span>
+        </div>
+
+        <div class="sos-lock-checklist">
+          <div class="sos-check-row">
+            <span class="sos-check-icon">✓</span>
+            <div>
+              <b>All outgoing transfers & debits frozen</b>
+              <div style="font-size:11.5px; color:#64748B;">No money can leave your account</div>
+            </div>
+          </div>
+          <div class="sos-check-row">
+            <span class="sos-check-icon">✓</span>
+            <div>
+              <b>SMS Alert sent to Daughter Ananya</b>
+              <div style="font-size:11.5px; color:#64748B;">+91 98112 23344 (Primary Guardian)</div>
+            </div>
+          </div>
+          <div class="sos-check-row">
+            <span class="sos-check-icon">✓</span>
+            <div>
+              <b>Live GPS coordinates dispatched</b>
+              <div style="font-size:11.5px; color:#64748B;">28.6139° N, 77.2090° E (Emergency Tracking)</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:8px; width:100%; margin-top:4px;">
+          <button type="button" class="sos-gotit-btn" onclick="window.EasySOS.dismissActiveLock()">
+            ✓ Understood · Return to Safe Screen
+          </button>
+          <div style="display:flex; gap:8px; width:100%;">
+            <button type="button" class="sos-sub-btn" style="flex:1;" onclick="window.EasySOS.callGuardian()">
+              📞 Call Ananya
+            </button>
+            <button type="button" class="sos-sub-btn" style="flex:1;" onclick="window.EasySOS.speakLockStatus()">
+              🔊 Hear Status
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
+
+  <!-- In-Website Guardian Passcode Unlock Modal -->
+  <div class="sos-modal-overlay" id="unfreezeModal" role="dialog" aria-modal="true" aria-labelledby="unfreezeModalTitle">
+    <div class="sos-modal-box" style="max-width:380px;">
+      <div style="font-size:36px;">🔓</div>
+      <h3 id="unfreezeModalTitle" style="font-size:20px; font-weight:800; color:#0F172A; margin:0;">
+        Unlock Account
+      </h3>
+      <p style="font-size:13px; color:#64748B; margin:0; text-align:center;">
+        Enter the 4-digit Guardian PIN to restore normal banking operations. (Default: <b>1234</b>)
+      </p>
+
+      <div class="pin-input-group">
+        <input 
+          type="password" 
+          id="guardianPinInput" 
+          maxlength="4" 
+          placeholder="••••" 
+          inputmode="numeric" 
+          pattern="[0-9]*" 
+          class="pin-code-field"
+          autocomplete="off"
+        >
+      </div>
+      <div id="unfreezeErrorMsg" style="font-size:12.5px; color:#DC2626; font-weight:700; display:none;">
+        ❌ Incorrect PIN. Please enter 1234.
+      </div>
+
+      <div style="display:flex; gap:8px; width:100%; margin-top:6px;">
+        <button type="button" class="sos-cancel-btn" style="flex:1;" onclick="window.EasySOS.closeUnlockModal()">
+          Cancel
+        </button>
+        <button type="button" class="sos-gotit-btn" style="flex:1; background:#003DD1; margin-top:0;" onclick="window.EasySOS.submitPasscode()">
+          Unlock
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Universal In-Website Floating Toast Notification -->
+  <div class="easy-toast-container" id="easyToast" role="status" aria-live="polite">
+    <span id="easyToastIcon" style="font-size:18px;">✅</span>
+    <span id="easyToastMsg">Notification message</span>
   </div>
 
   <!-- Core JavaScript Modules -->

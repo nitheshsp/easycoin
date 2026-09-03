@@ -200,11 +200,14 @@
         if (val === 'clear') {
           enteredAmount = '';
           if (window.EasyAudio) window.EasyAudio.playClick();
+        } else if (val === 'backspace') {
+          enteredAmount = enteredAmount.slice(0, -1);
+          if (window.EasyAudio) window.EasyAudio.playClick();
         } else if (val === 'voice') {
           triggerVoicePay();
           return;
         } else {
-          if (enteredAmount.length < 6) {
+          if (enteredAmount.length < 7) {
             enteredAmount += val;
             if (window.EasyAudio) window.EasyAudio.playKeyTap(val);
           }
@@ -214,14 +217,116 @@
       });
     });
 
+    // Native direct typing on phoneAmountInput
+    var phoneAmountInp = phoneEl.querySelector('#phoneAmountInput');
+    if (phoneAmountInp) {
+      phoneAmountInp.addEventListener('input', function () {
+        var clean = this.value.replace(/\D/g, '');
+        if (clean.length > 7) clean = clean.slice(0, 7);
+        enteredAmount = clean;
+        this.value = clean;
+        updateAmountUI();
+        if (window.EasyAudio && clean.length > 0) {
+          window.EasyAudio.playKeyTap(clean.slice(-1));
+        }
+      });
+
+      phoneAmountInp.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          var btn = phoneEl.querySelector('#sendMoneyBtn');
+          if (btn) btn.click();
+        }
+      });
+    }
+
+    // Connect laptop/desktop physical keyboard while on s-send screen
+    window.addEventListener('keydown', function (e) {
+      var sendScreen = phoneEl.querySelector('#s-send');
+      if (!sendScreen || !sendScreen.classList.contains('active')) return;
+      if (document.activeElement === phoneAmountInp) return;
+
+      if (/^[0-9]$/.test(e.key)) {
+        if (enteredAmount.length < 7) {
+          enteredAmount += e.key;
+          updateAmountUI();
+          if (window.EasyAudio) window.EasyAudio.playKeyTap(e.key);
+        }
+      } else if (e.key === 'Backspace') {
+        enteredAmount = enteredAmount.slice(0, -1);
+        updateAmountUI();
+        if (window.EasyAudio) window.EasyAudio.playClick();
+      } else if (e.key === 'Enter') {
+        var btn = phoneEl.querySelector('#sendMoneyBtn');
+        if (btn) btn.click();
+      }
+    });
+
     function updateAmountUI() {
-      if (!amountDisplay) return;
-      var num = parseInt(enteredAmount, 10) || 0;
-      amountDisplay.textContent = '₹ ' + (enteredAmount || '0');
+      var phoneInp = phoneEl.querySelector('#phoneAmountInput');
+      if (phoneInp && document.activeElement !== phoneInp) {
+        phoneInp.value = enteredAmount || '';
+      }
+      if (amountDisplay) {
+        var num = parseInt(enteredAmount, 10) || 0;
+        amountDisplay.textContent = '₹ ' + (num > 0 ? num.toLocaleString('en-IN') : '0');
+      }
       if (wordsDisplay) {
-        wordsDisplay.textContent = num > 0 ? num.toLocaleString('en-IN') + ' Rupees' : 'Tap numbers or tap Mic to speak';
+        var num = parseInt(enteredAmount, 10) || 0;
+        wordsDisplay.textContent = num > 0 ? num.toLocaleString('en-IN') + ' Rupees' : 'Type with keyboard or tap below';
+      }
+
+      var remBalEl = phoneEl.querySelector('#phoneRemBal');
+      if (remBalEl) {
+        var num = parseInt(enteredAmount, 10) || 0;
+        var rem = balance - num;
+        remBalEl.textContent = '₹ ' + (rem >= 0 ? rem.toLocaleString('en-IN') : 'Short by ' + Math.abs(rem));
+        remBalEl.style.color = rem >= 0 ? '#1e40af' : '#dc2626';
+      }
+
+      var sendBtnTxt = phoneEl.querySelector('#phoneSendBtnTxt');
+      if (sendBtnTxt) {
+        var num = parseInt(enteredAmount, 10) || 0;
+        if (num > 0) {
+          sendBtnTxt.textContent = '✓ Confirm & Spend ₹ ' + num.toLocaleString('en-IN');
+        } else {
+          sendBtnTxt.textContent = '✓ Confirm & Spend Payment';
+        }
       }
     }
+
+    window.phoneAddAmt = function(delta) {
+      var cur = parseInt(enteredAmount, 10) || 0;
+      var next = cur + delta;
+      if (next <= balance) enteredAmount = String(next);
+      else enteredAmount = String(balance);
+      updateAmountUI();
+      if (window.EasyAudio) {
+        window.EasyAudio.playClick();
+        window.EasyAudio.speak(next + ' Rupees.');
+      }
+    };
+
+    window.phoneClearAmt = function() {
+      enteredAmount = '';
+      updateAmountUI();
+      if (window.EasyAudio) {
+        window.EasyAudio.playClick();
+        window.EasyAudio.speak('Cleared.');
+      }
+    };
+
+    var phoneSelectedPurpose = 'Family';
+    window.phoneSelectPurpose = function(p, elem) {
+      phoneSelectedPurpose = p;
+      var pills = phoneEl.querySelectorAll('.spend-purpose-pill');
+      pills.forEach(function(pill) { pill.classList.remove('active'); });
+      if (elem) elem.classList.add('active');
+      if (window.EasyAudio) {
+        window.EasyAudio.playClick();
+        window.EasyAudio.speak('Purpose: ' + p);
+      }
+    };
 
     // Voice Pay Button
     var micBtn = phoneEl.querySelector('#micActionBtn');
@@ -294,7 +399,7 @@
 
         // Notify backend API if connected
         if (window.EasyAPI) {
-          window.EasyAPI.sendTransfer(activeRecipient.name, num, 'Direct Transfer', activeRecipient.avatar);
+          window.EasyAPI.sendTransfer(activeRecipient.name, num, phoneSelectedPurpose + ' Spend', activeRecipient.avatar);
         }
 
         // Deduct balance
@@ -305,7 +410,7 @@
         // Play coin sound
         if (window.EasyAudio) {
           window.EasyAudio.playCoinSound();
-          window.EasyAudio.speak('Success! ' + num + ' Rupees sent to ' + activeRecipient.name + '.');
+          window.EasyAudio.speak('Success! ' + num + ' Rupees spent on ' + phoneSelectedPurpose + ' for ' + activeRecipient.name + '.');
         }
 
         // Add to transactions
@@ -316,34 +421,95 @@
           amount: num,
           time: 'Just now',
           icon: activeRecipient.avatar || '👤',
-          note: 'Direct Transfer'
+          note: phoneSelectedPurpose + ' Spend'
         });
 
         renderPassbook();
         enteredAmount = '';
         updateAmountUI();
 
-        // Show brief success alert
-        alert('✅ Payment Sent: ₹ ' + num + ' to ' + activeRecipient.name);
+        // Show brief success toast
+        if (window.showEasyToast) {
+          window.showEasyToast('✅ Payment Sent: ₹ ' + num + ' to ' + activeRecipient.name, 'success', '💸');
+        }
         switchScreen('s-passbook');
       });
     }
 
-    // Render Passbook items
+    // Defined Phone Passbook Filters & Stats
+    var phonePbFilter = 'all';
+
+    window.phoneFilterPb = function (filter, elem) {
+      phonePbFilter = filter;
+      var chips = phoneEl.querySelectorAll('#s-passbook .quick-amt-chip');
+      chips.forEach(function (c) { c.classList.remove('active'); });
+      if (elem) elem.classList.add('active');
+      renderPassbook();
+      if (window.EasyAudio) {
+        window.EasyAudio.playClick();
+        var name = filter === 'in' ? 'Received' : filter === 'out' ? 'Spent' : 'All transactions';
+        window.EasyAudio.speak('Showing ' + name);
+      }
+    };
+
+    window.phoneSpeakPassbookSummary = function () {
+      var totalIn = 0, totalOut = 0;
+      transactions.forEach(function (tx) {
+        if (tx.type === 'in') totalIn += tx.amount;
+        else totalOut += tx.amount;
+      });
+      if (window.EasyAudio) {
+        window.EasyAudio.playClick();
+        window.EasyAudio.speak(
+          'Passbook summary: Available balance is ' + balance.toLocaleString('en-IN') + ' Rupees. ' +
+          'Total received is ' + totalIn.toLocaleString('en-IN') + ' Rupees. ' +
+          'Total spent is ' + totalOut.toLocaleString('en-IN') + ' Rupees.'
+        );
+      }
+    };
+
+    // Render Passbook items with Defined Details
     function renderPassbook() {
       var listEl = phoneEl.querySelector('#passbookList');
       if (!listEl) return;
       listEl.innerHTML = '';
 
+      var totalIn = 0, totalOut = 0;
       transactions.forEach(function (tx) {
+        if (tx.type === 'in') totalIn += tx.amount;
+        else totalOut += tx.amount;
+      });
+
+      var balEl = phoneEl.querySelector('#phonePbBal');
+      var inValEl = phoneEl.querySelector('#phonePbInVal');
+      var outValEl = phoneEl.querySelector('#phonePbOutVal');
+      var tabAllEl = phoneEl.querySelector('#phonePbTabAll');
+
+      if (balEl) balEl.textContent = '₹ ' + balance.toLocaleString('en-IN');
+      if (inValEl) inValEl.textContent = '🟢 In: +₹' + totalIn.toLocaleString('en-IN');
+      if (outValEl) outValEl.textContent = '🔴 Out: -₹' + totalOut.toLocaleString('en-IN');
+      if (tabAllEl) tabAllEl.textContent = 'All (' + transactions.length + ')';
+
+      var filtered = transactions.filter(function (tx) {
+        if (phonePbFilter === 'in' && tx.type !== 'in') return false;
+        if (phonePbFilter === 'out' && tx.type !== 'out') return false;
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        listEl.innerHTML = '<div style="text-align:center; padding:20px; font-size:12px; color:#64748B;">No transactions in this filter.</div>';
+        return;
+      }
+
+      filtered.forEach(function (tx) {
         var item = document.createElement('div');
         item.className = 'passbook-item';
         var isOut = tx.type === 'out';
         item.innerHTML = `
-          <div class="pb-icon ${isOut ? 'out' : 'in'}">${tx.icon}</div>
+          <div class="pb-icon ${isOut ? 'out' : 'in'}">${tx.icon || '💳'}</div>
           <div class="pb-info">
             <div class="pb-title">${tx.title}</div>
-            <div class="pb-time">${tx.time} · ${tx.note}</div>
+            <div class="pb-time">${tx.time} · ${tx.note || (isOut ? 'Payment' : 'Deposit')}</div>
           </div>
           <div class="pb-amount ${isOut ? 'out' : 'in'}">
             ${isOut ? '-' : '+'} ₹ ${tx.amount.toLocaleString('en-IN')}
@@ -352,7 +518,7 @@
         item.addEventListener('click', function () {
           if (window.EasyAudio) {
             window.EasyAudio.playClick();
-            var readout = (isOut ? 'Sent ' : 'Received ') + tx.amount + ' Rupees with ' + tx.title + ' on ' + tx.time;
+            var readout = (isOut ? 'Paid ' : 'Received ') + tx.amount + ' Rupees with ' + tx.title + ' on ' + tx.time + '. 100% verified.';
             window.EasyAudio.speak(readout);
           }
         });
@@ -365,14 +531,20 @@
     var sosBtn = phoneEl.querySelector('#sosFreezeBtn');
     if (sosBtn) {
       sosBtn.addEventListener('click', function () {
-        if (window.EasyAPI) {
-          window.EasyAPI.freezeAccount();
+        if (window.EasySOS) {
+          window.EasySOS.triggerSOSFlow();
+        } else {
+          if (window.EasyAPI) {
+            window.EasyAPI.freezeAccount();
+          }
+          if (window.EasyAudio) {
+            window.EasyAudio.playClick();
+            window.EasyAudio.speak('Emergency Mode: Your card and transfers are temporarily locked. Guardian notified.');
+          }
+          if (window.showEasyToast) {
+            window.showEasyToast('🚨 Emergency Freeze Active: Your account is safe and family guardian has received an alert.', 'error', '🚨');
+          }
         }
-        if (window.EasyAudio) {
-          window.EasyAudio.playClick();
-          window.EasyAudio.speak('Emergency Mode: Your card and transfers are temporarily locked. Guardian notified.');
-        }
-        alert('🚨 Emergency Freeze Active: Your account is safe and family guardian has received an alert.');
       });
     }
 
