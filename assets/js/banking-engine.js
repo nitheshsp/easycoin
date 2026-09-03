@@ -128,11 +128,14 @@
 
     if (tileBills) {
       tileBills.addEventListener('click', function () {
-        if (window.EasyAudio) {
-          window.EasyAudio.playClick();
-          window.EasyAudio.speak('Select Electricity, Water, or Gas Bill.');
+        var billsSec = document.getElementById('billsSection');
+        if (billsSec) {
+          billsSec.scrollIntoView({ behavior: 'smooth' });
         }
-        openPayModal('Electricity Department', '⚡', 'Utility Bill');
+        if (window.EasyBills) {
+          window.EasyBills.renderAll();
+          window.EasyBills.speakBillSummary();
+        }
       });
     }
 

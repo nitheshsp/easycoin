@@ -9,6 +9,8 @@
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/accessible-app.css">
   <link rel="stylesheet" href="assets/css/liquid-glass.css">
+  <link rel="stylesheet" href="assets/css/sos.css">
+  <link rel="stylesheet" href="assets/css/bills.css">
 </head>
 <body class="standalone-app-body">
 
@@ -118,6 +120,52 @@
       </div>
     </section>
 
+    <!-- Monthly Bill Reminders & 1-Tap Pay Section -->
+    <section class="app-section-card" id="billsSection">
+      <div class="app-sec-head">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div style="font-size:28px;">⚡</div>
+          <div>
+            <h3 style="margin:0;">Monthly Bill Reminders</h3>
+            <div style="font-size:13px; color:var(--text-muted);">Electricity, Mobile Network, Water & Gas</div>
+          </div>
+        </div>
+        <button class="ctrl-btn" onclick="window.EasyBills.speakBillSummary()">
+          🔊 Hear Bill Status
+        </button>
+      </div>
+
+      <!-- Bill Overview Summary Banner -->
+      <div class="bills-summary-card">
+        <div class="bills-summary-top">
+          <span class="bills-badge" id="appPendingBillsCount">2 Bills Pending</span>
+          <button class="bills-readout-btn" onclick="window.EasyBills.speakBillSummary()">
+            🔊 Voice Readout
+          </button>
+        </div>
+        <div>
+          <div style="font-size:13px; color:rgba(255,255,255,0.7); text-transform:uppercase; font-weight:700;">
+            Total Due This Month
+          </div>
+          <div class="bills-summary-amount" id="appPendingBillsAmt">₹ 749</div>
+        </div>
+      </div>
+
+      <!-- Voice Phone Reminder Alert Switch -->
+      <div class="reminder-control-row" style="margin-bottom:16px;">
+        <div class="reminder-txt">
+          <span>📞 Automated Voice Call Reminders (1 Day Before Due Date)</span>
+        </div>
+        <label class="switch-box">
+          <input type="checkbox" id="appBillReminderSwitch" checked onchange="window.EasyBills.toggleVoiceReminders(this.checked)">
+          <span class="switch-slider"></span>
+        </label>
+      </div>
+
+      <!-- Dynamic Bill Cards List -->
+      <div class="bills-list" id="standaloneBillsList"></div>
+    </section>
+
     <!-- Visual Passbook Statement Section -->
     <section class="app-section-card" id="passbookSection">
       <div class="app-sec-head">
@@ -131,18 +179,46 @@
     </section>
 
     <!-- Emergency Safety & Guardian Box -->
-    <section class="app-section-card" style="border: 2px solid #FCA5A5; background: #FEF2F2;">
-      <div style="display:flex; align-items:center; gap:16px;">
-        <div style="font-size:36px;">🚨</div>
-        <div style="flex:1;">
-          <h4 style="font-size:18px; color:#dc2626; margin-bottom:4px;">Guardian SOS & Safety Protection</h4>
-          <p style="font-size:14px; color:#475569; margin:0;">
-            Need help? Tap to freeze account against scams or call Daughter Ananya.
-          </p>
-        </div>
-        <button class="ctrl-btn" style="background:#dc2626; color:#fff; border-color:#dc2626;" onclick="window.EasyAudio.speak('Emergency lock active. Guardian alerted.'); alert('🚨 Emergency Lock Active: Account is frozen and Daughter Ananya has been notified.');">
-          🔒 Freeze Now
+    <section class="app-section-card" id="guardianSection" style="border: 2px solid #FCA5A5; background: #FEF2F2;">
+      <!-- Frozen Account Banner (Hidden by default) -->
+      <div class="frozen-alert-banner" style="display:none;">
+        <div class="frozen-title">🚨 ACCOUNT FROZEN</div>
+        <div class="frozen-desc">All payment withdrawals are locked. Your money is 100% safe.</div>
+        <button class="unfreeze-action-btn" onclick="window.EasySOS.unfreezeWithPasscode(prompt('Enter 4-Digit Guardian Passcode (1234):'))">
+          🔓 Unlock Account with Guardian PIN
         </button>
+      </div>
+
+      <div class="sos-panic-card" style="box-shadow:none; border:none; padding:10px 0;">
+        <div class="sos-badge-status">
+          <span class="sos-pulse-dot"></span> 24/7 Emergency Anti-Fraud Shield
+        </div>
+        <div class="sos-main-title">Emergency Account Freeze & SOS Alert</div>
+        <div class="sos-main-desc">
+          Received a suspicious call or suspect fraud? 1-Tap instantly locks your account and alerts Daughter Ananya with live GPS coordinates.
+        </div>
+        <button class="sos-big-trigger-btn" onclick="window.EasySOS.triggerSOSFlow('PANIC_FREEZE')">
+          <span>🔒 1-TAP FREEZE MY ACCOUNT NOW</span>
+        </button>
+      </div>
+
+      <!-- Quick Emergency Actions -->
+      <div class="sos-actions-grid" style="margin-top:16px;">
+        <div class="sos-action-tile" onclick="window.EasySOS.triggerSOSFlow('SCAM_CALL')">
+          <span class="sos-tile-icon">⚠️</span>
+          <div class="sos-tile-title">Scam Call Alert</div>
+          <div class="sos-tile-sub">Lock & Record</div>
+        </div>
+        <div class="sos-action-tile" onclick="window.EasySOS.callGuardian()">
+          <span class="sos-tile-icon">👩‍⚕️</span>
+          <div class="sos-tile-title">Call Daughter Ananya</div>
+          <div class="sos-tile-sub">Primary Guardian</div>
+        </div>
+        <div class="sos-action-tile" onclick="window.EasySOS.callHelpline()">
+          <span class="sos-tile-icon">📞</span>
+          <div class="sos-tile-title">24/7 Senior Helpline</div>
+          <div class="sos-tile-sub">Human Assistant</div>
+        </div>
       </div>
     </section>
 
@@ -278,9 +354,37 @@
     </div>
   </aside>
 
+  <!-- Full-Screen SOS Emergency Countdown & Confirmation Modal -->
+  <div class="sos-modal-overlay" id="sosCountdownOverlay">
+    <div class="sos-modal-box">
+      <div style="font-size:36px;">🚨</div>
+      <h3 style="font-size:22px; font-weight:800; color:#991B1B; margin:0;" id="sosPromptText">
+        Emergency Panic Freeze Initiating...
+      </h3>
+      <p style="font-size:14px; color:#7F1D1D; margin:0;">
+        All account debits will be frozen and live GPS coordinates will be dispatched to Daughter Ananya.
+      </p>
+
+      <!-- Animated Circular Countdown -->
+      <div class="countdown-circle-wrap">
+        <svg viewBox="0 0 100 100">
+          <circle class="bg" cx="50" cy="50" r="45"></circle>
+          <circle class="bar" id="sosCountdownCircle" cx="50" cy="50" r="45"></circle>
+        </svg>
+        <div class="countdown-number" id="sosCountdownNum">8</div>
+      </div>
+
+      <button class="sos-cancel-btn" onclick="window.EasySOS.cancelSOS()">
+        ✕ TAP TO CANCEL (ACCIDENTAL)
+      </button>
+    </div>
+  </div>
+
   <!-- Core Scripts -->
   <script src="assets/js/audio-synth.js"></script>
   <script src="assets/js/api-client.js"></script>
+  <script src="assets/js/sos-engine.js"></script>
+  <script src="assets/js/bills-engine.js"></script>
   <script src="assets/js/qr-generator.js"></script>
   <script src="assets/js/banking-engine.js"></script>
   <script src="assets/js/liquid-glass.js"></script>

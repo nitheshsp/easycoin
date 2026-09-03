@@ -1,0 +1,373 @@
+/* ==========================================================================
+   EasyCoin Enhanced SOS & Emergency Guardian Shield Styles
+   Designed for maximum clarity, panic-proof accessibility, and tactile feedback
+   ========================================================================== */
+
+:root {
+  --sos-red: #EF4444;
+  --sos-red-dark: #B91C1C;
+  --sos-red-glow: rgba(239, 68, 68, 0.45);
+  --sos-amber: #F59E0B;
+  --sos-green: #22C55E;
+}
+
+/* ==========================================================================
+   Emergency Hub Cards
+   ========================================================================== */
+.sos-hub-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Primary Panic Button Card */
+.sos-panic-card {
+  background: linear-gradient(135deg, rgba(254, 242, 242, 0.95) 0%, rgba(254, 226, 226, 0.9) 100%);
+  border: 2.5px solid #FCA5A5;
+  border-radius: 28px;
+  padding: 24px 20px;
+  text-align: center;
+  box-shadow: 0 12px 30px rgba(239, 68, 68, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.sos-panic-card::before {
+  content: '';
+  position: absolute;
+  top: -40px;
+  left: -40px;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: rgba(239, 68, 68, 0.1);
+  pointer-events: none;
+}
+
+.sos-badge-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #FFFFFF;
+  border: 1px solid #FECACA;
+  color: var(--sos-red-dark);
+  font-size: 12px;
+  font-weight: 800;
+  padding: 4px 12px;
+  border-radius: 999px;
+  margin-bottom: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.sos-pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--sos-red);
+  animation: sosPulse 1.5s infinite;
+}
+
+@keyframes sosPulse {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+  70% { transform: scale(1.2); box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+
+.sos-main-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: #991B1B;
+  margin-bottom: 6px;
+}
+
+.sos-main-desc {
+  font-size: 13.5px;
+  color: #7F1D1D;
+  line-height: 1.5;
+  margin-bottom: 18px;
+}
+
+/* Giant Tactile Panic Freeze Button */
+.sos-big-trigger-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 20px;
+  padding: 18px 20px;
+  font-size: 18px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  cursor: pointer;
+  box-shadow: 0 10px 25px var(--sos-red-glow), inset 0 2px 2px rgba(255, 255, 255, 0.35);
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.sos-big-trigger-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 32px rgba(239, 68, 68, 0.55);
+}
+
+.sos-big-trigger-btn:active {
+  transform: scale(0.97);
+}
+
+/* 3 Quick Action Emergency Tiles */
+.sos-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.sos-action-tile {
+  background: #FFFFFF;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 18px;
+  padding: 14px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(0, 8, 27, 0.04);
+}
+
+.sos-action-tile:hover {
+  border-color: #003DD1;
+  background: #F8FAFC;
+  transform: translateY(-2px);
+}
+
+.sos-tile-icon {
+  font-size: 26px;
+}
+
+.sos-tile-title {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--dlr900);
+}
+
+.sos-tile-sub {
+  font-size: 10.5px;
+  color: var(--text2);
+}
+
+/* Guardian Live Info Box */
+.sos-guardian-card {
+  background: #FFFFFF;
+  border-radius: 22px;
+  padding: 18px;
+  border: 1.5px solid rgba(0, 8, 27, 0.06);
+  box-shadow: 0 4px 14px rgba(0, 8, 27, 0.04);
+}
+
+.guardian-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.guardian-avatar-large {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #E8EEFB;
+  border: 2px solid #003DD1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  flex-shrink: 0;
+}
+
+.guardian-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.guardian-name {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--dlr900);
+}
+
+.guardian-meta {
+  font-size: 12px;
+  color: var(--text2);
+  margin-top: 2px;
+}
+
+.guardian-call-btn {
+  background: #EAF9EE;
+  border: 1.5px solid #86EFAC;
+  color: #15803D;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+
+.guardian-call-btn:hover {
+  background: #22C55E;
+  color: #FFFFFF;
+}
+
+/* ==========================================================================
+   Full-Screen Emergency Countdown & Confirmation Modal
+   ========================================================================== */
+.sos-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.sos-modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.sos-modal-box {
+  background: #FFFFFF;
+  border-radius: 32px;
+  width: min(480px, 100%);
+  padding: 32px 24px;
+  text-align: center;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  animation: modalPop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes modalPop {
+  0% { transform: scale(0.85); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Animated Circular Countdown Timer */
+.countdown-circle-wrap {
+  position: relative;
+  width: 110px;
+  height: 110px;
+  margin: 8px 0;
+}
+
+.countdown-circle-wrap svg {
+  transform: rotate(-90deg);
+  width: 100%;
+  height: 100%;
+}
+
+.countdown-circle-wrap circle.bg {
+  stroke: #FEE2E2;
+  stroke-width: 8;
+  fill: none;
+}
+
+.countdown-circle-wrap circle.bar {
+  stroke: #EF4444;
+  stroke-width: 8;
+  fill: none;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s linear;
+}
+
+.countdown-number {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 38px;
+  font-weight: 800;
+  color: #DC2626;
+}
+
+.sos-cancel-btn {
+  width: 100%;
+  background: #F1F5F9;
+  border: 2px solid #CBD5E1;
+  color: #334155;
+  border-radius: 18px;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.sos-cancel-btn:hover {
+  background: #E2E8F0;
+  color: #0F172A;
+}
+
+/* Account Frozen State Banner */
+.frozen-alert-banner {
+  background: #FEF2F2;
+  border: 2px solid #EF4444;
+  border-radius: 20px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.frozen-title {
+  font-size: 17px;
+  font-weight: 800;
+  color: #B91C1C;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.frozen-desc {
+  font-size: 13.5px;
+  color: #7F1D1D;
+  line-height: 1.45;
+}
+
+.unfreeze-action-btn {
+  background: #FFFFFF;
+  border: 1.5px solid #EF4444;
+  color: #B91C1C;
+  border-radius: 12px;
+  padding: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.unfreeze-action-btn:hover {
+  background: #B91C1C;
+  color: #FFFFFF;
+}
