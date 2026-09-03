@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="assets/css/bills.css">
   <link rel="stylesheet" href="assets/css/theme-toggle.css">
   <link rel="stylesheet" href="assets/css/upi-circle.css">
+  <link rel="stylesheet" href="assets/css/transactions.css">
 </head>
 <body class="standalone-app-body">
 
@@ -86,10 +87,10 @@
         <div class="st-sub">Power, Water, Gas</div>
       </div>
 
-      <div class="senior-tile st-passbook" id="tilePassbook">
-        <div class="st-icon">📖</div>
-        <div class="st-title">Passbook</div>
-        <div class="st-sub">Spoken transactions</div>
+      <div class="senior-tile st-passbook" id="tilePassbook" onclick="document.getElementById('txHistorySection').scrollIntoView({behavior:'smooth'}); if(window.EasyTransactions) window.EasyTransactions.speakRecentSummary();">
+        <div class="st-icon">📜</div>
+        <div class="st-title">Transactions</div>
+        <div class="st-sub">To who, when &amp; purpose</div>
       </div>
 
       <div class="senior-tile st-circle" id="tileCircle" onclick="document.getElementById('circleSection').scrollIntoView({behavior:'smooth'}); if(window.EasyCircle) window.EasyCircle.speakCircleSummary();">
@@ -225,16 +226,73 @@
       <div class="circle-grid" id="appCircleGrid"></div>
     </section>
 
-    <!-- Visual Passbook Statement Section -->
-    <section class="app-section-card" id="passbookSection">
-      <div class="app-sec-head">
-        <h3>📖 Spoken Audio Passbook</h3>
-        <button class="ctrl-btn" onclick="window.EasyAudio.speak('Here are your recent payments and pension deposits. Tap any row to hear it.')">
-          🔊 Explain
-        </button>
+    <!-- Dedicated Transaction History & Spoken Audit Section -->
+    <section class="app-section-card" id="txHistorySection">
+      <div class="tx-sec-head">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div style="font-size:32px;">📜</div>
+          <div>
+            <h3 style="margin:0;">Transaction History &amp; Spoken Audit</h3>
+            <div style="font-size:13px; color:var(--text-muted);">
+              Every payment tracked with To Who, When, and Purpose for complete peace of mind
+            </div>
+          </div>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button class="ctrl-btn" onclick="window.EasyTransactions.speakRecentSummary()">
+            🔊 Read Recent Spends
+          </button>
+        </div>
       </div>
 
-      <div class="passbook-list" id="standalonePassbookList"></div>
+      <!-- Live Financial Ledger Summary Stats -->
+      <div class="tx-stats-grid">
+        <div class="tx-stat-box">
+          <div class="tx-stat-lbl">💸 Total Spent (Month)</div>
+          <div class="tx-stat-val debit" id="txStatTotalSpent">₹ 2,210</div>
+        </div>
+        <div class="tx-stat-box">
+          <div class="tx-stat-lbl">👨‍👩‍👧‍👦 Minor Circle Spends</div>
+          <div class="tx-stat-val" style="color:#0047E0;" id="txStatMinorSpent">₹ 570</div>
+        </div>
+        <div class="tx-stat-box">
+          <div class="tx-stat-lbl">⚡ Utility Bills Paid</div>
+          <div class="tx-stat-val" style="color:#D97706;" id="txStatBillsPaid">₹ 450</div>
+        </div>
+        <div class="tx-stat-box">
+          <div class="tx-stat-lbl">🏛️ Pension Deposit</div>
+          <div class="tx-stat-val credit" id="txStatPension">+ ₹ 8,000</div>
+        </div>
+      </div>
+
+      <!-- Filter Pills & Search Toolbar -->
+      <div class="tx-toolbar">
+        <div class="tx-filter-pills">
+          <button class="tx-pill active" data-cat="all" onclick="window.EasyTransactions.setFilter('all')">
+            All Transactions
+          </button>
+          <button class="tx-pill" data-cat="circle" onclick="window.EasyTransactions.setFilter('circle')">
+            👨‍👩‍👧‍👦 Minor UPI Circle
+          </button>
+          <button class="tx-pill" data-cat="bills" onclick="window.EasyTransactions.setFilter('bills')">
+            💡 Utility Bills
+          </button>
+          <button class="tx-pill" data-cat="family" onclick="window.EasyTransactions.setFilter('family')">
+            👨‍👩‍👧 Family Direct
+          </button>
+          <button class="tx-pill" data-cat="pension" onclick="window.EasyTransactions.setFilter('pension')">
+            🏛️ Pension Credit
+          </button>
+        </div>
+
+        <div class="tx-search-wrap">
+          <span class="tx-search-icon">🔍</span>
+          <input type="text" class="tx-search-input" placeholder="Search To Who, Purpose..." oninput="window.EasyTransactions.setSearch(this.value)">
+        </div>
+      </div>
+
+      <!-- Dynamic Transaction List with To Who, When, and Purpose -->
+      <div class="tx-list-wrap" id="txHistoryList"></div>
     </section>
 
     <!-- Emergency Safety & Guardian Box -->
@@ -594,6 +652,7 @@
   <script src="assets/js/sos-engine.js"></script>
   <script src="assets/js/bills-engine.js"></script>
   <script src="assets/js/qr-generator.js"></script>
+  <script src="assets/js/transactions-engine.js"></script>
   <script src="assets/js/banking-engine.js"></script>
   <script src="assets/js/upi-circle.js"></script>
   <script src="assets/js/liquid-glass.js"></script>

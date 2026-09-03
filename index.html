@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="assets/css/bills.css">
   <link rel="stylesheet" href="assets/css/theme-toggle.css">
   <link rel="stylesheet" href="assets/css/upi-circle.css">
+  <link rel="stylesheet" href="assets/css/transactions.css">
 </head>
 <body>
 
@@ -257,9 +258,9 @@
                       </div>
 
                       <div class="action-tile tile-passbook">
-                        <div class="tile-icon">📖</div>
-                        <div class="tile-title">Passbook</div>
-                        <div class="tile-sub">Audio statement</div>
+                        <div class="tile-icon">📜</div>
+                        <div class="tile-title">Transactions</div>
+                        <div class="tile-sub">To who, when &amp; purpose</div>
                       </div>
 
                       <div class="action-tile tile-circle">
@@ -511,15 +512,18 @@
                     </button>
                   </div>
 
-                  <!-- Screen 3: Visual Passbook -->
+                  <!-- Screen 3: Spoken Transaction Ledger -->
                   <div class="screen" id="s-passbook">
                     <div class="app-header">
                       <div class="app-brand-pill">
-                        <span>📖 Audio Passbook</span>
+                        <span>📜 Transaction Ledger</span>
                       </div>
-                      <button class="voice-status-btn" onclick="window.EasyAudio.speak('Here is your passbook. Tap any row to hear details.')">
+                      <button class="voice-status-btn" onclick="window.EasyTransactions ? window.EasyTransactions.speakRecentSummary() : window.EasyAudio.speak('Here is your transaction ledger.')">
                         🔊 Read All
                       </button>
+                    </div>
+                    <div style="padding:0 6px 8px; font-size:11px; color:var(--text2);">
+                      Tap any transaction to hear <b>To Who</b>, <b>When</b> &amp; <b>Purpose</b>
                     </div>
                     <div class="passbook-list" id="passbookList"></div>
                   </div>
@@ -1290,6 +1294,7 @@
   <script src="assets/js/sos-engine.js"></script>
   <script src="assets/js/bills-engine.js"></script>
   <script src="assets/js/upi-circle.js"></script>
+  <script src="assets/js/transactions-engine.js"></script>
   <script src="assets/js/qr-generator.js"></script>
   <script src="assets/js/hero-shader.js"></script>
   <script src="assets/js/pitch-scroll.js"></script>

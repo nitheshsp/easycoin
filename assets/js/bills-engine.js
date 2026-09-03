@@ -103,6 +103,19 @@ class EasyBillsEngine {
     }
 
     bill.status = 'PAID';
+
+    // Add to Unified Transaction History with To Who, When, and Purpose
+    if (window.EasyTransactions) {
+      window.EasyTransactions.addTransaction(
+        `${bill.title} (${bill.provider})`,
+        'Today, ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        `Monthly Recurring Utility Bill (${bill.recurring})`,
+        bill.amount,
+        'out',
+        'bills',
+        bill.icon
+      );
+    }
     
     // Play celebratory coin drop chime
     if (window.EasyAudio) {

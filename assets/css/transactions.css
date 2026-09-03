@@ -1,0 +1,383 @@
+/* ==========================================================================
+   EasyCoin Transaction History & Spoken Audit Section
+   Accessible Liquid Glass Styles for Senior Parents & Grandparents
+   ========================================================================== */
+
+:root {
+  --tx-card-bg: rgba(255, 255, 255, 0.82);
+  --tx-card-border: rgba(0, 71, 224, 0.14);
+  --tx-item-bg: #FFFFFF;
+  --tx-item-border: #E2E8F0;
+  --tx-debit: #DC2626;
+  --tx-credit: #059669;
+}
+
+body.dark-theme {
+  --tx-card-bg: rgba(20, 27, 45, 0.82);
+  --tx-card-border: rgba(255, 255, 255, 0.12);
+  --tx-item-bg: rgba(30, 41, 59, 0.7);
+  --tx-item-border: rgba(51, 65, 85, 0.6);
+  --tx-debit: #F87171;
+  --tx-credit: #34D399;
+}
+
+/* Section Header */
+.tx-sec-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+/* Stats Summary Row */
+.tx-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.tx-stat-box {
+  background: var(--tx-item-bg);
+  border: 1.5px solid var(--tx-item-border);
+  border-radius: 16px;
+  padding: 16px 18px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
+  transition: transform 0.2s ease;
+}
+
+.tx-stat-box:hover {
+  transform: translateY(-2px);
+}
+
+.tx-stat-lbl {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted, #64748B);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tx-stat-val {
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--text-main, #0F172A);
+}
+
+.tx-stat-val.credit {
+  color: var(--tx-credit);
+}
+
+.tx-stat-val.debit {
+  color: var(--tx-debit);
+}
+
+/* Filter Controls Toolbar */
+.tx-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 18px;
+  padding-bottom: 16px;
+  border-bottom: 1.5px solid var(--tx-item-border);
+}
+
+.tx-filter-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tx-pill {
+  background: var(--tx-item-bg);
+  border: 1.5px solid var(--tx-item-border);
+  color: var(--text-main, #0F172A);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 7px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.tx-pill:hover {
+  border-color: #0047E0;
+  color: #0047E0;
+}
+
+.tx-pill.active {
+  background: #0047E0;
+  border-color: #0047E0;
+  color: #FFFFFF;
+  box-shadow: 0 4px 12px rgba(0, 71, 224, 0.25);
+}
+
+/* Search Box */
+.tx-search-wrap {
+  position: relative;
+  min-width: 240px;
+}
+
+.tx-search-input {
+  width: 100%;
+  background: var(--tx-item-bg);
+  border: 1.5px solid var(--tx-item-border);
+  color: var(--text-main, #0F172A);
+  font-size: 13.5px;
+  font-weight: 600;
+  padding: 8px 14px 8px 36px;
+  border-radius: 12px;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+.tx-search-input:focus {
+  border-color: #0047E0;
+  box-shadow: 0 0 0 3px rgba(0, 71, 224, 0.15);
+}
+
+.tx-search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  color: var(--text-muted, #64748B);
+  pointer-events: none;
+}
+
+/* Detailed Transaction Item List */
+.tx-list-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tx-card-item {
+  background: var(--tx-item-bg);
+  border: 1.5px solid var(--tx-item-border);
+  border-radius: 18px;
+  padding: 16px 20px;
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.tx-card-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+  border-color: rgba(0, 71, 224, 0.35);
+}
+
+/* Avatar Icon */
+.tx-avatar-box {
+  width: 52px;
+  height: 52px;
+  border-radius: 15px;
+  background: linear-gradient(135deg, #F1F5F9 0%, #E2E8F0 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+}
+
+body.dark-theme .tx-avatar-box {
+  background: rgba(51, 65, 85, 0.8);
+}
+
+.tx-avatar-box.in {
+  background: #ECFDF5;
+  color: #059669;
+}
+
+.tx-avatar-box.circle {
+  background: #EFF6FF;
+  color: #0047E0;
+}
+
+.tx-avatar-box.bills {
+  background: #FFFBEB;
+  color: #D97706;
+}
+
+/* Main Details: To Who, When, Purpose */
+.tx-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.tx-towho-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tx-towho-name {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text-main, #0F172A);
+}
+
+.tx-category-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: #F1F5F9;
+  color: var(--text-muted, #64748B);
+}
+
+.tx-category-badge.circle {
+  background: rgba(0, 71, 224, 0.1);
+  color: #0047E0;
+}
+
+.tx-category-badge.utility {
+  background: rgba(245, 158, 11, 0.12);
+  color: #B45309;
+}
+
+.tx-category-badge.family {
+  background: rgba(16, 185, 129, 0.12);
+  color: #065F46;
+}
+
+.tx-category-badge.pension {
+  background: rgba(147, 51, 234, 0.12);
+  color: #7E22CE;
+}
+
+/* Purpose Memo Banner */
+.tx-purpose-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.tx-purpose-badge {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-body, #334155);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+body.dark-theme .tx-purpose-badge {
+  color: #CBD5E1;
+}
+
+.tx-purpose-lbl {
+  font-size: 10.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #0047E0;
+  background: rgba(0, 71, 224, 0.08);
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+/* When / Timestamp */
+.tx-when-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-muted, #64748B);
+  margin-top: 2px;
+}
+
+/* Amount & Status */
+.tx-amount-col {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.tx-amount-val {
+  font-size: 19px;
+  font-weight: 900;
+}
+
+.tx-amount-val.debit {
+  color: var(--tx-debit);
+}
+
+.tx-amount-val.credit {
+  color: var(--tx-credit);
+}
+
+.tx-status-pill {
+  font-size: 11px;
+  font-weight: 700;
+  color: #059669;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* 1-Tap Audio Hear Button */
+.tx-speak-action-btn {
+  background: rgba(0, 71, 224, 0.08);
+  border: 1px solid rgba(0, 71, 224, 0.2);
+  color: #0047E0;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 8px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.tx-speak-action-btn:hover {
+  background: #0047E0;
+  color: #FFFFFF;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .tx-card-item {
+    grid-template-columns: auto 1fr;
+    gap: 12px;
+  }
+  .tx-amount-col {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
+    border-top: 1px dashed var(--tx-item-border);
+  }
+  .tx-speak-action-btn {
+    grid-column: 1 / -1;
+    justify-content: center;
+    width: 100%;
+  }
+}

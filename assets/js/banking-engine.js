@@ -256,6 +256,18 @@
           desc: 'Direct Payment'
         });
 
+        if (window.EasyTransactions) {
+          window.EasyTransactions.addTransaction(
+            activeRecipient.name,
+            'Today, ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            'Direct Family / Contact Payment',
+            num,
+            'out',
+            'family',
+            activeRecipient.avatar
+          );
+        }
+
         renderPassbook();
         if (payModal) payModal.classList.remove('active');
         alert('✅ Success! ₹ ' + num + ' sent to ' + activeRecipient.name);

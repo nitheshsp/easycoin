@@ -260,6 +260,20 @@ class EasyUPICircleEngine {
       );
     }
 
+    // 3. Add to Unified Transaction History with To Who, When, and Purpose
+    if (window.EasyTransactions) {
+      window.EasyTransactions.addTransaction(
+        `${spendToExecute.merchant} (${member.name})`,
+        'Today, ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        `${spendToExecute.category} · Minor Allowance Spend`,
+        spendToExecute.amount,
+        'out',
+        'circle',
+        member.avatar,
+        member.name
+      );
+    }
+
     // Show non-blocking toast and trigger smooth spoken alert
     var remainingNow = member.monthlyLimit - member.spentThisMonth;
     var toastText = `Verified: ${member.name} paid ₹${spendToExecute.amount} at ${spendToExecute.merchant} (₹${remainingNow} left)`;
@@ -329,6 +343,19 @@ class EasyUPICircleEngine {
           member.name + ' (Approved)',
           member.avatar,
           req.merchant
+        );
+      }
+
+      if (window.EasyTransactions) {
+        window.EasyTransactions.addTransaction(
+          `${req.merchant} (${member.name})`,
+          'Today, ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          `${req.category} · Minor Request Approved`,
+          req.amount,
+          'out',
+          'circle',
+          member.avatar,
+          member.name
         );
       }
     }
