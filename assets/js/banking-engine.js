@@ -24,6 +24,13 @@
     var dockMicBtn = document.getElementById('dockMicBtn');
     var dockStatus = document.getElementById('dockStatus');
 
+    function syncBalanceUI() {
+      if (balEl) balEl.textContent = '₹ ' + appBalance.toLocaleString('en-IN');
+      var sideBal = document.getElementById('sidebarBalVal');
+      if (sideBal) sideBal.textContent = '₹ ' + appBalance.toLocaleString('en-IN');
+    }
+    syncBalanceUI();
+
     // Balance voice readout
     if (speakBalBtn) {
       speakBalBtn.addEventListener('click', function () {
@@ -576,7 +583,7 @@
         }
 
         appBalance -= num;
-        if (balEl) balEl.textContent = '₹ ' + appBalance.toLocaleString('en-IN');
+        syncBalanceUI();
 
         if (window.EasyAudio) {
           window.EasyAudio.playCoinSound();
@@ -592,6 +599,18 @@
           icon: activeRecipient.avatar,
           desc: note || 'Direct Spend'
         });
+
+        if (window.EasyTransactions) {
+          window.EasyTransactions.addTransaction(
+            activeRecipient.name,
+            'Today, ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            'Direct Family / Contact Payment',
+            num,
+            'out',
+            'family',
+            activeRecipient.avatar
+          );
+        }
 
         renderPassbook();
         if (payModal) payModal.classList.remove('active');
@@ -807,6 +826,29 @@
     }
 
     renderPassbook();
+
+    // Expose Banking Interface for UPI Circle & Modules
+    window.EasyBanking = {
+      getBalance: function () {
+        return appBalance;
+      },
+      updateBalance: function (newBal) {
+        appBalance = Math.max(0, newBal);
+        syncBalanceUI();
+      },
+      addPassbookEntry: function (name, type, amount, icon, desc) {
+        transactions.unshift({
+          id: Date.now(),
+          name: name,
+          type: type || 'out',
+          amount: amount,
+          time: 'Just now',
+          icon: icon || '👤',
+          desc: desc || 'UPI Circle Spend'
+        });
+        renderPassbook();
+      }
+    };
   }
 
   document.addEventListener('DOMContentLoaded', initStandaloneApp);

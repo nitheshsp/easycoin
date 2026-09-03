@@ -1,0 +1,241 @@
+/* ==========================================================================
+   EasyCoin Top-Right Liquid Glass Dark / Light Mode Slider Styles
+   ========================================================================== */
+
+/* Slider Container */
+.theme-switch-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.65);
+  border: 1.5px solid rgba(0, 61, 209, 0.18);
+  border-radius: 999px;
+  padding: 4px 10px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 4px 14px rgba(0, 8, 27, 0.06);
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  user-select: none;
+  cursor: pointer;
+}
+
+.theme-switch-wrap:hover {
+  border-color: #003DD1;
+  box-shadow: 0 6px 18px rgba(0, 61, 209, 0.15);
+  transform: translateY(-1px);
+}
+
+.theme-icon {
+  font-size: 14px;
+  line-height: 1;
+  opacity: 0.55;
+  transition: opacity 0.2s, transform 0.2s;
+  pointer-events: none;
+}
+
+.theme-icon.active {
+  opacity: 1;
+  transform: scale(1.15);
+}
+
+/* Accessible Toggle Slider Switch */
+.theme-slider-switch {
+  position: relative;
+  display: inline-block;
+  width: 42px;
+  height: 22px;
+  cursor: pointer;
+  margin: 0;
+}
+
+.theme-slider-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.theme-slider-knob {
+  position: absolute;
+  inset: 0;
+  background: #E2E8F0;
+  border-radius: 999px;
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  border: 1px solid rgba(0, 8, 27, 0.08);
+}
+
+.theme-slider-knob::before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 2px;
+  bottom: 2px;
+  background: #FFFFFF;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0, 8, 27, 0.2);
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Checked (Dark Mode Active) */
+.theme-slider-switch input:checked + .theme-slider-knob {
+  background: #003DD1;
+  border-color: #38bdf8;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+}
+
+.theme-slider-switch input:checked + .theme-slider-knob::before {
+  transform: translateX(20px);
+  background: #FBFCFF;
+}
+
+/* ==========================================================================
+   Comprehensive Dark Theme Overrides (Applied when body.dark-mode is active)
+   ========================================================================== */
+body.dark-mode {
+  --white: #020617;
+  --dlr900: #F8FAFC;
+  --dlr800: #E2E8F0;
+  --text2: #94A3B8;
+  --gray-bg: #0B132B;
+  background-color: #020617;
+  color: #F8FAFC;
+}
+
+/* Dark Mode Theme Switch Container */
+body.dark-mode .theme-switch-wrap {
+  background: rgba(15, 23, 42, 0.85);
+  border-color: rgba(56, 189, 248, 0.35);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 12px rgba(56, 189, 248, 0.2);
+}
+
+/* Header in Dark Mode */
+body.dark-mode .dlrtt-hdr {
+  background: rgba(2, 6, 23, 0.82);
+  border-color: rgba(56, 189, 248, 0.18);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+}
+
+body.dark-mode .dlrtt-hdr.scrolled {
+  background: rgba(2, 6, 23, 0.95);
+  border-color: rgba(56, 189, 248, 0.3);
+}
+
+body.dark-mode .brand-title {
+  color: #FFFFFF;
+}
+
+body.dark-mode .dlrtt-links .top {
+  color: #CBD5E1;
+}
+
+body.dark-mode .dlrtt-links .top:hover {
+  color: #38bdf8;
+}
+
+body.dark-mode .dlrtt-panel {
+  background: rgba(10, 17, 40, 0.96);
+  border-color: rgba(56, 189, 248, 0.25);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.7);
+}
+
+body.dark-mode .di:hover {
+  background: rgba(56, 189, 248, 0.1);
+}
+
+body.dark-mode .di-t {
+  color: #FFFFFF;
+}
+
+body.dark-mode .di-s {
+  color: #94A3B8;
+}
+
+body.dark-mode .dlrtt-btn2 {
+  background: rgba(30, 41, 59, 0.8);
+  border-color: rgba(56, 189, 248, 0.25);
+  color: #F8FAFC;
+}
+
+body.dark-mode .dlrtt-btn2:hover {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: #38bdf8;
+}
+
+/* Sections in Dark Mode */
+body.dark-mode .dlrtt-features,
+body.dark-mode .dlrtt-more,
+body.dark-mode .dlrtt-reviews,
+body.dark-mode .dlrtt-faq {
+  background: #020617;
+  color: #F8FAFC;
+}
+
+body.dark-mode .dlrtt-fcard,
+body.dark-mode .dlrtt-rcard,
+body.dark-mode .dlrtt-faq-item,
+body.dark-mode .dlrtt-gcard {
+  background: rgba(15, 23, 42, 0.8);
+  border-color: rgba(56, 189, 248, 0.15);
+  color: #F8FAFC;
+}
+
+body.dark-mode .dlrtt-fcard:hover,
+body.dark-mode .dlrtt-rcard:hover {
+  border-color: #38bdf8;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 20px rgba(56, 189, 248, 0.15);
+}
+
+body.dark-mode .dlrtt-faq-q {
+  color: #FFFFFF;
+}
+
+body.dark-mode .dlrtt-faq-a {
+  color: #94A3B8;
+}
+
+/* Standalone App Dark Mode */
+body.dark-mode.standalone-app-body {
+  background: #020817;
+}
+
+body.dark-mode .app-navbar {
+  background: rgba(2, 8, 23, 0.88);
+  border-color: rgba(56, 189, 248, 0.2);
+}
+
+body.dark-mode .app-brand-name {
+  color: #FFFFFF;
+}
+
+body.dark-mode .app-section-card {
+  background: rgba(15, 23, 42, 0.75);
+  border-color: rgba(56, 189, 248, 0.18);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .app-contact-item {
+  background: rgba(30, 41, 59, 0.7);
+  border-color: rgba(56, 189, 248, 0.15);
+  color: #F8FAFC;
+}
+
+body.dark-mode .app-contact-name {
+  color: #FFFFFF;
+}
+
+body.dark-mode .ctrl-btn {
+  background: rgba(30, 41, 59, 0.8);
+  border-color: rgba(56, 189, 248, 0.2);
+  color: #F8FAFC;
+}
+
+body.dark-mode .voice-assistant-dock {
+  background: rgba(15, 23, 42, 0.92);
+  border-color: rgba(56, 189, 248, 0.3);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+}
+
+body.dark-mode .dock-status-txt {
+  color: #F1F5F9;
+}

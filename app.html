@@ -11,40 +11,157 @@
   <link rel="stylesheet" href="assets/css/liquid-glass.css">
   <link rel="stylesheet" href="assets/css/sos.css">
   <link rel="stylesheet" href="assets/css/bills.css">
+  <link rel="stylesheet" href="assets/css/theme-toggle.css">
+  <link rel="stylesheet" href="assets/css/upi-circle.css">
+  <link rel="stylesheet" href="assets/css/transactions.css">
+  <link rel="stylesheet" href="assets/css/sidebar.css">
 </head>
-<body class="standalone-app-body">
+<body class="standalone-app-body app-sidebar-layout">
 
-  <!-- Accessible App Top Navigation Bar -->
-  <header class="app-navbar">
-    <a href="index.html" class="app-brand-btn" title="Return to Landing Page">
-      <div class="app-brand-icon">₹</div>
-      <div>
-        <div class="app-brand-name">EasyCoin</div>
-        <div style="font-size:12px; color:var(--text-muted);">Senior & Visual Assist Mode</div>
-      </div>
-    </a>
-
-    <div class="app-controls">
-      <button class="ctrl-btn" onclick="document.body.classList.toggle('high-contrast-mode')">
-        👁️ High Contrast
-      </button>
-      <button class="ctrl-btn" onclick="window.EasyAudio.speak('Welcome to EasyCoin. You are in accessible banking mode. Tap any button to hear details.')">
-        🔊 Voice Help
-      </button>
-      <a href="login.html" class="ctrl-btn" title="Open Accessible Senior Login">
-        🔐 Login
-      </a>
-      <a href="index.html" class="ctrl-btn">
-        ← Home
+  <!-- Left Side Menu Bar (Senior Accessible & Smooth Navigation) -->
+  <aside class="app-sidebar" id="appSidebar" aria-label="Main Navigation">
+    <div class="sidebar-brand">
+      <a href="index.html" class="app-brand-btn" title="Return to Landing Page" style="text-decoration:none; padding:0; background:none; border:none; box-shadow:none;">
+        <div class="app-brand-icon" style="width:42px; height:42px; font-size:22px;">₹</div>
+        <div>
+          <div class="app-brand-name" style="font-size:18px;">EasyCoin</div>
+          <div class="sidebar-brand-sub">Senior &amp; Visual Assist</div>
+        </div>
       </a>
     </div>
-  </header>
 
-  <!-- App Main Content Area -->
-  <main class="standalone-container">
-    
-    <!-- Balance Hero Box -->
-    <section class="senior-balance-box">
+    <!-- Quick Balance Widget -->
+    <div class="sidebar-balance-widget">
+      <div class="sidebar-bal-lbl">Available Balance</div>
+      <div class="sidebar-bal-val" id="sidebarBalVal">₹ 14,250</div>
+      <button class="sidebar-bal-btn" onclick="if(window.EasyAudio){window.EasyAudio.playClick(); window.EasyAudio.speak('Your current balance is ' + (window.EasyBanking ? window.EasyBanking.getBalance().toLocaleString('en-IN') : '14,250') + ' Rupees.');}">
+        🔊 Hear Balance
+      </button>
+    </div>
+
+    <!-- Main Navigation Links -->
+    <nav class="sidebar-nav">
+      <!-- Animated Sliding Active Indicator -->
+      <div class="sidebar-active-indicator" id="sidebarActiveIndicator"></div>
+
+      <a href="#balanceSection" class="sidebar-nav-item active" id="navBalance">
+        <span class="sidebar-nav-icon">🏠</span>
+        <span class="sidebar-nav-text">
+          <span>Balance &amp; Actions</span>
+        </span>
+      </a>
+
+      <a href="#contactsSection" class="sidebar-nav-item" id="navContacts">
+        <span class="sidebar-nav-icon">💸</span>
+        <span class="sidebar-nav-text">
+          <span>Send &amp; Contacts</span>
+        </span>
+      </a>
+
+      <a href="#billsSection" class="sidebar-nav-item" id="navBills">
+        <span class="sidebar-nav-icon">⚡</span>
+        <span class="sidebar-nav-text">
+          <span>Pay Bills</span>
+          <span class="sidebar-badge" id="sideBillsBadge">2 Due</span>
+        </span>
+      </a>
+
+      <a href="#passbookSection" class="sidebar-nav-item" id="navPassbook">
+        <span class="sidebar-nav-icon">📖</span>
+        <span class="sidebar-nav-text">
+          <span>Senior Passbook</span>
+        </span>
+      </a>
+
+      <a href="#circleSection" class="sidebar-nav-item" id="navCircle">
+        <span class="sidebar-nav-icon">👨‍👩‍👧‍👦</span>
+        <span class="sidebar-nav-text">
+          <span>UPI Family Circle</span>
+          <span class="sidebar-badge circle" id="sideCircleBadge">2 Minors</span>
+        </span>
+      </a>
+
+      <a href="#txHistorySection" class="sidebar-nav-item" id="navHistory">
+        <span class="sidebar-nav-icon">📜</span>
+        <span class="sidebar-nav-text">
+          <span>Transaction History</span>
+        </span>
+      </a>
+
+      <a href="#guardianSection" class="sidebar-nav-item danger" id="navGuardian">
+        <span class="sidebar-nav-icon">🛡️</span>
+        <span class="sidebar-nav-text">
+          <span>Safety &amp; SOS Shield</span>
+        </span>
+      </a>
+    </nav>
+
+    <!-- Sidebar Footer Controls -->
+    <div class="sidebar-footer">
+      <div class="sidebar-theme-row">
+        <span>Theme Mode</span>
+        <div class="theme-switch-wrap" title="Toggle Light / Dark Mode">
+          <span class="theme-icon sun active">☀️</span>
+          <label class="theme-slider-switch">
+            <input type="checkbox" class="theme-toggle-input" aria-label="Toggle Dark and Light mode">
+            <span class="theme-slider-knob"></span>
+          </label>
+          <span class="theme-icon moon">🌙</span>
+        </div>
+      </div>
+
+      <button class="sidebar-ctrl-btn" onclick="document.body.classList.toggle('high-contrast-mode')">
+        <span>👁️</span>
+        <span>High Contrast</span>
+      </button>
+
+      <button class="sidebar-ctrl-btn" onclick="window.EasyAudio.speak('Welcome to EasyCoin left menu. Tap any section to jump directly: Balance, Send Money, Pay Bills, Family Circle, History, or SOS.')">
+        <span>🔊</span>
+        <span>Voice Guide</span>
+      </button>
+
+      <a href="login.html" class="sidebar-ctrl-btn" title="Open Accessible Senior Login">
+        <span>🔐</span>
+        <span>Senior Sign In</span>
+      </a>
+
+      <a href="index.html" class="sidebar-ctrl-btn" style="color:var(--text-muted);">
+        <span>←</span>
+        <span>Exit to Home</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- Mobile Drawer Overlay -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- Right-Hand Main Content Area -->
+  <div class="app-main-content">
+    <!-- Top Mobile Header (<992px) -->
+    <header class="mobile-top-bar">
+      <button class="mobile-menu-btn" id="sidebarToggleBtn" aria-label="Open Navigation Menu">
+        <span>☰</span>
+        <span>Menu</span>
+      </button>
+      <div style="font-weight:900; color:var(--primary-navy, #00174E); font-size:16px;">EasyCoin Banking</div>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <a href="login.html" class="mobile-menu-btn" style="text-decoration:none; padding:6px 10px; font-size:13px;" title="Sign In">
+          🔐 Sign In
+        </a>
+        <div class="theme-switch-wrap" title="Toggle Light / Dark Mode">
+          <label class="theme-slider-switch">
+            <input type="checkbox" class="theme-toggle-input" aria-label="Toggle Dark and Light mode">
+            <span class="theme-slider-knob"></span>
+          </label>
+        </div>
+      </div>
+    </header>
+
+    <!-- App Main Content Area -->
+    <main class="standalone-container">
+      
+      <!-- Balance Hero Box -->
+      <section class="senior-balance-box" id="balanceSection">
       <div class="bal-top-row">
         <span class="bal-lbl">Available Savings Balance</span>
         <button class="bal-speak-btn" id="speakBalBtn">
@@ -77,15 +194,21 @@
         <div class="st-sub">Power, Water, Gas</div>
       </div>
 
-      <div class="senior-tile st-passbook" id="tilePassbook">
-        <div class="st-icon">📖</div>
-        <div class="st-title">Passbook</div>
-        <div class="st-sub">Spoken transactions</div>
+      <div class="senior-tile st-passbook" id="tilePassbook" onclick="document.getElementById('txHistorySection').scrollIntoView({behavior:'smooth'}); if(window.EasyTransactions) window.EasyTransactions.speakRecentSummary();">
+        <div class="st-icon">📜</div>
+        <div class="st-title">Transactions</div>
+        <div class="st-sub">To who, when &amp; purpose</div>
+      </div>
+
+      <div class="senior-tile st-circle" id="tileCircle" onclick="document.getElementById('circleSection').scrollIntoView({behavior:'smooth'}); if(window.EasyCircle) window.EasyCircle.speakCircleSummary();">
+        <div class="st-icon">👨‍👩‍👧‍👦</div>
+        <div class="st-title">UPI Circle</div>
+        <div class="st-sub">Minor allowance</div>
       </div>
     </section>
 
     <!-- Quick Photo Contacts Section -->
-    <section class="app-section-card">
+    <section class="app-section-card" id="contactsSection">
       <div class="app-sec-head">
         <h3>1-Tap Photo Contacts</h3>
         <button class="ctrl-btn" onclick="window.EasyAudio.speak('Tap Son Rahul, Lakshmi Grocery, Dr Sharma, or Landlord to transfer money.')">
@@ -250,6 +373,119 @@
       <div class="pb-defined-list" id="standalonePassbookList"></div>
     </section>
 
+    <!-- Family UPI Circle & Minor Access Section -->
+    <section class="app-section-card" id="circleSection">
+      <div class="app-sec-head">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div style="font-size:32px;">👨‍👩‍👧‍👦</div>
+          <div>
+            <h3 style="margin:0;">Family UPI Circle · Minor Access</h3>
+            <div style="font-size:13px; color:var(--text-muted);">Empower minor grandchildren with safe spending limits &amp; guardian oversight</div>
+          </div>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button class="ctrl-btn" onclick="window.EasyCircle.speakCircleSummary()">
+            🔊 Spoken Summary
+          </button>
+          <button class="ctrl-btn" onclick="window.EasyCircle.openAddMinorModal()">
+            ➕ Add Minor
+          </button>
+        </div>
+      </div>
+
+      <!-- Regulatory Terms & Conditions Banner Card -->
+      <div class="circle-tc-banner">
+        <div class="circle-tc-info">
+          <div class="circle-tc-icon">📜</div>
+          <div>
+            <div class="circle-tc-title">NPCI &amp; RBI Delegated Payment Guidelines for Minors</div>
+            <div class="circle-tc-desc">
+              All minor spends are subject to parental liability, category safety filters, and maximum monthly allowance caps.
+            </div>
+          </div>
+        </div>
+        <button class="circle-tc-view-btn" onclick="window.EasyCircle.openTermsModal()">
+          <span>View Terms &amp; Conditions</span>
+          <span>→</span>
+        </button>
+      </div>
+
+      <!-- Pending Approval Requests Box (Dynamic) -->
+      <div class="circle-approval-card" id="appCircleApprovalBox"></div>
+
+      <!-- Minor Member Cards Grid -->
+      <div class="circle-grid" id="appCircleGrid"></div>
+    </section>
+
+    <!-- Dedicated Transaction History & Spoken Audit Section -->
+    <section class="app-section-card" id="txHistorySection">
+      <div class="tx-sec-head">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div style="font-size:32px;">📜</div>
+          <div>
+            <h3 style="margin:0;">Transaction History &amp; Spoken Audit</h3>
+            <div style="font-size:13px; color:var(--text-muted);">
+              Every payment tracked with To Who, When, and Purpose for complete peace of mind
+            </div>
+          </div>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button class="ctrl-btn" onclick="window.EasyTransactions.speakRecentSummary()">
+            🔊 Read Recent Spends
+          </button>
+        </div>
+      </div>
+
+      <!-- Live Financial Ledger Summary Stats -->
+      <div class="tx-stats-grid">
+        <div class="tx-stat-box">
+          <div class="tx-stat-lbl">💸 Total Spent (Month)</div>
+          <div class="tx-stat-val debit" id="txStatTotalSpent">₹ 2,210</div>
+        </div>
+        <div class="tx-stat-box">
+          <div class="tx-stat-lbl">👨‍👩‍👧‍👦 Minor Circle Spends</div>
+          <div class="tx-stat-val" style="color:#0047E0;" id="txStatMinorSpent">₹ 570</div>
+        </div>
+        <div class="tx-stat-box">
+          <div class="tx-stat-lbl">⚡ Utility Bills Paid</div>
+          <div class="tx-stat-val" style="color:#D97706;" id="txStatBillsPaid">₹ 450</div>
+        </div>
+        <div class="tx-stat-box">
+          <div class="tx-stat-lbl">🏛️ Pension Deposit</div>
+          <div class="tx-stat-val credit" id="txStatPension">+ ₹ 8,000</div>
+        </div>
+      </div>
+
+      <!-- Filter Pills & Search Toolbar -->
+      <div class="tx-toolbar">
+        <div class="tx-filter-pills">
+          <button class="tx-pill active" data-cat="all" onclick="window.EasyTransactions.setFilter('all')">
+            All Transactions
+          </button>
+          <button class="tx-pill" data-cat="circle" onclick="window.EasyTransactions.setFilter('circle')">
+            👨‍👩‍👧‍👦 Minor UPI Circle
+          </button>
+          <button class="tx-pill" data-cat="bills" onclick="window.EasyTransactions.setFilter('bills')">
+            💡 Utility Bills
+          </button>
+          <button class="tx-pill" data-cat="family" onclick="window.EasyTransactions.setFilter('family')">
+            👨‍👩‍👧 Family Direct
+          </button>
+          <button class="tx-pill" data-cat="pension" onclick="window.EasyTransactions.setFilter('pension')">
+            🏛️ Pension Credit
+          </button>
+        </div>
+
+        <div class="tx-search-wrap">
+          <span class="tx-search-icon">🔍</span>
+          <input type="text" class="tx-search-input" placeholder="Search To Who, Purpose..." oninput="window.EasyTransactions.setSearch(this.value)">
+        </div>
+      </div>
+
+      <!-- Dynamic Transaction List with To Who, When, and Purpose -->
+      <div class="tx-list-wrap" id="txHistoryList"></div>
+    </section>
+
     <!-- Emergency Safety & Guardian Box -->
     <section class="app-section-card" id="guardianSection" style="border: 2px solid #FCA5A5; background: #FEF2F2;">
       <!-- Frozen Account Banner (Hidden by default) -->
@@ -295,6 +531,7 @@
     </section>
 
   </main>
+  </div> <!-- End app-main-content -->
 
   <!-- Payment Modal Dialog: Defined Subparts -->
   <div class="pay-modal" id="payModal" role="dialog" aria-modal="true" aria-labelledby="spendModalMainTitle">
@@ -792,19 +1029,172 @@
     </div>
   </div>
 
+  <!-- Accessible NPCI Terms & Conditions Modal Dialog -->
+  <div class="circle-modal-overlay" id="circleTermsModal">
+    <div class="circle-modal-box">
+      <div class="circle-modal-header">
+        <h3>📜 UPI Circle Minor Terms &amp; Conditions</h3>
+        <button class="circle-modal-close" onclick="window.EasyCircle.closeTermsModal()">✕</button>
+      </div>
+      <div class="circle-modal-body">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; background:rgba(0,71,224,0.06); padding:12px 16px; border-radius:12px;">
+          <span style="font-size:13.5px; font-weight:700; color:var(--circle-primary);">
+            Senior Voice Readout: Listen instead of reading
+          </span>
+          <button class="ctrl-btn" onclick="window.EasyCircle.speakTermsAndConditions()" style="background:#0047E0; color:#FFFFFF; border:none;">
+            🔊 Listen to T&amp;C
+          </button>
+        </div>
+
+        <div class="tc-clause-list">
+          <div class="tc-clause-item">
+            <div class="tc-clause-title">1. Minor Eligibility &amp; Senior Guardian Representation</div>
+            <div class="tc-clause-body">
+              The Primary Account Holder certifies that secondary circle members are family minors aged between 5 and 17 years old. The senior/parent acts as the authorized financial sponsor under RBI Delegated Payment frameworks.
+            </div>
+          </div>
+
+          <div class="tc-clause-item">
+            <div class="tc-clause-title">2. Financial Liability &amp; Debit Authorization</div>
+            <div class="tc-clause-body">
+              All transactions initiated by the minor under Pre-Approved Limits or Explicit Approvals are debited directly from the primary account. The primary account holder assumes legal liability for authorized transactions.
+            </div>
+          </div>
+
+          <div class="tc-clause-item">
+            <div class="tc-clause-title">3. NPCI Monthly Allowance Limits &amp; Transaction Caps</div>
+            <div class="tc-clause-body">
+              In accordance with NPCI circular guidelines, the maximum cumulative spending limit cannot exceed ₹15,000 per month per minor. The primary user sets customized lower thresholds (e.g., ₹2,000/month) and per-transaction caps (e.g., max ₹500/transaction).
+            </div>
+          </div>
+
+          <div class="tc-clause-item">
+            <div class="tc-clause-title">4. Merchant Category Code (MCC) Safety Protection</div>
+            <div class="tc-clause-body">
+              EasyCoin automatically enforces age-appropriate merchant category filters. Minors are strictly prohibited and technically blocked from spending at gaming/gambling, cryptocurrency, adult entertainment, liquor, tobacco, and high-risk speculative merchants.
+            </div>
+          </div>
+
+          <div class="tc-clause-item">
+            <div class="tc-clause-title">5. Instant 1-Tap Revocation &amp; Freeze Rights</div>
+            <div class="tc-clause-body">
+              The primary account holder retains unconditional, real-time authority to modify limits, pause transactions, or permanently revoke secondary minor access with immediate effect.
+            </div>
+          </div>
+
+          <div class="tc-clause-item">
+            <div class="tc-clause-title">6. Spoken &amp; SMS Transaction Audits</div>
+            <div class="tc-clause-body">
+              Both the primary elder and secondary minor receive real-time notifications with merchant name, amount, timestamp, and remaining allowance upon completion of any payment.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="circle-modal-footer">
+        <button class="ctrl-btn" onclick="window.EasyCircle.closeTermsModal()" style="background:#0047E0; color:#FFFFFF; border:none; padding:10px 24px;">
+          I Understand &amp; Agree
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Minor Family Member Modal Dialog -->
+  <div class="circle-modal-overlay" id="circleAddMinorModal">
+    <div class="circle-modal-box">
+      <div class="circle-modal-header">
+        <h3>➕ Add Minor to UPI Circle</h3>
+        <button class="circle-modal-close" onclick="window.EasyCircle.closeAddMinorModal()">✕</button>
+      </div>
+      <div class="circle-modal-body">
+        <form id="addMinorForm" onsubmit="window.EasyCircle.handleFormSubmit(event)">
+          <div class="circle-form-group">
+            <label class="circle-form-label">Minor's Full Name</label>
+            <input type="text" id="mName" class="circle-form-input" placeholder="e.g. Aarav Chandra" required autocomplete="off">
+          </div>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+            <div class="circle-form-group">
+              <label class="circle-form-label">Relationship</label>
+              <select id="mRel" class="circle-form-select" required>
+                <option value="Grandson">Grandson</option>
+                <option value="Granddaughter">Granddaughter</option>
+                <option value="Son">Son</option>
+                <option value="Daughter">Daughter</option>
+                <option value="Ward">Ward / Nephew / Niece</option>
+              </select>
+            </div>
+
+            <div class="circle-form-group">
+              <label class="circle-form-label">Age (5 - 17 Years)</label>
+              <input type="number" id="mAge" class="circle-form-input" min="5" max="17" placeholder="e.g. 14" required>
+            </div>
+          </div>
+
+          <div class="circle-form-group">
+            <label class="circle-form-label">Minor's Mobile Number (Optional)</label>
+            <input type="tel" id="mPhone" class="circle-form-input" maxlength="10" placeholder="e.g. 9811223344">
+            <span style="font-size:11.5px; color:var(--text-muted); display:block; margin-top:3px;">
+              Used to assign a delegated UPI ID (e.g. name.last4@easycoin)
+            </span>
+          </div>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+            <div class="circle-form-group">
+              <label class="circle-form-label">Monthly Limit (₹)</label>
+              <input type="number" id="mLimit" class="circle-form-input" min="100" max="15000" placeholder="e.g. 2000" value="2000" required>
+            </div>
+
+            <div class="circle-form-group">
+              <label class="circle-form-label">Per-Spend Cap (₹)</label>
+              <input type="number" id="mPerTx" class="circle-form-input" min="50" max="5000" placeholder="e.g. 500" value="500" required>
+            </div>
+          </div>
+
+          <div class="circle-form-group">
+            <label class="circle-form-label">Delegation Control Mode</label>
+            <select id="mMode" class="circle-form-select">
+              <option value="PRE_APPROVED">⚡ Pre-Approved Allowance (Auto-approve up to spend cap)</option>
+              <option value="APPROVAL_REQUIRED">🛡️ Ask Elder (Require my 1-tap approval for each spend)</option>
+            </select>
+          </div>
+
+          <div class="circle-form-checkbox-row">
+            <input type="checkbox" id="mTcCheck" required checked>
+            <label for="mTcCheck" style="font-size:13px; color:var(--text-main); cursor:pointer;">
+              I certify this minor is under 18 years and accept the <a href="javascript:void(0)" onclick="window.EasyCircle.openTermsModal()" style="color:var(--circle-primary); font-weight:700;">NPCI UPI Circle Terms &amp; Conditions</a>.
+            </label>
+          </div>
+
+          <!-- Submit & Done Button Row -->
+          <div style="margin-top:20px; display:flex; justify-content:flex-end; gap:10px;">
+            <button type="button" class="ctrl-btn" onclick="window.EasyCircle.closeAddMinorModal()">Cancel</button>
+            <button type="submit" class="btn-circle-done" style="width:auto; padding:11px 24px;">
+              <span>✓ Done · Add Minor to Circle</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <!-- Universal In-Website Floating Toast Notification -->
   <div class="easy-toast-container" id="easyToast" role="status" aria-live="polite">
     <span id="easyToastIcon" style="font-size:18px;">✅</span>
     <span id="easyToastMsg">Notification message</span>
   </div>
+  </div>
 
   <!-- Core Scripts -->
+  <script src="assets/js/theme-toggle.js"></script>
   <script src="assets/js/audio-synth.js"></script>
   <script src="assets/js/api-client.js"></script>
   <script src="assets/js/sos-engine.js"></script>
   <script src="assets/js/bills-engine.js"></script>
   <script src="assets/js/qr-generator.js"></script>
+  <script src="assets/js/transactions-engine.js"></script>
   <script src="assets/js/banking-engine.js"></script>
+  <script src="assets/js/upi-circle.js"></script>
   <script src="assets/js/liquid-glass.js"></script>
+  <script src="assets/js/sidebar.js"></script>
 </body>
 </html>

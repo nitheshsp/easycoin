@@ -182,10 +182,10 @@ body.standalone-app-body {
   color: #FEF08A;
 }
 
-/* 4 Big Color Tiles (Desktop / Tablet responsive) */
+/* 5 Big Color Tiles (Desktop / Tablet responsive) */
 .senior-action-tiles {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
   gap: 16px;
 }
 

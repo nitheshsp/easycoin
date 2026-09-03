@@ -12,6 +12,7 @@ const authRoutes = require('./routes/auth.routes');
 const accountRoutes = require('./routes/account.routes');
 const paymentRoutes = require('./routes/payment.routes');
 const guardianRoutes = require('./routes/guardian.routes');
+const circleRoutes = require('./routes/circle.routes');
 
 const app = express();
 
@@ -38,7 +39,8 @@ app.get('/api/health', (req, res) => {
       auth: 'Friend 1: Active',
       account: 'Friend 2: Active',
       payments: 'Friend 3: Active',
-      guardian: 'Friend 4: Active'
+      guardian: 'Friend 4: Active',
+      circle: 'UPI Circle: Active'
     },
     timestamp: new Date().toISOString()
   });
@@ -49,6 +51,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/account', accountRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/guardian', guardianRoutes);
+app.use('/api/circle', circleRoutes);
 
 // 404 Handler for undefined API routes
 app.use('/api', (req, res) => {

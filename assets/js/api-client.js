@@ -334,6 +334,42 @@ class EasyAPIClient {
     }
     return { isFrozen: true, spokenResponse: 'Emergency Lock Active. Account frozen.' };
   }
+
+  // Module 5: UPI Circle (Delegated Minor Spends)
+  async getCircleData() {
+    if (this.isLive) {
+      try {
+        const res = await fetch(`${this.baseUrl}/circle/members`);
+        const json = await res.json();
+        return json.data;
+      } catch (e) { console.warn(e); }
+    }
+    return null;
+  }
+
+  async addCircleMember(memberData) {
+    if (this.isLive) {
+      try {
+        const res = await fetch(`${this.baseUrl}/circle/members`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(memberData)
+        });
+        return await res.json();
+      } catch (e) { console.warn(e); }
+    }
+    return { success: true, simulated: true };
+  }
+
+  async toggleCircleFreeze(memberId) {
+    if (this.isLive) {
+      try {
+        const res = await fetch(`${this.baseUrl}/circle/members/${memberId}/freeze`, { method: 'POST' });
+        return await res.json();
+      } catch (e) { console.warn(e); }
+    }
+    return { success: true, simulated: true };
+  }
 }
 
 window.EasyAPI = new EasyAPIClient();
