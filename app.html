@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="assets/css/liquid-glass.css">
   <link rel="stylesheet" href="assets/css/sos.css">
   <link rel="stylesheet" href="assets/css/bills.css">
+  <link rel="stylesheet" href="assets/css/theme-toggle.css">
 </head>
 <body class="standalone-app-body">
 
@@ -25,6 +26,16 @@
     </a>
 
     <div class="app-controls">
+      <!-- Top-Right Dark / Light Mode Slider -->
+      <div class="theme-switch-wrap" title="Toggle Light / Dark Mode">
+        <span class="theme-icon sun active">☀️</span>
+        <label class="theme-slider-switch">
+          <input type="checkbox" class="theme-toggle-input" aria-label="Toggle Dark and Light mode">
+          <span class="theme-slider-knob"></span>
+        </label>
+        <span class="theme-icon moon">🌙</span>
+      </div>
+
       <button class="ctrl-btn" onclick="document.body.classList.toggle('high-contrast-mode')">
         👁️ High Contrast
       </button>
@@ -378,6 +389,7 @@
   </div>
 
   <!-- Core Scripts -->
+  <script src="assets/js/theme-toggle.js"></script>
   <script src="assets/js/audio-synth.js"></script>
   <script src="assets/js/api-client.js"></script>
   <script src="assets/js/sos-engine.js"></script>

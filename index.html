@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="assets/css/liquid-glass.css">
   <link rel="stylesheet" href="assets/css/sos.css">
   <link rel="stylesheet" href="assets/css/bills.css">
+  <link rel="stylesheet" href="assets/css/theme-toggle.css">
 </head>
 <body>
 
@@ -70,6 +71,16 @@
     </nav>
 
     <div class="dlrtt-right">
+      <!-- Dark / Light Mode Slider -->
+      <div class="theme-switch-wrap" title="Toggle Light / Dark Mode">
+        <span class="theme-icon sun active">☀️</span>
+        <label class="theme-slider-switch">
+          <input type="checkbox" class="theme-toggle-input" aria-label="Toggle Dark and Light mode">
+          <span class="theme-slider-knob"></span>
+        </label>
+        <span class="theme-icon moon">🌙</span>
+      </div>
+
       <button type="button" class="dlrtt-btn2" id="toggleContrastBtn" title="Toggle High Contrast Mode">
         👁️ High Contrast
       </button>
@@ -1058,6 +1069,7 @@
   </div>
 
   <!-- Core JavaScript Modules -->
+  <script src="assets/js/theme-toggle.js"></script>
   <script src="assets/js/audio-synth.js"></script>
   <script src="assets/js/api-client.js"></script>
   <script src="assets/js/sos-engine.js"></script>
