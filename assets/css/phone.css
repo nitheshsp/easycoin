@@ -366,6 +366,24 @@
   color: #9333ea;
 }
 
+.action-tile.tile-circle {
+  grid-column: span 2;
+  flex-direction: row;
+  justify-content: flex-start;
+  text-align: left;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, rgba(0, 71, 224, 0.06) 0%, rgba(16, 185, 129, 0.08) 100%);
+  border-color: rgba(0, 71, 224, 0.22);
+}
+.action-tile.tile-circle .tile-icon {
+  background: #EFF6FF;
+  color: #0047E0;
+  width: 46px;
+  height: 46px;
+  font-size: 22px;
+  border-radius: 12px;
+}
+
 .tile-icon {
   width: 56px;
   height: 56px;

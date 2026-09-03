@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="assets/css/sos.css">
   <link rel="stylesheet" href="assets/css/bills.css">
   <link rel="stylesheet" href="assets/css/theme-toggle.css">
+  <link rel="stylesheet" href="assets/css/upi-circle.css">
 </head>
 <body>
 
@@ -260,6 +261,18 @@
                         <div class="tile-title">Passbook</div>
                         <div class="tile-sub">Audio statement</div>
                       </div>
+
+                      <div class="action-tile tile-circle">
+                        <div class="tile-icon">👨‍👩‍👧‍👦</div>
+                        <div style="flex:1;">
+                          <div class="tile-title" style="display:flex; justify-content:space-between; align-items:center;">
+                            <span>Family UPI Circle</span>
+                            <span style="font-size:10.5px; color:#10B981; font-weight:800; background:rgba(16,185,129,0.14); padding:2px 6px; border-radius:4px;">2 Minors</span>
+                          </div>
+                          <div class="tile-sub">Minor allowances &amp; limits</div>
+                        </div>
+                        <span style="font-size:16px; color:#0047E0; font-weight:700;">→</span>
+                      </div>
                     </div>
 
                     <!-- Quick Photo Contacts -->
@@ -463,6 +476,39 @@
 
                     <!-- Dynamic Bills List -->
                     <div class="bills-list" id="phoneBillsList"></div>
+                  </div>
+
+                  <!-- Screen: Family UPI Circle -->
+                  <div class="screen" id="s-circle">
+                    <div class="app-header">
+                      <div class="app-brand-pill">
+                        <span>👨‍👩‍👧‍👦 UPI Family Circle</span>
+                      </div>
+                      <button class="voice-status-btn" onclick="window.EasyCircle.speakCircleSummary()">
+                        🔊 Status
+                      </button>
+                    </div>
+
+                    <!-- Circle Overview Card -->
+                    <div style="background:linear-gradient(135deg, #00174E 0%, #003DD1 100%); color:#FFFFFF; border-radius:16px; padding:14px; margin-bottom:12px;">
+                      <div style="font-size:11px; text-transform:uppercase; letter-spacing:0.04em; color:rgba(255,255,255,0.75);">
+                        Minor Delegated Spending
+                      </div>
+                      <div style="font-size:18px; font-weight:800; margin:4px 0;">2 Minors Linked</div>
+                      <div style="font-size:12px; color:#FEF08A;">Aarav (₹1,150 Left) · Diya (₹1,800 Left)</div>
+                    </div>
+
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                      <span style="font-size:12px; font-weight:800; color:var(--dlr900);">Active Minor Members:</span>
+                      <a href="javascript:void(0)" onclick="window.EasyCircle.openTermsModal()" style="font-size:11px; font-weight:700; color:var(--dlr500);">📜 Terms &amp; Rules</a>
+                    </div>
+
+                    <!-- Dynamic Phone Circle List -->
+                    <div id="phoneCircleList"></div>
+
+                    <button class="voice-status-btn" style="width:100%; justify-content:center; padding:10px; margin-top:8px;" onclick="window.EasyCircle.speakTermsAndConditions()">
+                      🔊 Hear NPCI Minor Rules
+                    </button>
                   </div>
 
                   <!-- Screen 3: Visual Passbook -->
@@ -676,6 +722,27 @@
               <div class="gauge-val">
                 <span class="gauge-val-num">98%</span>
                 <span class="gauge-val-lbl">Senior Usability</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4: UPI Circle for Minors -->
+        <div class="card-item">
+          <span class="card-item-tag">Family Delegation</span>
+          <h3 class="card-item-title">UPI Circle for Minors with Parental Caps.</h3>
+          <p class="card-item-desc">
+            Give minor grandchildren and children safe digital payment freedom for school canteen, stationery, and books with pre-approved monthly allowances, 1-tap elder approvals, and NPCI safety compliance.
+          </p>
+          <div class="gauge-wrap">
+            <div class="gauge-circle" data-score="100">
+              <svg viewBox="0 0 100 100">
+                <circle class="bg" cx="50" cy="50" r="42"></circle>
+                <circle class="progress" cx="50" cy="50" r="42" style="stroke:#0047E0;"></circle>
+              </svg>
+              <div class="gauge-val">
+                <span class="gauge-val-num">100%</span>
+                <span class="gauge-val-lbl">NPCI Compliant</span>
               </div>
             </div>
           </div>
@@ -1068,12 +1135,82 @@
     </div>
   </div>
 
+  <!-- Accessible NPCI Terms & Conditions Modal Dialog -->
+  <div class="circle-modal-overlay" id="circleTermsModal">
+    <div class="circle-modal-box">
+      <div class="circle-modal-header">
+        <h3>📜 UPI Circle Minor Terms &amp; Conditions</h3>
+        <button class="circle-modal-close" onclick="window.EasyCircle.closeTermsModal()">✕</button>
+      </div>
+      <div class="circle-modal-body">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; background:rgba(0,71,224,0.06); padding:12px 16px; border-radius:12px;">
+          <span style="font-size:13.5px; font-weight:700; color:var(--circle-primary);">
+            Senior Voice Readout: Listen instead of reading
+          </span>
+          <button class="ctrl-btn" onclick="window.EasyCircle.speakTermsAndConditions()" style="background:#0047E0; color:#FFFFFF; border:none; font-size:13px; font-weight:700; padding:8px 16px; border-radius:8px; cursor:pointer;">
+            🔊 Listen to T&amp;C
+          </button>
+        </div>
+
+        <div class="tc-clause-list">
+          <div class="tc-clause-item">
+            <div class="tc-clause-title">1. Minor Eligibility &amp; Senior Guardian Representation</div>
+            <div class="tc-clause-body">
+              The Primary Account Holder certifies that secondary circle members are family minors aged between 5 and 17 years old. The senior/parent acts as the authorized financial sponsor under RBI Delegated Payment frameworks.
+            </div>
+          </div>
+
+          <div class="tc-clause-item">
+            <div class="tc-clause-title">2. Financial Liability &amp; Debit Authorization</div>
+            <div class="tc-clause-body">
+              All transactions initiated by the minor under Pre-Approved Limits or Explicit Approvals are debited directly from the primary account. The primary account holder assumes legal liability for authorized transactions.
+            </div>
+          </div>
+
+          <div class="tc-clause-item">
+            <div class="tc-clause-title">3. NPCI Monthly Allowance Limits &amp; Transaction Caps</div>
+            <div class="tc-clause-body">
+              In accordance with NPCI circular guidelines, the maximum cumulative spending limit cannot exceed ₹15,000 per month per minor. The primary user sets customized lower thresholds (e.g., ₹2,000/month) and per-transaction caps (e.g., max ₹500/transaction).
+            </div>
+          </div>
+
+          <div class="tc-clause-item">
+            <div class="tc-clause-title">4. Merchant Category Code (MCC) Safety Protection</div>
+            <div class="tc-clause-body">
+              EasyCoin automatically enforces age-appropriate merchant category filters. Minors are strictly prohibited and technically blocked from spending at gaming/gambling, cryptocurrency, adult entertainment, liquor, tobacco, and high-risk speculative merchants.
+            </div>
+          </div>
+
+          <div class="tc-clause-item">
+            <div class="tc-clause-title">5. Instant 1-Tap Revocation &amp; Freeze Rights</div>
+            <div class="tc-clause-body">
+              The primary account holder retains unconditional, real-time authority to modify limits, pause transactions, or permanently revoke secondary minor access with immediate effect.
+            </div>
+          </div>
+
+          <div class="tc-clause-item">
+            <div class="tc-clause-title">6. Spoken &amp; SMS Transaction Audits</div>
+            <div class="tc-clause-body">
+              Both the primary elder and secondary minor receive real-time notifications with merchant name, amount, timestamp, and remaining allowance upon completion of any payment.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="circle-modal-footer">
+        <button class="ctrl-btn" onclick="window.EasyCircle.closeTermsModal()" style="background:#0047E0; color:#FFFFFF; border:none; padding:10px 24px; border-radius:10px; font-weight:700; cursor:pointer;">
+          I Understand &amp; Agree
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Core JavaScript Modules -->
   <script src="assets/js/theme-toggle.js"></script>
   <script src="assets/js/audio-synth.js"></script>
   <script src="assets/js/api-client.js"></script>
   <script src="assets/js/sos-engine.js"></script>
   <script src="assets/js/bills-engine.js"></script>
+  <script src="assets/js/upi-circle.js"></script>
   <script src="assets/js/qr-generator.js"></script>
   <script src="assets/js/hero-shader.js"></script>
   <script src="assets/js/pitch-scroll.js"></script>

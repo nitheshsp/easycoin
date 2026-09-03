@@ -153,6 +153,17 @@
       });
     }
 
+    var tileCircle = phoneEl.querySelector('.tile-circle');
+    if (tileCircle) {
+      tileCircle.addEventListener('click', function () {
+        if (window.EasyCircle) {
+          window.EasyCircle.renderPhoneSimulator();
+          window.EasyCircle.speakCircleSummary();
+        }
+        switchScreen('s-circle');
+      });
+    }
+
     // Listen to balance button
     var listenBtn = phoneEl.querySelector('#listenBalanceBtn');
     if (listenBtn) {
