@@ -2,8 +2,6 @@
 
 > **Empowering senior citizens, illiterate, and visually challenged individuals with effortless voice-first and symbol-assisted digital banking.**
 
-Built with an ultra-premium **Liquid Glassmorphism UI** inspired by [dlr-test.training](https://dlr-test.training/en), featuring interactive 3D phone simulation, WebGL Perlin fluid shaders, Web Audio acoustic synthesizers, and Web Speech API natural language processing.
-
 ---
 
 ## 📂 Repository Directory Structure
