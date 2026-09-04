@@ -101,10 +101,40 @@ exports.symbolLogin = (req, res) => {
   });
 };
 
+exports.registerUser = (req, res) => {
+  const { name, phone, age, guardianName, guardianPhone, balance, symbols } = req.body;
+  if (!name || !phone) {
+    return res.status(400).json({
+      success: false,
+      message: 'Name and phone number are required.'
+    });
+  }
+
+  const user = db.registerUser({
+    name,
+    phone,
+    age,
+    guardianName,
+    guardianPhone,
+    balance,
+    symbols
+  });
+
+  return res.status(201).json({
+    success: true,
+    message: `Account created successfully for ${user.name}!`,
+    data: {
+      user,
+      token: 'jwt_session_senior_' + Date.now()
+    }
+  });
+};
+
 exports.getCurrentUser = (req, res) => {
   return res.status(200).json({
     success: true,
     data: db.getUser()
   });
 };
+
 

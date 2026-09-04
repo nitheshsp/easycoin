@@ -53,11 +53,33 @@ async function runTests() {
   assert(circleData.data.members.length >= 2);
   console.log(`   ✅ Active Family Circle members: ${circleData.data.members.length}\n`);
 
-  // 5. Cleanup to pristine state
+  // 5. User Registration Persistence
+  console.log('5️⃣ User Registration Persistence...');
+  const regRes = await fetch(`${BASE_URL}/auth/register`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      name: 'Rameshwar Dayal',
+      phone: '9876599999',
+      age: 72,
+      guardianName: 'Son Amit',
+      guardianPhone: '+91 98112 33445',
+      balance: 15000,
+      symbols: ['☀️', '🐄', '🪔']
+    })
+  });
+  assert.strictEqual(regRes.status, 201);
+  const regData = await regRes.json();
+  assert.strictEqual(regData.data.user.name, 'Rameshwar Dayal');
+  console.log(`   ✅ Registered new user in SQLite: ${regData.data.user.name}\n`);
+
+  // 6. Cleanup to pristine state
   db.db.exec("DELETE FROM circle_members WHERE id NOT IN ('minor-aarav', 'minor-diya');");
   db.db.exec("DELETE FROM circle_spends WHERE id NOT IN ('sp_01', 'sp_02', 'sp_03', 'sp_04');");
   db.db.exec("DELETE FROM transactions WHERE id NOT IN ('tx_101', 'tx_102', 'tx_103');");
+  db.db.exec("DELETE FROM users WHERE id != 'usr_senior_01';");
   db.setBalance(14250);
+
 
   console.log('====================================================');
   console.log('🎉 ALL TESTS PASSED! PERSISTENCE & APIS VERIFIED 100%');

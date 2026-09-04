@@ -377,6 +377,59 @@ class DatabaseStore {
     };
   }
 
+  getUserById(userId) {
+    const row = this.db.prepare('SELECT * FROM users WHERE id = ?').get(userId);
+    if (!row) return this.getUser();
+    return {
+      id: row.id,
+      name: row.name,
+      age: row.age,
+      phone: row.phone,
+      language: row.language,
+      isFrozen: Boolean(row.is_frozen),
+      biometricEnabled: Boolean(row.biometric_enabled),
+      balance: row.balance,
+      pensionMonthly: row.pension_monthly,
+      guardian: JSON.parse(row.guardian_json),
+      secretSymbols: JSON.parse(row.secret_symbols_json)
+    };
+  }
+
+  registerUser(u) {
+    const userId = u.id || `usr_senior_${Date.now()}`;
+    const guardian = {
+      name: u.guardianName || 'Family Guardian',
+      phone: u.guardianPhone || '+919811223344',
+      relation: 'Guardian',
+      approvalRequiredAbove: 2000
+    };
+    const symbols = u.symbols || ['☀️', '🐄', '🪔'];
+
+    const insert = this.db.prepare(`
+      INSERT OR REPLACE INTO users (
+        id, name, age, phone, language, is_frozen, biometric_enabled,
+        balance, pension_monthly, guardian_json, secret_symbols_json
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `);
+
+    insert.run(
+      userId,
+      u.name || 'Senior User',
+      parseInt(u.age, 10) || 70,
+      u.phone || '+919876543210',
+      'en-IN',
+      0,
+      1,
+      parseInt(u.balance, 10) || 10000,
+      8000,
+      JSON.stringify(guardian),
+      JSON.stringify(symbols)
+    );
+
+    return this.getUserById(userId);
+  }
+
+
   getBalance() {
     const row = this.db.prepare('SELECT balance FROM users WHERE id = ?').get('usr_senior_01');
     return row ? row.balance : 0;

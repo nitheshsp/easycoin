@@ -199,10 +199,32 @@ class EasyAPIClient {
     };
   }
 
+  async registerUser(userData) {
+    if (this.isLive) {
+      try {
+        const res = await fetch(`${this.baseUrl}/auth/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(userData)
+        });
+        const json = await res.json();
+        if (json.success && json.data?.token) {
+          localStorage.setItem('easycoin_auth_token', json.data.token);
+          localStorage.setItem('easycoin_user_session', JSON.stringify(json.data.user));
+        }
+        return json;
+      } catch (e) {
+        console.warn('Live registerUser failed, using local fallback', e);
+      }
+    }
+    return { success: true, simulated: true };
+  }
+
   logout() {
     localStorage.removeItem('easycoin_auth_token');
     localStorage.removeItem('easycoin_user_session');
   }
+
 
 
   // Module 2: Account & Balance

@@ -900,8 +900,13 @@
         localStorage.setItem('easycoin_auth_token', 'jwt_' + Date.now());
       }
 
+      if (window.EasyAPI && typeof window.EasyAPI.registerUser === 'function') {
+        window.EasyAPI.registerUser(newUser);
+      }
+
       this.handleLoginSuccess(`Account created successfully for ${name}! Welcome to EasyCoin.`, registered);
     }
+
   }
 
   // Auto-initialize when DOM is ready

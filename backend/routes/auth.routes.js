@@ -18,8 +18,12 @@ router.post('/biometric-login', authController.biometricLogin);
 // POST /api/auth/symbol-login
 router.post('/symbol-login', authController.symbolLogin);
 
+// POST /api/auth/register
+router.post('/register', authController.registerUser);
+
 // GET /api/auth/me
 router.get('/me', authController.getCurrentUser);
 
 module.exports = router;
+
 
