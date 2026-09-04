@@ -242,14 +242,21 @@ body.dark-mode .sidebar-nav-item:hover {
   box-shadow: 0 4px 12px rgba(124, 58, 237, 0.18);
 }
 
-/* 5. Transaction History (Indigo / Cyan Glow) */
+/* 5. Senior Passbook (Teal / Emerald Glow) */
+.sidebar-nav-item[href="#passbookSection"] .sidebar-nav-icon {
+  background: linear-gradient(135deg, #CCFBF1 0%, #99F6E4 100%);
+  border: 1.5px solid rgba(13, 148, 136, 0.25);
+  box-shadow: 0 4px 12px rgba(13, 148, 136, 0.18);
+}
+
+/* 6. Transaction History (Indigo / Cyan Glow) */
 .sidebar-nav-item[href="#txHistorySection"] .sidebar-nav-icon {
   background: linear-gradient(135deg, #E0E7FF 0%, #C7D2FE 100%);
   border: 1.5px solid rgba(67, 56, 202, 0.25);
   box-shadow: 0 4px 12px rgba(67, 56, 202, 0.18);
 }
 
-/* 6. Emergency SOS (Crimson Pulse Glow) */
+/* 7. Emergency SOS (Crimson Pulse Glow) */
 .sidebar-nav-item[href="#guardianSection"] .sidebar-nav-icon {
   background: linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%);
   border: 1.5px solid rgba(220, 38, 38, 0.35);
@@ -292,6 +299,12 @@ body.dark-theme .sidebar-nav-item[href="#circleSection"] .sidebar-nav-icon,
 body.dark-mode .sidebar-nav-item[href="#circleSection"] .sidebar-nav-icon {
   background: rgba(124, 58, 237, 0.25);
   border-color: rgba(124, 58, 237, 0.45);
+}
+
+body.dark-theme .sidebar-nav-item[href="#passbookSection"] .sidebar-nav-icon,
+body.dark-mode .sidebar-nav-item[href="#passbookSection"] .sidebar-nav-icon {
+  background: rgba(13, 148, 136, 0.25);
+  border-color: rgba(13, 148, 136, 0.45);
 }
 
 body.dark-theme .sidebar-nav-item[href="#txHistorySection"] .sidebar-nav-icon,

@@ -14,6 +14,7 @@
       document.getElementById('balanceSection'),
       document.getElementById('contactsSection'),
       document.getElementById('billsSection'),
+      document.getElementById('passbookSection'),
       document.getElementById('circleSection'),
       document.getElementById('txHistorySection'),
       document.getElementById('guardianSection')
@@ -62,6 +63,7 @@
               '#balanceSection': 'Balance and Quick Actions',
               '#contactsSection': '1-Tap Photo Contacts',
               '#billsSection': 'Monthly Bill Reminders',
+              '#passbookSection': 'Senior Passbook and Digital Statement',
               '#circleSection': 'UPI Family Circle for Minors',
               '#txHistorySection': 'Transaction History and Spoken Audit',
               '#guardianSection': 'Emergency Anti-Fraud Shield and SOS'
