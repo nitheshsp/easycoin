@@ -1,0 +1,273 @@
+/* =========================================================================
+   EasyCoin Unified Presentation Hub (Single Master Demo Bar & Modal)
+   ========================================================================= */
+
+.presentation-hub-bar {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 99999;
+  background: linear-gradient(90deg, #0B1120 0%, #111E38 50%, #0B1120 100%);
+  border-bottom: 2px solid rgba(255, 215, 0, 0.35);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  padding: 8px 16px;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  color: #FFFFFF;
+}
+
+.pres-hub-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.pres-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pres-pulse {
+  width: 10px;
+  height: 10px;
+  background-color: #10B981;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #10B981;
+  animation: presPulse 1.8s infinite;
+}
+
+@keyframes presPulse {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+  70% { transform: scale(1.15); box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+.pres-title {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: #F8FAFC;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pres-title .pres-tag {
+  background: rgba(255, 215, 0, 0.2);
+  color: #FCD34D;
+  border: 1px solid rgba(255, 215, 0, 0.4);
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.pres-nav-group {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pres-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #F1F5F9;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  outline: none;
+}
+
+.pres-pill:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-1px);
+  color: #FFFFFF;
+}
+
+.pres-pill.accent {
+  background: linear-gradient(135deg, rgba(234, 88, 12, 0.25) 0%, rgba(249, 115, 22, 0.35) 100%);
+  border-color: rgba(249, 115, 22, 0.6);
+  color: #FFEDD5;
+}
+
+.pres-pill.accent:hover {
+  background: linear-gradient(135deg, rgba(234, 88, 12, 0.4) 0%, rgba(249, 115, 22, 0.5) 100%);
+  box-shadow: 0 0 12px rgba(249, 115, 22, 0.4);
+}
+
+.pres-pill.backend {
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.2) 0%, rgba(59, 130, 246, 0.3) 100%);
+  border-color: rgba(59, 130, 246, 0.5);
+  color: #BAE6FD;
+}
+
+.pres-pill.backend:hover {
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.35) 0%, rgba(59, 130, 246, 0.45) 100%);
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.4);
+}
+
+.pres-pill.team {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.2) 0%, rgba(139, 92, 246, 0.3) 100%);
+  border-color: rgba(168, 85, 247, 0.5);
+  color: #E9D5FF;
+}
+
+.pres-pill.team:hover {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.35) 0%, rgba(139, 92, 246, 0.45) 100%);
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.4);
+}
+
+/* Modal for Team Presentation Credits */
+.pres-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.pres-modal-backdrop.active {
+  display: flex;
+}
+
+.pres-modal-dialog {
+  background: #0F172A;
+  border: 2px solid rgba(255, 215, 0, 0.3);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 680px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+  padding: 28px;
+  box-sizing: border-box;
+  color: #F8FAFC;
+  animation: presModalIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes presModalIn {
+  from { opacity: 0; transform: scale(0.95) translateY(10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.pres-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 14px;
+}
+
+.pres-modal-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pres-modal-close {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: #94A3B8;
+  font-size: 18px;
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.pres-modal-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #FFFFFF;
+}
+
+.pres-team-card {
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 14px;
+  transition: border-color 0.2s;
+}
+
+.pres-team-card:hover {
+  border-color: rgba(255, 215, 0, 0.4);
+}
+
+.pres-team-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.pres-team-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #F8FAFC;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pres-team-role {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: rgba(255, 215, 0, 0.15);
+  color: #FCD34D;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.pres-team-list {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #CBD5E1;
+}
+
+.pres-team-list li {
+  margin-bottom: 4px;
+}
+
+@media (max-width: 860px) {
+  .pres-hub-inner {
+    justify-content: center;
+  }
+  .pres-title {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+  }
+}
