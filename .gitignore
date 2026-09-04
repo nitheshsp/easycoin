@@ -30,3 +30,10 @@ dist/
 build/
 scratch/
 .system_generated/
+
+# Database Files
+backend/data/*.sqlite
+backend/data/*.sqlite-journal
+backend/data/*.sqlite-wal
+backend/data/*.sqlite-shm
+

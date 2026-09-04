@@ -9,7 +9,37 @@ class EasyTransactionsEngine {
     this.currentFilter = 'all';
     this.searchQuery = '';
     this.loadTransactions();
+    this.syncWithBackend();
   }
+
+  syncWithBackend() {
+    if (typeof window !== 'undefined' && window.EasyAPI && typeof window.EasyAPI.getPassbook === 'function') {
+      window.EasyAPI.getPassbook().then(txs => {
+        if (Array.isArray(txs) && txs.length > 0) {
+          this.transactions = txs.map(t => ({
+            id: t.id,
+            toWho: t.title,
+            recipient: t.recipientId || t.title,
+            minorName: t.category === 'circle' ? t.title : null,
+            when: t.formattedTime || 'Recently',
+            timestamp: new Date(t.timestamp).getTime() || Date.now(),
+            purpose: t.purpose || t.note || 'Verified Bank Transfer',
+            amount: t.amount,
+            type: t.type,
+            category: t.category || (t.type === 'in' ? 'pension' : 'general'),
+            avatar: t.icon || '🪙',
+            method: 'Verified EasyCoin Transfer',
+            status: t.status || 'Completed · Verified'
+          }));
+          this.saveTransactions();
+          this.renderTransactions();
+        }
+      }).catch(e => {
+        console.warn('Could not sync passbook with backend', e);
+      });
+    }
+  }
+
 
   loadTransactions() {
     var saved = localStorage.getItem(this.storageKey);

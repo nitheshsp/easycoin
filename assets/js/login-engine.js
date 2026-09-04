@@ -620,11 +620,16 @@
         const res = await window.EasyAPI.verifySymbolPin(this.selectedSymbols);
         if (res.success) {
           this.handleLoginSuccess(I18N[this.lang].symbolSuccess, res.data?.user);
+        } else {
+          this.speak(res.message || 'Incorrect secret pictures. Please try again.');
+          this.selectedSymbols = [];
+          this.renderSymbolSlots();
         }
       } catch (err) {
         this.handleLoginSuccess(I18N[this.lang].symbolSuccess);
       }
     }
+
 
     // ==========================================
     // Mode 4: Voice Phrase Recognition

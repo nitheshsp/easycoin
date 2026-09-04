@@ -65,9 +65,46 @@ exports.biometricLogin = (req, res) => {
   });
 };
 
+exports.symbolLogin = (req, res) => {
+  const { symbols } = req.body;
+  if (!Array.isArray(symbols) || symbols.length !== 3) {
+    return res.status(400).json({
+      success: false,
+      message: 'Please choose all 3 secret pictures.'
+    });
+  }
+
+  const user = db.getUser();
+  if (user.isFrozen) {
+    return res.status(403).json({
+      success: false,
+      message: 'Account is currently FROZEN due to Emergency SOS Lock.',
+      isFrozen: true
+    });
+  }
+
+  const isValid = db.verifySymbolPin(symbols);
+  if (!isValid) {
+    return res.status(401).json({
+      success: false,
+      message: 'Incorrect secret pictures. Please try again.'
+    });
+  }
+
+  return res.status(200).json({
+    success: true,
+    message: 'Secret picture lock verified successfully',
+    data: {
+      token: 'jwt_mock_easycoin_symbol_auth_8842',
+      user
+    }
+  });
+};
+
 exports.getCurrentUser = (req, res) => {
   return res.status(200).json({
     success: true,
     data: db.getUser()
   });
 };
+

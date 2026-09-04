@@ -8,7 +8,24 @@ class EasyUPICircleEngine {
     this.storageKey = 'easycoin_upi_circle_data';
     this.loadState();
     this.initToastElement();
+    this.syncWithBackend();
   }
+
+  syncWithBackend() {
+    if (typeof window !== 'undefined' && window.EasyAPI && typeof window.EasyAPI.getCircleData === 'function') {
+      window.EasyAPI.getCircleData().then(data => {
+        if (data && data.members && data.members.length > 0) {
+          this.members = data.members;
+          this.pendingRequests = data.pendingRequests || [];
+          this.saveState();
+          this.renderAll();
+        }
+      }).catch(e => {
+        console.warn('Could not sync UPI Circle with backend', e);
+      });
+    }
+  }
+
 
   loadState() {
     var saved = localStorage.getItem(this.storageKey);
@@ -274,6 +291,11 @@ class EasyUPICircleEngine {
       );
     }
 
+    // Sync with Live Backend API
+    if (window.EasyAPI && typeof window.EasyAPI.simulateCircleSpend === 'function') {
+      window.EasyAPI.simulateCircleSpend(member.id, spendToExecute.amount, spendToExecute.merchant, spendToExecute.category);
+    }
+
     // Show non-blocking toast and trigger smooth spoken alert
     var remainingNow = member.monthlyLimit - member.spentThisMonth;
     var toastText = `Verified: ${member.name} paid ₹${spendToExecute.amount} at ${spendToExecute.merchant} (₹${remainingNow} left)`;
@@ -296,9 +318,15 @@ class EasyUPICircleEngine {
     this.saveState();
     this.renderAll();
 
+    // Sync with Live Backend API
+    if (window.EasyAPI && typeof window.EasyAPI.toggleCircleFreeze === 'function') {
+      window.EasyAPI.toggleCircleFreeze(memberId);
+    }
+
     var statusMsg = member.isFrozen
       ? `UPI access for ${member.relation} ${member.name} has been frozen. They cannot make purchases until you unfreeze.`
       : `UPI access for ${member.relation} ${member.name} has been restored and unfreezed.`;
+
 
     this.showToast(member.isFrozen ? `❄️ Frozen: ${member.name}'s card is locked` : `🔓 Unfrozen: ${member.name}'s card is active`, member.isFrozen ? '❄️' : '🔓');
 
@@ -364,6 +392,11 @@ class EasyUPICircleEngine {
     this.saveState();
     this.renderAll();
 
+    // Sync with Live Backend API
+    if (window.EasyAPI && typeof window.EasyAPI.resolveCircleRequest === 'function') {
+      window.EasyAPI.resolveCircleRequest(requestId, true);
+    }
+
     this.showToast(`Approved ₹${req.amount} for ${req.name}`, '✅');
     var speech = `Approved payment of ${req.amount} Rupees for ${req.name} at ${req.merchant}.`;
     if (window.EasyAudio) {
@@ -381,6 +414,11 @@ class EasyUPICircleEngine {
     this.saveState();
     this.renderAll();
 
+    // Sync with Live Backend API
+    if (window.EasyAPI && typeof window.EasyAPI.resolveCircleRequest === 'function') {
+      window.EasyAPI.resolveCircleRequest(requestId, false);
+    }
+
     this.showToast(`Declined request of ₹${req.amount} from ${req.name}`, '✕');
     var speech = `Declined payment request from ${req.name}.`;
     if (window.EasyAudio) {
@@ -392,37 +430,37 @@ class EasyUPICircleEngine {
   // --- Add New Minor Member with Detailed Validation ---
   addMinorMember(name, relation, age, phone, monthlyLimit, perTxLimit, delegationMode, customAvatar) {
     if (!name || name.trim().length < 2) {
-      alert('Please enter a valid minor full name.');
+      this.showToast('Please enter a valid minor full name.', '⚠️');
       return null;
     }
 
     if (!relation) {
-      alert('Please select family relationship.');
+      this.showToast('Please select family relationship.', '⚠️');
       return null;
     }
 
     age = parseInt(age, 10);
     if (isNaN(age) || age < 5 || age >= 18) {
-      alert('Age Requirement: In compliance with RBI & NPCI guidelines, UPI Circle minor delegation is exclusively for children between 5 and 17 years old. Individuals 18 or older must open an independent bank account.');
+      this.showToast('NPCI Requirement: UPI Circle minor delegation is exclusively for children between 5 and 17 years old.', '⚠️');
       return null;
     }
 
     monthlyLimit = parseInt(monthlyLimit, 10) || 2000;
     if (monthlyLimit < 100 || monthlyLimit > 15000) {
-      alert('Limit Error: Monthly spending allowance must be between ₹100 and ₹15,000 (NPCI regulatory maximum).');
+      this.showToast('Monthly spending allowance must be between ₹100 and ₹15,000.', '⚠️');
       return null;
     }
 
     perTxLimit = parseInt(perTxLimit, 10) || Math.min(500, monthlyLimit);
     if (perTxLimit < 50 || perTxLimit > monthlyLimit || perTxLimit > 5000) {
-      alert(`Per-Transaction Limit: Must be between ₹50 and ₹${Math.min(5000, monthlyLimit)}.`);
+      this.showToast(`Per-Transaction Limit: Must be between ₹50 and ₹${Math.min(5000, monthlyLimit)}.`, '⚠️');
       return null;
     }
 
     // Clean phone number
     var cleanPhone = (phone || '').replace(/\D/g, '');
     if (cleanPhone && cleanPhone.length !== 10) {
-      alert('Please enter a valid 10-digit mobile number for the minor or leave blank.');
+      this.showToast('Please enter a valid 10-digit mobile number for the minor.', '⚠️');
       return null;
     }
     if (!cleanPhone) {
@@ -461,8 +499,14 @@ class EasyUPICircleEngine {
     this.saveState();
     this.renderAll();
 
+    // Sync with Live Backend API
+    if (window.EasyAPI && typeof window.EasyAPI.addCircleMember === 'function') {
+      window.EasyAPI.addCircleMember(newMember);
+    }
+
     return newMember;
   }
+
 
   // --- Show In-Modal Success Screen with Done Button ---
   showSuccessConfirmation(member) {
@@ -631,7 +675,7 @@ class EasyUPICircleEngine {
     var tcCheck = document.getElementById('mTcCheck');
 
     if (!tcCheck || !tcCheck.checked) {
-      alert('Please agree to the NPCI Terms & Conditions to enable delegated access.');
+      this.showToast('Please agree to the NPCI Terms & Conditions to enable delegated access.', '⚠️');
       return;
     }
 
@@ -652,7 +696,7 @@ class EasyUPICircleEngine {
 
     newLimit = parseInt(newLimit, 10);
     if (isNaN(newLimit) || newLimit < 100 || newLimit > 15000) {
-      alert('Allowance Limit must be between ₹100 and ₹15,000 as per NPCI rules.');
+      this.showToast('Allowance Limit must be between ₹100 and ₹15,000 as per NPCI rules.', '⚠️');
       return;
     }
 
@@ -664,6 +708,11 @@ class EasyUPICircleEngine {
     this.saveState();
     this.renderAll();
 
+    // Sync with Live Backend API
+    if (window.EasyAPI && typeof window.EasyAPI.updateCircleLimit === 'function') {
+      window.EasyAPI.updateCircleLimit(memberId, newLimit);
+    }
+
     this.showToast(`Updated limit for ${member.name}: ₹${newLimit}`, '✏️');
     var speech = `Updated ${member.name}'s monthly allowance to ${newLimit} Rupees.`;
     if (window.EasyAudio) window.EasyAudio.speak(speech);
@@ -673,11 +722,41 @@ class EasyUPICircleEngine {
     var member = this.members.find(m => m.id === memberId);
     if (!member) return;
 
-    var input = prompt(`Enter new monthly allowance limit for ${member.name} (Max ₹15,000 as per NPCI guidelines):`, member.monthlyLimit);
-    if (input !== null) {
-      this.updateLimit(memberId, input);
-    }
+    var existing = document.getElementById('circleLimitPromptOverlay');
+    if (existing) existing.remove();
+
+    var overlay = document.createElement('div');
+    overlay.id = 'circleLimitPromptOverlay';
+    overlay.className = 'quick-tx-modal-overlay active';
+    overlay.style.zIndex = '99999';
+    overlay.innerHTML = `
+      <div class="quick-tx-modal-sheet" style="max-width:400px; text-align:center;">
+        <div style="font-size:36px; margin-bottom:8px;">✏️</div>
+        <h3 style="margin:0 0 6px; font-size:18px; font-weight:800; color:var(--dlr900);">Update Monthly Limit</h3>
+        <p style="margin:0 0 16px; font-size:13px; color:var(--dlr700);">Set new monthly spending allowance for <b>${member.name}</b> (₹100 - ₹15,000):</p>
+        <div style="position:relative; margin-bottom:16px;">
+          <span style="position:absolute; left:16px; top:50%; transform:translateY(-50%); font-size:18px; font-weight:800; color:var(--dlr900);">₹</span>
+          <input type="number" id="newCircleLimitInput" value="${member.monthlyLimit}" min="100" max="15000" style="width:100%; box-sizing:border-box; padding:12px 12px 12px 38px; font-size:20px; font-weight:800; border-radius:12px; border:2px solid var(--dlr300, #cbd5e1); outline:none; background:#fff; color:var(--dlr900);">
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <button type="button" id="cancelLimitBtn" style="padding:12px; border-radius:12px; border:1px solid var(--dlr300, #cbd5e1); background:#F1F5F9; font-weight:700; cursor:pointer;">Cancel</button>
+          <button type="button" id="saveLimitBtn" style="padding:12px; border-radius:12px; border:none; background:var(--dlr600, #059669); color:#fff; font-weight:800; cursor:pointer;">Save Limit</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+
+    var inputEl = overlay.querySelector('#newCircleLimitInput');
+    if (inputEl) inputEl.focus();
+
+    overlay.querySelector('#cancelLimitBtn').onclick = () => overlay.remove();
+    overlay.querySelector('#saveLimitBtn').onclick = () => {
+      var val = inputEl ? inputEl.value : '';
+      overlay.remove();
+      this.updateLimit(memberId, val);
+    };
   }
+
 
   // --- Modals Management ---
   openTermsModal() {

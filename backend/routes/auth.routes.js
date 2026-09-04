@@ -15,7 +15,11 @@ router.post('/verify-otp', authController.verifyOTP);
 // POST /api/auth/biometric-login
 router.post('/biometric-login', authController.biometricLogin);
 
+// POST /api/auth/symbol-login
+router.post('/symbol-login', authController.symbolLogin);
+
 // GET /api/auth/me
 router.get('/me', authController.getCurrentUser);
 
 module.exports = router;
+

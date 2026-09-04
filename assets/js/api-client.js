@@ -158,10 +158,29 @@ class EasyAPIClient {
   }
 
   async verifySymbolPin(symbols) {
-    // 3 secret symbols check (e.g. ☀️ Sun, 🐄 Cow, 🪔 Diya)
     if (!Array.isArray(symbols) || symbols.length < 3) {
       return { success: false, message: 'Please choose all 3 secret pictures.' };
     }
+
+    if (this.isLive) {
+      try {
+        const res = await fetch(`${this.baseUrl}/auth/symbol-login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ symbols })
+        });
+        const json = await res.json();
+        if (json.success && json.data?.token) {
+          localStorage.setItem('easycoin_auth_token', json.data.token);
+          localStorage.setItem('easycoin_user_session', JSON.stringify(json.data.user));
+        }
+        return json;
+      } catch (e) {
+        console.warn('Live symbol-login failed, using mock fallback', e);
+      }
+    }
+
+    // Resilient local fallback
     const user = {
       id: 'usr_senior_01',
       name: 'Harish Chandra',
@@ -184,6 +203,7 @@ class EasyAPIClient {
     localStorage.removeItem('easycoin_auth_token');
     localStorage.removeItem('easycoin_user_session');
   }
+
 
   // Module 2: Account & Balance
   async getBalance() {
@@ -370,6 +390,49 @@ class EasyAPIClient {
     }
     return { success: true, simulated: true };
   }
+
+  async updateCircleLimit(memberId, newLimit) {
+    if (this.isLive) {
+      try {
+        const res = await fetch(`${this.baseUrl}/circle/members/${memberId}/limit`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ newLimit })
+        });
+        return await res.json();
+      } catch (e) { console.warn(e); }
+    }
+    return { success: true, simulated: true };
+  }
+
+  async simulateCircleSpend(memberId, amount, merchant, category) {
+    if (this.isLive) {
+      try {
+        const res = await fetch(`${this.baseUrl}/circle/simulate-spend`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: memberId, amount, merchant, category })
+        });
+        return await res.json();
+      } catch (e) { console.warn(e); }
+    }
+    return { success: true, simulated: true };
+  }
+
+  async resolveCircleRequest(requestId, approved) {
+    if (this.isLive) {
+      try {
+        const res = await fetch(`${this.baseUrl}/circle/requests/${requestId}/resolve`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ approved })
+        });
+        return await res.json();
+      } catch (e) { console.warn(e); }
+    }
+    return { success: true, simulated: true };
+  }
 }
 
 window.EasyAPI = new EasyAPIClient();
+

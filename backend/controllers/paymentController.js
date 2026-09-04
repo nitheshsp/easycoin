@@ -261,7 +261,7 @@ exports.payBillById = (req, res) => {
 
   const newBalance = currentBalance - bill.amount;
   db.setBalance(newBalance);
-  db.payBill(id);
+  const updatedBill = db.payBill(id);
 
   const tx = {
     id: 'tx_bill_' + Date.now(),
@@ -280,13 +280,14 @@ exports.payBillById = (req, res) => {
     success: true,
     message: `${bill.title} paid successfully.`,
     data: {
-      bill,
+      bill: updatedBill || bill,
       transaction: tx,
       remainingBalance: newBalance,
       spokenResponse: `Success! Your ${bill.title} of ${bill.amount} Rupees has been paid.`
     }
   });
 };
+
 
 exports.deleteBill = (req, res) => {
   const { id } = req.params;
