@@ -1077,3 +1077,131 @@ body.high-contrast-mode .btn-jumbo-action {
     justify-content: center;
   }
 }
+
+/* ==========================================================================
+   Primary Auth Switcher & First-Time Sign Up Styles
+   ========================================================================== */
+.auth-primary-switcher {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  padding: 6px;
+  border-radius: 20px;
+  border: 1.5px solid rgba(0, 61, 209, 0.15);
+  box-shadow: 0 4px 20px rgba(0, 8, 27, 0.05);
+  margin-bottom: 24px;
+}
+
+body.dark-mode .auth-primary-switcher,
+body.dark-theme .auth-primary-switcher {
+  background: rgba(30, 41, 59, 0.7);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.auth-primary-tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 18px;
+  border-radius: 16px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted, #64748B);
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.auth-primary-tab:hover {
+  color: #0047E0;
+  background: rgba(0, 71, 224, 0.06);
+}
+
+.auth-primary-tab.active {
+  background: #0047E0;
+  color: #FFFFFF;
+  box-shadow: 0 4px 16px rgba(0, 71, 224, 0.35);
+}
+
+.auth-primary-tab.signup.active {
+  background: linear-gradient(135deg, #059669 0%, #10B981 100%);
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.35);
+}
+
+/* User Profile Picker Chips (For Returning Users) */
+.user-select-tray {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 0 14px;
+  margin-bottom: 12px;
+}
+
+.user-select-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1.5px solid #CBD5E1;
+  background: #FFFFFF;
+  color: var(--text-main, #0F172A);
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.user-select-chip:hover {
+  border-color: #0047E0;
+  background: #EFF6FF;
+}
+
+.user-select-chip.active {
+  background: #0047E0;
+  color: #FFFFFF;
+  border-color: #0047E0;
+  box-shadow: 0 2px 10px rgba(0, 71, 224, 0.25);
+}
+
+/* Sign Up Avatar Chips */
+.su-avatar-chips {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.su-avatar-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 14px;
+  border: 2px solid #CBD5E1;
+  background: #FFFFFF;
+  color: var(--text-main, #0F172A);
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.su-avatar-chip:hover {
+  border-color: #10B981;
+  background: #ECFDF5;
+}
+
+.su-avatar-chip.active {
+  background: #ECFDF5;
+  border-color: #10B981;
+  color: #065F46;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+  transform: translateY(-2px);
+}
+

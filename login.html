@@ -86,8 +86,30 @@
       </div>
     </aside>
 
-    <!-- Quick Senior Profile Card -->
-    <section class="senior-profile-quickcard" aria-label="Active Senior Account">
+    <!-- Master Primary Switcher (Sign In vs Sign Up) -->
+    <div class="auth-primary-switcher">
+      <button class="auth-primary-tab active" id="btnMainTabSignIn" type="button" onclick="window.EasyLogin && window.EasyLogin.switchMainMode('signin')">
+        <span>🔐 Sign In (Existing User)</span>
+      </button>
+      <button class="auth-primary-tab signup" id="btnMainTabSignUp" type="button" onclick="window.EasyLogin && window.EasyLogin.switchMainMode('signup')">
+        <span>✍️ Sign Up (First-Time User)</span>
+      </button>
+    </div>
+
+    <!-- ===================================================================
+         EXISTING USER SIGN IN CONTAINER
+         =================================================================== -->
+    <div id="sectionSignIn">
+      <!-- User Profile Picker Tray (Shows Registered Senior Accounts) -->
+      <div style="margin-bottom:8px;">
+        <div style="font-size:12px; font-weight:800; color:var(--login-muted); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:6px;">
+          👥 Switch Account or Pick Profile:
+        </div>
+        <div class="user-select-tray" id="userSelectTray"></div>
+      </div>
+
+      <!-- Quick Senior Profile Card -->
+      <section class="senior-profile-quickcard" id="seniorProfileCard" aria-label="Active Senior Account">
       <div class="senior-user-meta">
         <div class="senior-avatar-badge" aria-hidden="true">👴</div>
         <div>
@@ -308,6 +330,132 @@
       </section>
 
     </article>
+    </div> <!-- End #sectionSignIn -->
+
+    <!-- ===================================================================
+         FIRST-TIME USER SIGN UP SECTION
+         =================================================================== -->
+    <section class="signup-main-container login-glass-card" id="sectionSignUp" style="display:none; padding:32px clamp(20px, 4vw, 40px); border-radius:28px;">
+      <div class="signup-header-banner" style="background:linear-gradient(135deg, rgba(5,150,105,0.1) 0%, rgba(16,185,129,0.05) 100%); border:1.5px solid rgba(16,185,129,0.3); border-radius:20px; padding:18px; margin-bottom:24px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div style="font-size:34px;">✍️</div>
+          <div>
+            <div style="font-size:18px; font-weight:800; color:#065F46;">First-Time Senior Registration</div>
+            <div style="font-size:13px; color:#047857;">Create your zero-password, voice-assisted EasyCoin account</div>
+          </div>
+        </div>
+        <button type="button" class="acc-tool-btn" onclick="window.EasyLogin && window.EasyLogin.speakSignUpHelp()" style="font-size:13px; padding:8px 14px; background:#ECFDF5; color:#065F46; border:1.5px solid #6EE7B7;">
+          🔊 Speak Form Guide
+        </button>
+      </div>
+
+      <form id="seniorSignUpForm" onsubmit="event.preventDefault(); window.EasyLogin && window.EasyLogin.handleSignUpSubmit();">
+        <!-- Step 1: Full Name & Avatar -->
+        <div class="su-form-group" style="margin-bottom:20px;">
+          <label class="su-label" style="display:block; font-size:15px; font-weight:800; color:var(--text-main, #0F172A); margin-bottom:8px;">
+            👤 What is your full name?
+          </label>
+          <div style="display:flex; gap:10px;">
+            <input type="text" id="suName" required placeholder="e.g. Satyajit Sharma" class="su-input" style="flex:1; font-size:16px; font-weight:700; padding:14px 18px; border-radius:16px; border:2px solid #CBD5E1; outline:none; background:#FFFFFF;" />
+            <button type="button" class="su-voice-btn" id="suVoiceBtn" onclick="window.EasyLogin && window.EasyLogin.voiceInputName()" title="Speak Your Name" style="background:#0047E0; color:#FFFFFF; border:none; border-radius:16px; padding:0 20px; font-size:15px; font-weight:800; cursor:pointer; display:flex; align-items:center; gap:6px;">
+              🎙️ Speak
+            </button>
+          </div>
+          <span style="font-size:12px; color:#64748B; margin-top:5px; display:block;">Tap the blue mic to speak your name if you prefer not to type.</span>
+        </div>
+
+        <!-- Step 2: Choose Senior Avatar -->
+        <div class="su-form-group" style="margin-bottom:20px;">
+          <label class="su-label" style="display:block; font-size:15px; font-weight:800; color:var(--text-main, #0F172A); margin-bottom:8px;">
+            🎨 Choose Your Picture / Avatar:
+          </label>
+          <div class="su-avatar-chips">
+            <button type="button" class="su-avatar-chip active" data-avatar="👴" onclick="window.EasyLogin.selectAvatar('👴', this)">
+              <span style="font-size:26px;">👴</span>
+              <span>Grandfather</span>
+            </button>
+            <button type="button" class="su-avatar-chip" data-avatar="👵" onclick="window.EasyLogin.selectAvatar('👵', this)">
+              <span style="font-size:26px;">👵</span>
+              <span>Grandmother</span>
+            </button>
+            <button type="button" class="su-avatar-chip" data-avatar="👨" onclick="window.EasyLogin.selectAvatar('👨', this)">
+              <span style="font-size:26px;">👨</span>
+              <span>Senior Man</span>
+            </button>
+            <button type="button" class="su-avatar-chip" data-avatar="👩" onclick="window.EasyLogin.selectAvatar('👩', this)">
+              <span style="font-size:26px;">👩</span>
+              <span>Senior Woman</span>
+            </button>
+            <button type="button" class="su-avatar-chip" data-avatar="🧕" onclick="window.EasyLogin.selectAvatar('🧕', this)">
+              <span style="font-size:26px;">🧕</span>
+              <span>Elder</span>
+            </button>
+          </div>
+          <input type="hidden" id="suAvatar" value="👴" />
+        </div>
+
+        <!-- Step 3: Mobile Number & Age -->
+        <div style="display:grid; grid-template-columns: 2fr 1fr; gap:14px; margin-bottom:20px;">
+          <div class="su-form-group">
+            <label class="su-label" style="display:block; font-size:15px; font-weight:800; color:var(--text-main, #0F172A); margin-bottom:8px;">
+              📱 Mobile Phone Number
+            </label>
+            <input type="tel" id="suPhone" required maxlength="10" placeholder="e.g. 9876543210" class="su-input" style="width:100%; box-sizing:border-box; font-size:16px; font-weight:700; padding:14px 18px; border-radius:16px; border:2px solid #CBD5E1; background:#FFFFFF;" />
+          </div>
+
+          <div class="su-form-group">
+            <label class="su-label" style="display:block; font-size:15px; font-weight:800; color:var(--text-main, #0F172A); margin-bottom:8px;">
+              🎂 Your Age
+            </label>
+            <input type="number" id="suAge" required min="18" max="110" value="70" class="su-input" style="width:100%; box-sizing:border-box; font-size:16px; font-weight:700; padding:14px 18px; border-radius:16px; border:2px solid #CBD5E1; background:#FFFFFF;" />
+          </div>
+        </div>
+
+        <!-- Step 4: Family Guardian -->
+        <div style="background:#FEF2F2; border:1.5px solid #FCA5A5; border-radius:20px; padding:18px; margin-bottom:20px;">
+          <div style="font-size:14px; font-weight:800; color:#991B1B; margin-bottom:4px; display:flex; align-items:center; gap:8px;">
+            <span>🛡️ Trusted Family Guardian (For 24/7 SOS & Emergency Alerts)</span>
+          </div>
+          <div style="font-size:12.5px; color:#7F1D1D; margin-bottom:14px;">
+            This family member will receive your 1-tap emergency alerts and live GPS tracking if you suspect fraud.
+          </div>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+            <div>
+              <label style="font-size:12.5px; font-weight:700; color:#7F1D1D; display:block; margin-bottom:4px;">Guardian Name</label>
+              <input type="text" id="suGuardianName" required placeholder="e.g. Daughter Priya" style="width:100%; box-sizing:border-box; font-size:15px; font-weight:700; padding:12px 16px; border-radius:14px; border:1.5px solid #F87171; background:#FFFFFF;" />
+            </div>
+            <div>
+              <label style="font-size:12.5px; font-weight:700; color:#7F1D1D; display:block; margin-bottom:4px;">Guardian Phone</label>
+              <input type="tel" id="suGuardianPhone" required maxlength="10" placeholder="e.g. 9811223344" style="width:100%; box-sizing:border-box; font-size:15px; font-weight:700; padding:12px 16px; border-radius:14px; border:1.5px solid #F87171; background:#FFFFFF;" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 5: Security PIN & Welcome Demo Balance -->
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:14px; margin-bottom:24px;">
+          <div class="su-form-group">
+            <label class="su-label" style="display:block; font-size:15px; font-weight:800; color:var(--text-main, #0F172A); margin-bottom:8px;">
+              🔢 4-Digit Easy PIN
+            </label>
+            <input type="password" id="suPin" required maxlength="4" placeholder="••••" value="1234" class="su-input" style="width:100%; box-sizing:border-box; font-size:20px; font-weight:900; letter-spacing:6px; padding:14px 18px; border-radius:16px; border:2px solid #CBD5E1; text-align:center; background:#FFFFFF;" />
+          </div>
+
+          <div class="su-form-group">
+            <label class="su-label" style="display:block; font-size:15px; font-weight:800; color:var(--text-main, #0F172A); margin-bottom:8px;">
+              🪙 Welcome Demo Credit (₹)
+            </label>
+            <input type="number" id="suBalance" required min="1000" max="100000" value="10000" class="su-input" style="width:100%; box-sizing:border-box; font-size:17px; font-weight:800; padding:14px 18px; border-radius:16px; border:2px solid #CBD5E1; background:#FFFFFF;" />
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn-jumbo-action" style="background:linear-gradient(135deg, #059669 0%, #10B981 100%); box-shadow:0 8px 24px rgba(16,185,129,0.35); font-size:18px; padding:18px;">
+          <span>✓ Create My Safe Account &amp; Open Banking</span>
+          <span>→</span>
+        </button>
+      </form>
+    </section>
 
     <!-- Emergency Guardian Assistance Card -->
     <footer class="guardian-help-footer" role="contentinfo">
@@ -329,6 +477,7 @@
   <!-- Core JavaScript Engines -->
   <script src="assets/js/audio-synth.js"></script>
   <script src="assets/js/api-client.js"></script>
+  <script src="assets/js/auth-guard.js"></script>
   <script src="assets/js/liquid-glass.js"></script>
   <script src="assets/js/login-engine.js"></script>
 </body>

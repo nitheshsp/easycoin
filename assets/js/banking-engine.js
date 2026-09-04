@@ -5,7 +5,25 @@
 (function () {
   'use strict';
 
-  var appBalance = 14250;
+  var currentUser = null;
+  try {
+    var sessionRaw = localStorage.getItem('easycoin_user_session');
+    if (sessionRaw) currentUser = JSON.parse(sessionRaw);
+  } catch (e) {}
+
+  if (!currentUser) {
+    currentUser = {
+      name: 'Harish Chandra',
+      age: 78,
+      phone: '9876543210',
+      avatar: '👴',
+      balance: 14250,
+      guardianName: 'Daughter Ananya',
+      guardianPhone: '+91 98765 43210'
+    };
+  }
+
+  var appBalance = (typeof currentUser.balance === 'number') ? currentUser.balance : 14250;
   var enteredAmount = '';
   var activeRecipient = { name: 'Son Rahul', avatar: '👨‍🦱', rel: 'Son' };
 
@@ -28,8 +46,40 @@
       if (balEl) balEl.textContent = '₹ ' + appBalance.toLocaleString('en-IN');
       var sideBal = document.getElementById('sidebarBalVal');
       if (sideBal) sideBal.textContent = '₹ ' + appBalance.toLocaleString('en-IN');
+      var pbBal = document.getElementById('pbStatBalance');
+      if (pbBal) pbBal.textContent = '₹ ' + appBalance.toLocaleString('en-IN');
+
+      // Persist balance changes to user session
+      currentUser.balance = appBalance;
+      localStorage.setItem('easycoin_user_session', JSON.stringify(currentUser));
+      if (window.EasyGuard && window.EasyGuard.setCurrentUser) {
+        window.EasyGuard.setCurrentUser(currentUser);
+      }
     }
     syncBalanceUI();
+
+    function syncPersonalizedUI() {
+      var sideAv = document.getElementById('sidebarUserAvatar');
+      var sideName = document.getElementById('sidebarUserName');
+      var sideStatus = document.getElementById('sidebarUserStatus');
+      if (sideAv) sideAv.textContent = currentUser.avatar || '👴';
+      if (sideName) sideName.textContent = currentUser.name;
+      if (sideStatus) sideStatus.textContent = '● Age ' + (currentUser.age || 70) + ' · ' + (currentUser.phone || '');
+
+      var sosDesc = document.getElementById('sosGuardianDesc');
+      var sosTitle = document.getElementById('sosGuardianTileTitle');
+      var sosSub = document.getElementById('sosGuardianTileSub');
+      if (sosDesc && currentUser.guardianName) {
+        sosDesc.textContent = 'Received a suspicious call or suspect fraud? 1-Tap instantly locks your account and alerts ' + currentUser.guardianName + ' with live GPS coordinates.';
+      }
+      if (sosTitle && currentUser.guardianName) {
+        sosTitle.textContent = 'Call ' + currentUser.guardianName;
+      }
+      if (sosSub && currentUser.guardianPhone) {
+        sosSub.textContent = 'Primary Guardian (' + currentUser.guardianPhone + ')';
+      }
+    }
+    syncPersonalizedUI();
 
     // Balance voice readout
     if (speakBalBtn) {

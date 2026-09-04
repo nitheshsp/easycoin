@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="assets/css/upi-circle.css">
   <link rel="stylesheet" href="assets/css/transactions.css">
   <link rel="stylesheet" href="assets/css/sidebar.css">
+  <script src="assets/js/auth-guard.js"></script>
 </head>
 <body class="standalone-app-body app-sidebar-layout">
 
@@ -28,6 +29,20 @@
           <div class="sidebar-brand-sub">Senior &amp; Visual Assist</div>
         </div>
       </a>
+    </div>
+
+    <!-- Active Senior User Profile Badge -->
+    <div class="sidebar-user-card" id="sidebarUserCard" style="background:rgba(0,61,209,0.06); border:1.5px solid rgba(0,61,209,0.15); border-radius:16px; padding:10px 12px; margin-bottom:16px; display:flex; align-items:center; justify-content:space-between;">
+      <div style="display:flex; align-items:center; gap:10px; min-width:0;">
+        <span style="font-size:26px;" id="sidebarUserAvatar">👴</span>
+        <div style="min-width:0;">
+          <div style="font-size:13.5px; font-weight:800; color:var(--text-main,#0F172A); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" id="sidebarUserName">Harish Chandra</div>
+          <div style="font-size:11px; font-weight:700; color:#16A34A;" id="sidebarUserStatus">● Verified Senior</div>
+        </div>
+      </div>
+      <button type="button" onclick="window.EasyGuard && window.EasyGuard.logout()" title="Sign Out / Switch Account" style="background:#FEE2E2; color:#DC2626; border:1px solid #FCA5A5; font-size:11px; font-weight:800; padding:4px 8px; border-radius:8px; cursor:pointer; flex-shrink:0;">
+        🚪 Exit
+      </button>
     </div>
 
     <!-- Quick Balance Widget -->
@@ -120,14 +135,14 @@
         <span>Voice Guide</span>
       </button>
 
-      <a href="login.html" class="sidebar-ctrl-btn" title="Open Accessible Senior Login">
-        <span>🔐</span>
-        <span>Senior Sign In</span>
-      </a>
+      <button type="button" class="sidebar-ctrl-btn" onclick="window.EasyGuard && window.EasyGuard.logout()" title="Sign Out &amp; Switch Account" style="color:#DC2626; border-color:#FCA5A5;">
+        <span>🚪</span>
+        <span>Sign Out / Switch</span>
+      </button>
 
       <a href="index.html" class="sidebar-ctrl-btn" style="color:var(--text-muted);">
         <span>←</span>
-        <span>Exit to Home</span>
+        <span>Home Portal</span>
       </a>
     </div>
   </aside>
@@ -145,9 +160,9 @@
       </button>
       <div style="font-weight:900; color:var(--primary-navy, #00174E); font-size:16px;">EasyCoin Banking</div>
       <div style="display:flex; align-items:center; gap:8px;">
-        <a href="login.html" class="mobile-menu-btn" style="text-decoration:none; padding:6px 10px; font-size:13px;" title="Sign In">
-          🔐 Sign In
-        </a>
+        <button type="button" class="mobile-menu-btn" onclick="window.EasyGuard && window.EasyGuard.logout()" style="padding:6px 10px; font-size:12px; color:#DC2626; border-color:#FCA5A5;" title="Sign Out">
+          🚪 Exit
+        </button>
         <div class="theme-switch-wrap" title="Toggle Light / Dark Mode">
           <label class="theme-slider-switch">
             <input type="checkbox" class="theme-toggle-input" aria-label="Toggle Dark and Light mode">
@@ -505,8 +520,8 @@
           <span class="sos-pulse-dot"></span> 24/7 Emergency Anti-Fraud Shield
         </div>
         <div class="sos-main-title">Emergency Account Freeze & SOS Alert</div>
-        <div class="sos-main-desc">
-          Received a suspicious call or suspect fraud? 1-Tap instantly locks your account and alerts Daughter Ananya with live GPS coordinates.
+        <div class="sos-main-desc" id="sosGuardianDesc">
+          Received a suspicious call or suspect fraud? 1-Tap instantly locks your account and alerts your trusted guardian with live GPS coordinates.
         </div>
         <button class="sos-big-trigger-btn" onclick="window.EasySOS.triggerSOSFlow('PANIC_FREEZE')">
           <span>🔒 1-TAP FREEZE MY ACCOUNT NOW</span>
@@ -518,12 +533,12 @@
         <div class="sos-action-tile" onclick="window.EasySOS.triggerSOSFlow('SCAM_CALL')">
           <span class="sos-tile-icon">⚠️</span>
           <div class="sos-tile-title">Scam Call Alert</div>
-          <div class="sos-tile-sub">Lock & Record</div>
+          <div class="sos-tile-sub">Lock &amp; Record</div>
         </div>
         <div class="sos-action-tile" onclick="window.EasySOS.callGuardian()">
-          <span class="sos-tile-icon">👩‍⚕️</span>
-          <div class="sos-tile-title">Call Daughter Ananya</div>
-          <div class="sos-tile-sub">Primary Guardian</div>
+          <span class="sos-tile-icon" id="sosGuardianTileIcon">👩‍⚕️</span>
+          <div class="sos-tile-title" id="sosGuardianTileTitle">Call Daughter Ananya</div>
+          <div class="sos-tile-sub" id="sosGuardianTileSub">Primary Guardian</div>
         </div>
         <div class="sos-action-tile" onclick="window.EasySOS.callHelpline()">
           <span class="sos-tile-icon">📞</span>

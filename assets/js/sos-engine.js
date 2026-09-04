@@ -15,6 +15,21 @@ class EasySOSEngine {
       phone: '+919811223344',
       avatar: '👩‍⚕️'
     };
+
+    try {
+      var userRaw = localStorage.getItem('easycoin_user_session');
+      if (userRaw) {
+        var u = JSON.parse(userRaw);
+        if (u.guardianName) {
+          this.guardian = {
+            name: u.guardianName,
+            relation: 'Primary Family Guardian',
+            phone: u.guardianPhone || '+919811223344',
+            avatar: '🛡️'
+          };
+        }
+      }
+    } catch (e) {}
   }
 
   // 1. Trigger Emergency SOS with safety countdown

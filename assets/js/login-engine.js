@@ -159,6 +159,8 @@
     constructor() {
       this.lang = 'en';
       this.currentMode = 'biometric'; // 'biometric', 'otp', 'symbol', 'voice'
+      this.mainMode = 'signin'; // 'signin' or 'signup'
+      this.activeUser = null;
       this.otpCode = '';
       this.generatedOtp = '4821';
       this.selectedSymbols = [];
@@ -170,6 +172,7 @@
       this.initSpeechRecognition();
       this.bindEvents();
       this.initAccessibilityDefaults();
+      this.initMainModeAndUsers();
     }
 
     // Helper: Audio Announcement
@@ -692,14 +695,20 @@
       const defaultUser = {
         name: 'Harish Chandra',
         age: 78,
-        phone: '+919876543210',
+        phone: '9876543210',
         balance: 14250,
-        avatar: '👴'
+        avatar: '👴',
+        guardianName: 'Daughter Ananya',
+        guardianPhone: '+91 98765 43210'
       };
 
-      const finalUser = user || defaultUser;
-      localStorage.setItem('easycoin_auth_token', 'jwt_session_senior_' + Date.now());
-      localStorage.setItem('easycoin_user_session', JSON.stringify(finalUser));
+      const finalUser = user || this.activeUser || defaultUser;
+      if (window.EasyGuard && window.EasyGuard.setCurrentUser) {
+        window.EasyGuard.setCurrentUser(finalUser);
+      } else {
+        localStorage.setItem('easycoin_auth_token', 'jwt_session_senior_' + Date.now());
+        localStorage.setItem('easycoin_user_session', JSON.stringify(finalUser));
+      }
 
       this.updateSpokenBannerText('🎉 ' + spokenMessage);
       this.speak(spokenMessage, () => {
@@ -711,6 +720,187 @@
       setTimeout(() => {
         window.location.href = 'app.html';
       }, 1600);
+    }
+
+    // ==========================================
+    // Dual Mode Switcher & First-Time Sign Up
+    // ==========================================
+    initMainModeAndUsers() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const reqMode = urlParams.get('mode');
+      if (reqMode === 'signup') {
+        this.switchMainMode('signup');
+      } else {
+        this.switchMainMode('signin');
+      }
+
+      this.populateUserTray();
+    }
+
+    populateUserTray() {
+      const tray = document.getElementById('userSelectTray');
+      if (!tray) return;
+
+      const users = window.EasyGuard ? window.EasyGuard.getAllUsers() : [
+        { name: 'Harish Chandra', age: 78, phone: '9876543210', avatar: '👴', balance: 14250, guardianName: 'Daughter Ananya', guardianPhone: '+91 98765 43210' }
+      ];
+
+      tray.innerHTML = '';
+      users.forEach((u, idx) => {
+        const chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = 'user-select-chip' + (idx === 0 ? ' active' : '');
+        chip.innerHTML = `<span>${u.avatar || '👴'}</span><span>${u.name}</span>`;
+        chip.onclick = () => this.selectRegisteredUser(u, chip);
+        tray.appendChild(chip);
+      });
+
+      if (users.length > 0) {
+        this.selectRegisteredUser(users[0]);
+      }
+    }
+
+    selectRegisteredUser(u, chipEl = null) {
+      this.activeUser = u;
+
+      if (chipEl) {
+        document.querySelectorAll('.user-select-chip').forEach(c => c.classList.remove('active'));
+        chipEl.classList.add('active');
+      }
+
+      // Update Quick Profile Card
+      const card = document.getElementById('seniorProfileCard');
+      if (card) {
+        const avBadge = card.querySelector('.senior-avatar-badge');
+        const sName = card.querySelector('.senior-name');
+        const sTag = card.querySelector('.senior-tag');
+        if (avBadge) avBadge.textContent = u.avatar || '👴';
+        if (sName) sName.textContent = u.name;
+        if (sTag) sTag.textContent = `Age ${u.age || 70} · +91 ${u.phone}`;
+      }
+
+      // Update Registered Mobile in OTP screen
+      const otpPhoneText = document.querySelector('.otp-phone-text');
+      if (otpPhoneText) {
+        otpPhoneText.textContent = '+91 ' + u.phone;
+      }
+
+      // Update Guardian Assistance in Footer
+      const guardianDesc = document.querySelector('.guardian-help-desc');
+      const guardianCallBtn = document.querySelector('.btn-call-guardian');
+      if (guardianDesc && u.guardianName) {
+        guardianDesc.textContent = `Need help? ${u.guardianName} is your registered family guardian.`;
+      }
+      if (guardianCallBtn && u.guardianName) {
+        guardianCallBtn.href = 'tel:' + (u.guardianPhone || '+919811223344');
+        guardianCallBtn.innerHTML = `<span>📞 Call ${u.guardianName}</span>`;
+      }
+    }
+
+    switchMainMode(mode) {
+      this.mainMode = mode;
+      const btnSignIn = document.getElementById('btnMainTabSignIn');
+      const btnSignUp = document.getElementById('btnMainTabSignUp');
+      const secSignIn = document.getElementById('sectionSignIn');
+      const secSignUp = document.getElementById('sectionSignUp');
+
+      if (mode === 'signup') {
+        if (btnSignIn) btnSignIn.classList.remove('active');
+        if (btnSignUp) btnSignUp.classList.add('active');
+        if (secSignIn) secSignIn.style.display = 'none';
+        if (secSignUp) secSignUp.style.display = 'block';
+        this.updateSpokenBannerText('First-Time Registration. Speak or enter your name to create your account.');
+        this.speak('First time registration. Please tell us your name, phone, and trusted guardian.');
+      } else {
+        if (btnSignUp) btnSignUp.classList.remove('active');
+        if (btnSignIn) btnSignIn.classList.add('active');
+        if (secSignUp) secSignUp.style.display = 'none';
+        if (secSignIn) secSignIn.style.display = 'block';
+        this.updateSpokenBannerText('Welcome back. Choose how you want to sign in.');
+        this.speak('Welcome back to EasyCoin. Please select your sign in method.');
+      }
+    }
+
+    selectAvatar(avatar, btnEl) {
+      const hiddenInput = document.getElementById('suAvatar');
+      if (hiddenInput) hiddenInput.value = avatar;
+      document.querySelectorAll('.su-avatar-chip').forEach(c => c.classList.remove('active'));
+      if (btnEl) btnEl.classList.add('active');
+      if (window.EasyAudio) window.EasyAudio.playClick();
+    }
+
+    voiceInputName() {
+      const voiceBtn = document.getElementById('suVoiceBtn');
+      const nameInput = document.getElementById('suName');
+      if (!nameInput) return;
+
+      if (voiceBtn) voiceBtn.textContent = '🔴 Listening...';
+      this.speak('Please say your full name now.', () => {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (SpeechRecognition) {
+          try {
+            const rec = new SpeechRecognition();
+            rec.lang = 'en-IN';
+            rec.start();
+            rec.onresult = (e) => {
+              const text = e.results[0][0].transcript;
+              nameInput.value = text;
+              if (voiceBtn) voiceBtn.textContent = '🎙️ Speak';
+              this.speak('I heard: ' + text);
+            };
+            rec.onerror = () => {
+              if (voiceBtn) voiceBtn.textContent = '🎙️ Speak';
+            };
+            rec.onend = () => {
+              if (voiceBtn) voiceBtn.textContent = '🎙️ Speak';
+            };
+            return;
+          } catch (err) {}
+        }
+        // Fallback simulated voice
+        setTimeout(() => {
+          nameInput.value = 'Rameshwar Dayal';
+          if (voiceBtn) voiceBtn.textContent = '🎙️ Speak';
+          this.speak('Name recognized: Rameshwar Dayal');
+        }, 1800);
+      });
+    }
+
+    speakSignUpHelp() {
+      this.speak('Registration has 5 quick steps: enter your name, pick an avatar picture, enter your phone and age, add your family guardian for emergency alerts, and choose your 4-digit PIN.');
+    }
+
+    handleSignUpSubmit() {
+      const name = document.getElementById('suName')?.value.trim() || 'Senior User';
+      const avatar = document.getElementById('suAvatar')?.value || '👴';
+      const phone = document.getElementById('suPhone')?.value.trim() || '9876500000';
+      const age = parseInt(document.getElementById('suAge')?.value, 10) || 70;
+      const guardianName = document.getElementById('suGuardianName')?.value.trim() || 'Family Guardian';
+      const guardianPhone = document.getElementById('suGuardianPhone')?.value.trim() || '+91 98765 43210';
+      const pin = document.getElementById('suPin')?.value.trim() || '1234';
+      const balance = parseInt(document.getElementById('suBalance')?.value, 10) || 10000;
+
+      const newUser = {
+        name,
+        avatar,
+        phone,
+        age,
+        guardianName,
+        guardianPhone,
+        pin,
+        balance,
+        symbols: ['☀️', '🐄', '🪔']
+      };
+
+      let registered = newUser;
+      if (window.EasyGuard && window.EasyGuard.registerUser) {
+        registered = window.EasyGuard.registerUser(newUser);
+      } else {
+        localStorage.setItem('easycoin_user_session', JSON.stringify(newUser));
+        localStorage.setItem('easycoin_auth_token', 'jwt_' + Date.now());
+      }
+
+      this.handleLoginSuccess(`Account created successfully for ${name}! Welcome to EasyCoin.`, registered);
     }
   }
 
