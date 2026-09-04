@@ -168,3 +168,27 @@ exports.getAuditLogs = (req, res) => {
   });
 };
 
+exports.updateSettings = (req, res) => {
+  const { approvalRequiredAbove, phone, name, relation } = req.body;
+  const clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '127.0.0.1';
+
+  const updatedSettings = db.updateGuardianSettings({
+    ...(approvalRequiredAbove !== undefined && { approvalRequiredAbove: parseInt(approvalRequiredAbove, 10) }),
+    ...(phone && { phone }),
+    ...(name && { name }),
+    ...(relation && { relation })
+  });
+
+  // Record audit log
+  db.addAuditLog('GUARDIAN_SETTINGS_UPDATED', {
+    updatedSettings
+  }, clientIp, 'usr_senior_01');
+
+  return res.status(200).json({
+    success: true,
+    message: 'Guardian security settings updated successfully.',
+    data: updatedSettings
+  });
+};
+
+

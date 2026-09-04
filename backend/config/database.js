@@ -484,8 +484,26 @@ class DatabaseStore {
   }
 
   // Transactions Ledger
-  getTransactions() {
-    const rows = this.db.prepare('SELECT * FROM transactions WHERE user_id = ? ORDER BY rowid DESC').all('usr_senior_01');
+  getTransactions(filter = {}) {
+    let query = 'SELECT * FROM transactions WHERE user_id = ?';
+    const params = ['usr_senior_01'];
+
+    if (filter.category) {
+      query += ' AND category = ?';
+      params.push(filter.category);
+    }
+    if (filter.search) {
+      query += ' AND (title LIKE ? OR note LIKE ? OR purpose LIKE ?)';
+      const term = `%${filter.search}%`;
+      params.push(term, term, term);
+    }
+    query += ' ORDER BY rowid DESC';
+    if (filter.limit) {
+      query += ' LIMIT ?';
+      params.push(parseInt(filter.limit, 10));
+    }
+
+    const rows = this.db.prepare(query).all(...params);
     return rows.map(r => ({
       id: r.id,
       title: r.title,
@@ -502,6 +520,56 @@ class DatabaseStore {
       utr: r.utr
     }));
   }
+
+  deposit(amount, source = 'Pension Deposit', note = 'Govt. Central Pension Deposit', category = 'pension') {
+    const numAmount = parseInt(amount, 10);
+    if (!numAmount || numAmount <= 0) return null;
+
+    const currentBal = this.getBalance();
+    const newBal = currentBal + numAmount;
+    this.setBalance(newBal);
+
+    const tx = this.addTransaction({
+      id: `tx_dep_${Date.now()}`,
+      title: source,
+      type: 'in',
+      amount: numAmount,
+      timestamp: new Date().toISOString(),
+      formattedTime: 'Just now',
+      icon: category === 'pension' ? '🏛️' : '💰',
+      note,
+      purpose: note,
+      category,
+      status: 'SUCCESS'
+    });
+
+    return {
+      newBalance: newBal,
+      transaction: tx
+    };
+  }
+
+  updateGuardianSettings(settings = {}) {
+    const user = this.getUser();
+    if (!user) return null;
+
+    const updatedGuardian = {
+      ...user.guardian,
+      ...settings
+    };
+
+    if (settings.approvalRequiredAbove !== undefined) {
+      updatedGuardian.approvalRequiredAbove = parseInt(settings.approvalRequiredAbove, 10) || 2000;
+    }
+
+    this.db.prepare('UPDATE users SET guardian_json = ? WHERE id = ?').run(
+      JSON.stringify(updatedGuardian),
+      'usr_senior_01'
+    );
+
+    return updatedGuardian;
+  }
+
 
   addTransaction(tx) {
     const insert = this.db.prepare(`

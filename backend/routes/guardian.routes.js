@@ -25,6 +25,10 @@ router.post('/unfreeze', guardianController.unfreezeAccount);
 // GET /api/guardian/status
 router.get('/status', guardianController.getGuardianStatus);
 
+// PATCH /api/guardian/settings (Customize Approval Threshold & Contact)
+router.patch('/settings', guardianController.updateSettings);
+router.post('/settings', guardianController.updateSettings);
+
 // POST /api/guardian/approve
 router.post('/approve', guardianController.approveTransfer);
 

@@ -4,6 +4,7 @@
  * Responsibilities: Voice OTP, Biometric Login, Senior Session Management
  */
 const db = require('../config/database');
+const authGuard = require('../middleware/authGuard');
 
 exports.requestVoiceOTP = (req, res) => {
   const { phone } = req.body;
@@ -33,12 +34,15 @@ exports.verifyOTP = (req, res) => {
     });
   }
 
+  const user = db.getUser();
+  const token = authGuard.generateToken({ userId: user.id, role: 'senior' });
+
   return res.status(200).json({
     success: true,
     message: 'Authentication successful',
     data: {
-      token: 'jwt_mock_easycoin_senior_token_9921',
-      user: db.getUser()
+      token,
+      user
     }
   });
 };
@@ -55,15 +59,18 @@ exports.biometricLogin = (req, res) => {
     });
   }
 
+  const token = authGuard.generateToken({ userId: user.id, role: 'senior', method: 'biometric' });
+
   return res.status(200).json({
     success: true,
     message: 'Biometric verification passed',
     data: {
       user,
-      token: 'jwt_mock_easycoin_senior_token_9921'
+      token
     }
   });
 };
+
 
 exports.symbolLogin = (req, res) => {
   const { symbols } = req.body;
@@ -91,11 +98,13 @@ exports.symbolLogin = (req, res) => {
     });
   }
 
+  const token = authGuard.generateToken({ userId: user.id, role: 'senior', method: 'symbol' });
+
   return res.status(200).json({
     success: true,
     message: 'Secret picture lock verified successfully',
     data: {
-      token: 'jwt_mock_easycoin_symbol_auth_8842',
+      token,
       user
     }
   });
@@ -120,15 +129,18 @@ exports.registerUser = (req, res) => {
     symbols
   });
 
+  const token = authGuard.generateToken({ userId: user.id, role: 'senior', method: 'registration' });
+
   return res.status(201).json({
     success: true,
     message: `Account created successfully for ${user.name}!`,
     data: {
       user,
-      token: 'jwt_session_senior_' + Date.now()
+      token
     }
   });
 };
+
 
 exports.getCurrentUser = (req, res) => {
   return res.status(200).json({

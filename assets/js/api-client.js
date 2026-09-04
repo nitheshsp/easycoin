@@ -258,16 +258,44 @@ class EasyAPIClient {
     };
   }
 
-  async getPassbook() {
+  async getPassbook(filter = {}) {
     if (this.isLive) {
       try {
-        const res = await fetch(`${this.baseUrl}/account/passbook`);
+        const query = new URLSearchParams(filter).toString();
+        const url = `${this.baseUrl}/account/passbook${query ? `?${query}` : ''}`;
+        const res = await fetch(url);
         const json = await res.json();
         return json.data.transactions;
       } catch (e) { console.warn(e); }
     }
     return null; // fallback to local memory in phone-simulator
   }
+
+  async deposit(amount, source = 'Pension Deposit', note = 'Govt. Central Pension Deposit') {
+    if (this.isLive) {
+      try {
+        const res = await fetch(`${this.baseUrl}/account/deposit`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ amount, source, note })
+        });
+        return await res.json();
+      } catch (e) { console.warn(e); }
+    }
+    return { success: true, simulated: true };
+  }
+
+  async getCertifiedStatement() {
+    if (this.isLive) {
+      try {
+        const res = await fetch(`${this.baseUrl}/account/statement`);
+        const json = await res.json();
+        return json.data;
+      } catch (e) { console.warn(e); }
+    }
+    return null;
+  }
+
 
   // Module 3: Payments, Voice & Bills
   async getBills() {
@@ -365,6 +393,20 @@ class EasyAPIClient {
     return null;
   }
 
+  async syncOfflineBatch(queuedTransactions) {
+    if (this.isLive) {
+      try {
+        const res = await fetch(`${this.baseUrl}/payments/sync-offline`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ queuedTransactions })
+        });
+        return await res.json();
+      } catch (e) { console.warn(e); }
+    }
+    return { success: true, simulated: true };
+  }
+
   // Module 4: Guardian & SOS
   async freezeAccount() {
     if (this.isLive) {
@@ -376,6 +418,21 @@ class EasyAPIClient {
     }
     return { isFrozen: true, spokenResponse: 'Emergency Lock Active. Account frozen.' };
   }
+
+  async updateGuardianSettings(settings) {
+    if (this.isLive) {
+      try {
+        const res = await fetch(`${this.baseUrl}/guardian/settings`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(settings)
+        });
+        return await res.json();
+      } catch (e) { console.warn(e); }
+    }
+    return { success: true, simulated: true };
+  }
+
 
   // Module 5: UPI Circle (Delegated Minor Spends)
   async getCircleData() {

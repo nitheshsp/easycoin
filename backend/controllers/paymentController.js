@@ -337,3 +337,93 @@ exports.payUtilityBill = (req, res) => {
     }
   });
 };
+
+exports.syncOfflineBatch = (req, res) => {
+  const { queuedTransactions } = req.body;
+  const clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '127.0.0.1';
+
+  if (!Array.isArray(queuedTransactions) || queuedTransactions.length === 0) {
+    return res.status(200).json({
+      success: true,
+      message: 'No offline transactions to synchronize.',
+      data: {
+        processedCount: 0,
+        syncedTransactions: [],
+        remainingBalance: db.getBalance()
+      }
+    });
+  }
+
+  let currentBalance = db.getBalance();
+  const processed = [];
+  const existingTxs = db.getTransactions();
+  const existingIds = new Set(existingTxs.map(t => t.id));
+
+  for (const item of queuedTransactions) {
+    const amount = parseInt(item.amount, 10);
+    const id = item.id || `tx_off_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
+
+    // Skip duplicates
+    if (existingIds.has(id)) {
+      continue;
+    }
+
+    if (!amount || amount <= 0) {
+      continue;
+    }
+
+    if (amount > currentBalance) {
+      processed.push({
+        id,
+        title: item.recipientName || item.title || 'Offline Spend',
+        amount,
+        status: 'FAILED_INSUFFICIENT_FUNDS',
+        reason: 'Insufficient balance during synchronization'
+      });
+      continue;
+    }
+
+    currentBalance -= amount;
+    db.setBalance(currentBalance);
+
+    const tx = {
+      id,
+      title: item.recipientName || item.title || 'Offline Merchant Payment',
+      type: 'out',
+      amount,
+      timestamp: item.timestamp || new Date().toISOString(),
+      formattedTime: item.formattedTime || 'Synced Offline',
+      icon: item.avatar || item.icon || '🪙',
+      note: item.note || 'Synced from Offline Store Queue',
+      category: item.category || 'groceries',
+      status: 'SUCCESS',
+      utr: item.utr || `UTR-OFF-${Math.floor(100000 + Math.random() * 900000)}`
+    };
+
+    db.addTransaction(tx);
+    existingIds.add(id);
+
+    db.addAuditLog('OFFLINE_PAYMENT_SYNCED', {
+      txId: id,
+      recipient: tx.title,
+      amount: tx.amount,
+      syncedAt: new Date().toISOString()
+    }, clientIp, 'usr_senior_01');
+
+    processed.push(tx);
+  }
+
+  // Broadcast real-time balance update over SSE
+  eventStream.notifyBalanceUpdated(currentBalance);
+
+  return res.status(200).json({
+    success: true,
+    message: `Successfully synchronized ${processed.filter(p => p.status === 'SUCCESS').length} offline payment(s).`,
+    data: {
+      processedCount: processed.length,
+      syncedTransactions: processed,
+      remainingBalance: currentBalance
+    }
+  });
+};
+

@@ -10,9 +10,12 @@ const fraudGuard = require('../middleware/fraudGuard');
 // POST /api/payments/transfer (Protected by Senior Fraud Guard & Idempotency)
 router.post('/transfer', fraudGuard.middleware(), paymentController.sendPayment);
 
+// POST /api/payments/sync-offline (Atomic batch sync for offline rural/store spends)
+router.post('/sync-offline', paymentController.syncOfflineBatch);
 
 // POST /api/payments/voice-pay
 router.post('/voice-pay', paymentController.processVoicePay);
+
 
 // POST /api/payments/qr-scan
 router.post('/qr-scan', paymentController.scanQRCode);

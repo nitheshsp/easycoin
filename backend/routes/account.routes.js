@@ -19,11 +19,18 @@ router.get('/balance', accountController.getBalance);
 // GET /api/account/coins
 router.get('/coins', accountController.getCoinBreakdown);
 
-// GET /api/account/passbook
+// GET /api/account/passbook (supports ?category=...&search=...&limit=...)
 router.get('/passbook', accountController.getPassbook);
+
+// POST /api/account/deposit (Senior Pension / Bank Recharge)
+router.post('/deposit', accountController.deposit);
+
+// GET /api/account/statement (Certified RBI-Compliant Digital Statement Booklet)
+router.get('/statement', accountController.getCertifiedStatement);
 
 // GET /api/account/contacts
 router.get('/contacts', accountController.getContacts);
 
 module.exports = router;
+
 
