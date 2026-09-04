@@ -16,49 +16,10 @@
   <link rel="stylesheet" href="assets/css/transactions.css">
   <link rel="stylesheet" href="assets/css/sidebar.css">
   <link rel="stylesheet" href="assets/css/voice-overlay.css">
-  <link rel="stylesheet" href="assets/css/presentation-hub.css">
   <script src="assets/js/auth-guard.js"></script>
 </head>
 
 <body class="standalone-app-body app-sidebar-layout">
-
-  <!-- =========================================================================
-       EASYCOIN UNIFIED PRESENTATION HUB (Single Master Demo Bar)
-       ========================================================================= -->
-  <div class="presentation-hub-bar" id="presentationHubBar">
-    <div class="pres-hub-inner">
-      <div class="pres-badge">
-        <span class="pres-pulse"></span>
-        <span class="pres-title">
-          🪙 EasyCoin
-          <span class="pres-tag">Master Demo Link</span>
-        </span>
-      </div>
-      <div class="pres-nav-group">
-        <a href="index.html#phone-stage" class="pres-pill" title="Live Interactive Tablet Prototype">
-          <span>📱</span> Tablet Demo
-        </a>
-        <a href="app.html" class="pres-pill" style="border-color:rgba(255,215,0,0.5); background:rgba(255,215,0,0.15);" title="Senior Accessible Full Web App">
-          <span>💻</span> Web App Active
-        </a>
-        <button type="button" class="pres-pill accent" onclick="window.EasyVoice && window.EasyVoice.openOverlay()" title="Multi-Lingual AI Voice Overlay (Hindi, Tamil, English)">
-          <span>🎙️</span> Voice AI
-        </button>
-        <button type="button" class="pres-pill" onclick="window.openQRModal && window.openQRModal()" title="Live Webcam / Camera QR Scanner">
-          <span>📷</span> Camera QR
-        </button>
-        <a href="login.html?mode=signup" class="pres-pill" title="4-Method Senior Authentication (Voice, Face, Pattern, PIN)">
-          <span>🔐</span> 4-Way Auth
-        </a>
-        <a href="/api/docs" target="_blank" class="pres-pill backend" title="Live Backend Gateway &amp; SQLite Explorer">
-          <span>⚡</span> Backend &amp; DB
-        </a>
-        <button type="button" class="pres-pill team" onclick="document.getElementById('teamCreditsModal').classList.add('active')" title="Collaborators &amp; Architecture">
-          <span>👥</span> Team Works
-        </button>
-      </div>
-    </div>
-  </div>
 
   <!-- Left Side Menu Bar (Senior Accessible & Smooth Navigation) -->
   <aside class="app-sidebar" id="appSidebar" aria-label="Main Navigation">
@@ -1549,63 +1510,6 @@
         </button>
       </div>
 
-    </div>
-  </div>
-
-  <!-- Team Works & Architecture Presentation Modal -->
-  <div class="pres-modal-backdrop" id="teamCreditsModal" onclick="if(event.target===this)this.classList.remove('active')">
-    <div class="pres-modal-dialog">
-      <div class="pres-modal-header">
-        <h3 class="pres-modal-title">
-          <span>👥</span>
-          <span>EasyCoin Team Contributors &amp; Architecture</span>
-        </h3>
-        <button type="button" class="pres-modal-close" onclick="document.getElementById('teamCreditsModal').classList.remove('active')">✕</button>
-      </div>
-
-      <!-- Shyam Sundar G J -->
-      <div class="pres-team-card">
-        <div class="pres-team-head">
-          <div class="pres-team-name"><span>👨‍💻</span> Shyam Sundar G J</div>
-          <span class="pres-team-role">Voice AI &amp; Backend Lead</span>
-        </div>
-        <ul class="pres-team-list">
-          <li><strong>Multi-Lingual Voice Assistant Overlay:</strong> Real-time Web Speech Recognition modal with animated equalizer bars, pulsing mic orb, and Indian multi-lingual NLP intent engine (Hindi, Tamil, English).</li>
-          <li><strong>Complete Backend Gateway &amp; Database:</strong> Persistent SQLite database, 14 REST API suites, real-time Server-Sent Events (SSE) push, senior fraud guard idempotency, dynamic guardian limits, and certified statement generator.</li>
-          <li><strong>Live Camera QR Scanner:</strong> Integrated dual-tab modal with active system webcam video feed for scanning merchant QR codes.</li>
-        </ul>
-      </div>
-
-      <!-- R Satyajit -->
-      <div class="pres-team-card">
-        <div class="pres-team-head">
-          <div class="pres-team-name"><span>👨‍💻</span> R Satyajit</div>
-          <span class="pres-team-role">Frontend &amp; Auth Architect</span>
-        </div>
-        <ul class="pres-team-list">
-          <li><strong>Interactive Tablet Simulator:</strong> Transformed mobile simulator into a sleek tablet design with high-contrast tactile UI.</li>
-          <li><strong>4-Method Senior Authentication:</strong> Unified first-time sign up and login with Voice OTP, Face Recognition, Picture Lock Pattern, and Tactile PIN.</li>
-          <li><strong>Personalized Sessions &amp; Security:</strong> Strict authentication guard, automatic redirects, and dynamic user identification across all login methods.</li>
-        </ul>
-      </div>
-
-      <!-- Nithesh S P -->
-      <div class="pres-team-card">
-        <div class="pres-team-head">
-          <div class="pres-team-name"><span>👨‍💻</span> Nithesh S P</div>
-          <span class="pres-team-role">Core Design &amp; UPI Circle</span>
-        </div>
-        <ul class="pres-team-list">
-          <li><strong>Senior-First Accessibility Framework:</strong> High contrast color palette, coin breakdown visualization, and haptic sound engine.</li>
-          <li><strong>UPI Circle Minor Delegation:</strong> Family member permission delegation, daily spending caps, and secondary approval gates.</li>
-        </ul>
-      </div>
-
-      <div style="margin-top:16px; text-align:right;">
-        <button type="button" class="pres-pill backend" style="padding:8px 16px; font-size:13px;" onclick="document.getElementById('teamCreditsModal').classList.remove('active')">
-          ✓ Close &amp; Continue Demo
-        </button>
-      </div>
     </div>
   </div>
 
