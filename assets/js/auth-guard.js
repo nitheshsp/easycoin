@@ -66,11 +66,11 @@
       const userRaw = localStorage.getItem('easycoin_user_session');
       const isAppPage = window.location.pathname.endsWith('app.html') || window.location.pathname.includes('/app.html');
 
-      // Strict protection for app.html
+      // Strict protection for app.html: only through login page can main app be opened
       if (isAppPage && (!token || !userRaw)) {
-        console.log('🔒 Strict Auth: No active user session detected on app.html. Redirecting to landing.');
+        console.log('🔒 Strict Auth: No active user session detected on app.html. Redirecting to login.');
         sessionStorage.setItem('easycoin_auth_redirect_msg', 'Please Sign In or Create an Account first to access your secure bank.');
-        window.location.replace('index.html?auth=required');
+        window.location.replace('login.html?auth=required');
         return;
       }
 
