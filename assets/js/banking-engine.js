@@ -1010,18 +1010,25 @@
 
     // Dock Voice Assistant Button
     if (dockMicBtn) {
-      dockMicBtn.addEventListener('click', function () {
+      dockMicBtn.addEventListener('click', function (e) {
+        e.preventDefault();
         triggerVoiceInput();
       });
     }
 
     function triggerVoiceInput() {
+      if (window.EasyVoice && typeof window.EasyVoice.openOverlay === 'function') {
+        window.EasyVoice.openOverlay();
+        return;
+      }
+
       if (dockMicBtn) dockMicBtn.classList.add('listening');
       if (dockStatus) dockStatus.textContent = 'Listening... Speak your command';
       if (window.EasyAudio) {
         window.EasyAudio.playClick();
         window.EasyAudio.speak('I am listening. Say something like: Check balance, or Send 500 Rupees to Son.');
       }
+
 
       var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       if (SpeechRecognition) {

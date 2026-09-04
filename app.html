@@ -15,8 +15,10 @@
   <link rel="stylesheet" href="assets/css/upi-circle.css">
   <link rel="stylesheet" href="assets/css/transactions.css">
   <link rel="stylesheet" href="assets/css/sidebar.css">
+  <link rel="stylesheet" href="assets/css/voice-overlay.css">
   <script src="assets/js/auth-guard.js"></script>
 </head>
+
 <body class="standalone-app-body app-sidebar-layout">
 
   <!-- Left Side Menu Bar (Senior Accessible & Smooth Navigation) -->
@@ -1384,6 +1386,133 @@
   </div>
   </div>
 
+  <!-- Multi-Lingual Speech Assistant Overlay Modal -->
+  <div class="voice-overlay-modal" id="voiceAssistantOverlay" role="dialog" aria-modal="true" aria-labelledby="voiceModalTitle">
+    <div class="voice-modal-paper">
+      
+      <!-- Modal Header -->
+      <div class="voice-modal-header">
+        <div class="voice-header-meta">
+          <div class="voice-badge-pill">
+            <span>🇮🇳</span>
+            <span>Multi-Lingual AI Voice Engine</span>
+          </div>
+          <h3 class="voice-modal-title" id="voiceModalTitle">
+            <span>🎙️</span>
+            <span>Senior Speech Assistant</span>
+          </h3>
+          <div class="voice-lang-support-row">
+            <span class="voice-lang-tag active" id="langTagEn">🇬🇧 English</span>
+            <span class="voice-lang-tag active" id="langTagHi">🇮🇳 हिन्दी (Hindi)</span>
+            <span class="voice-lang-tag active" id="langTagTa">🇮🇳 தமிழ் (Tamil)</span>
+          </div>
+        </div>
+        <button type="button" class="voice-close-btn" id="voiceCloseModalBtn" title="Close Voice Assistant" onclick="window.EasyVoice && window.EasyVoice.closeOverlay()">✕</button>
+      </div>
+
+      <!-- Central Listening Stage with Dynamic Visual Waveform -->
+      <div class="voice-stage-center">
+        <div class="voice-orb-wrapper">
+          <div class="voice-ripple" id="voiceRipple1"></div>
+          <div class="voice-ripple ripple-2" id="voiceRipple2"></div>
+          <div class="voice-mic-core listening" id="voiceMicCore" title="Tap to Toggle Listening">
+            🎤
+          </div>
+        </div>
+
+        <!-- 7 Dancing Frequency Sound Bars -->
+        <div class="voice-wave-bars active" id="voiceWaveBars">
+          <div class="voice-wave-bar"></div>
+          <div class="voice-wave-bar"></div>
+          <div class="voice-wave-bar"></div>
+          <div class="voice-wave-bar"></div>
+          <div class="voice-wave-bar"></div>
+          <div class="voice-wave-bar"></div>
+          <div class="voice-wave-bar"></div>
+        </div>
+
+        <div class="voice-status-heading" id="voiceStatusHeading">
+          Listening... Speak in Hindi, Tamil, or English
+        </div>
+      </div>
+
+      <!-- Live Spoken Transcript Display Box -->
+      <div class="voice-transcript-card" id="voiceTranscriptCard">
+        <div class="voice-transcript-text placeholder" id="voiceTranscriptText">
+          "Speak your command (e.g. Rahul ko 500 rupaye bhej do, or Send 500 to Son)"
+        </div>
+      </div>
+
+      <!-- NLP Intent Recognition Card (Shown upon successful speech capture) -->
+      <div class="voice-intent-card" id="voiceIntentCard">
+        <div class="voice-intent-top">
+          <span class="voice-lang-detected-badge" id="voiceDetectedLangBadge">
+            <span>🇮🇳</span>
+            <span id="voiceDetectedLangText">Hindi Recognized</span>
+          </span>
+          <span style="font-size:12px; color:#22C55E; font-weight:700;">✓ Intent Extracted</span>
+        </div>
+
+        <div class="voice-intent-entity-row">
+          <div class="voice-intent-recipient">
+            <div class="voice-intent-avatar" id="voiceIntentAvatar">👨‍🦱</div>
+            <div>
+              <div class="voice-intent-name" id="voiceIntentName">Son Rahul</div>
+              <div class="voice-intent-rel" id="voiceIntentRel">Family Contact</div>
+            </div>
+          </div>
+          <div class="voice-intent-amount-badge" id="voiceIntentAmount">
+            ₹ 500
+          </div>
+        </div>
+
+        <div class="voice-spoken-prompt-text" id="voiceIntentPrompt">
+          Understood: Send ₹500 to Son Rahul. Please tap below to confirm.
+        </div>
+
+        <button type="button" class="voice-proceed-btn" id="voiceProceedPayBtn">
+          <span>✓ Confirm &amp; Proceed to Pay</span>
+          <span style="font-size:18px;">→</span>
+        </button>
+      </div>
+
+      <!-- Quick Spoken Suggestion Chips (1-Tap Test Bubbles for Seniors) -->
+      <div class="voice-suggestions-tray" id="voiceSuggestionsTray">
+        <div class="voice-suggestions-label">Or tap any example phrase to test instantly:</div>
+        <div class="voice-chips-grid">
+          <button type="button" class="voice-suggestion-chip" onclick="window.EasyVoice && window.EasyVoice.testVoicePhrase('Rahul ko 500 rupaye bhej do')">
+            <span class="voice-chip-lang">🇮🇳 हिन्दी (Hindi)</span>
+            <span class="voice-chip-phrase">"Rahul ko 500 rupaye bhej do"</span>
+          </button>
+          <button type="button" class="voice-suggestion-chip" onclick="window.EasyVoice && window.EasyVoice.testVoicePhrase('Lakshmi grocery-ku moonu nooru roobai kudu')">
+            <span class="voice-chip-lang">🇮🇳 தமிழ் (Tamil)</span>
+            <span class="voice-chip-phrase">"Lakshmi grocery-ku moonu nooru roobai kudu"</span>
+          </button>
+          <button type="button" class="voice-suggestion-chip" onclick="window.EasyVoice && window.EasyVoice.testVoicePhrase('Pay 340 to Dr Sharma for medicine')">
+            <span class="voice-chip-lang">🇬🇧 English</span>
+            <span class="voice-chip-phrase">"Pay 340 to Dr Sharma"</span>
+          </button>
+          <button type="button" class="voice-suggestion-chip" onclick="window.EasyVoice && window.EasyVoice.testVoicePhrase('Check my available balance')">
+            <span class="voice-chip-lang">🔊 Spoken Inquiry</span>
+            <span class="voice-chip-phrase">"Check my current balance"</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Bottom Controls Row -->
+      <div class="voice-footer-actions">
+        <button type="button" class="voice-action-btn secondary" onclick="window.EasyVoice && window.EasyVoice.closeOverlay()">
+          ✕ Close
+        </button>
+        <button type="button" class="voice-action-btn primary" id="voiceToggleListenBtn" onclick="window.EasyVoice && window.EasyVoice.toggleListening()">
+          <span>🎙️</span>
+          <span id="voiceToggleListenLabel">Listen Again</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
   <!-- Core Scripts -->
   <script src="assets/js/theme-toggle.js"></script>
   <script src="assets/js/audio-synth.js"></script>
@@ -1393,8 +1522,10 @@
   <script src="assets/js/qr-generator.js"></script>
   <script src="assets/js/transactions-engine.js"></script>
   <script src="assets/js/banking-engine.js"></script>
+  <script src="assets/js/voice-assistant.js"></script>
   <script src="assets/js/upi-circle.js"></script>
   <script src="assets/js/liquid-glass.js"></script>
   <script src="assets/js/sidebar.js"></script>
 </body>
 </html>
+
