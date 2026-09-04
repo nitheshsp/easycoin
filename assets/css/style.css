@@ -618,8 +618,8 @@ body.high-contrast-mode .voice-card {
 
 .phone-showcase-layout {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: clamp(30px, 5vw, 70px);
+  grid-template-columns: 1fr 1.2fr;
+  gap: clamp(24px, 4vw, 60px);
   align-items: center;
   margin-top: 40px;
 }

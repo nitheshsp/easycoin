@@ -64,7 +64,7 @@
         </div>
       </div>
 
-      <a class="top" href="#phone-stage">Live Phone Demo</a>
+      <a class="top" href="#phone-stage">Live Tablet Demo</a>
       <a class="top" href="#reviews">Stories</a>
       <a class="top" href="#faq">FAQ</a>
       
@@ -137,7 +137,7 @@
         </p>
         <div class="hero-actions">
           <a href="#phone-stage" class="hero-cta-main">
-            Try Interactive Phone
+            Try Interactive Tablet
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
               <path d="M3 7H11M11 7L7.5 3.5M11 7L7.5 10.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
@@ -151,7 +151,7 @@
   </section>
 
   <!-- =========================================================================
-       3. Interactive Phone Simulator & Senior Banking Showcase
+       3. Interactive Tablet Simulator & Senior Banking Showcase
        ========================================================================= -->
   <section class="sheetsec1" id="phone-stage">
     <div class="container">
@@ -159,10 +159,10 @@
         
         <!-- Left: Interactive Explanations -->
         <div class="showcase-features">
-          <span class="section-tag">Senior-First Design</span>
+          <span class="section-tag">Senior Tablet Experience</span>
           <h2 class="section-title">Experience Banking Without Boundaries.</h2>
           <p class="section-sub">
-            Test the live EasyCoin phone prototype on the right. Tap the power button, switch between iPhone and Android, speak your balance, and tap family photos to make simulated transfers.
+            Test the live EasyCoin tablet prototype on the right. Tap the power button, speak your balance, and tap family photos to make simulated transfers.
           </p>
 
           <div class="showcase-feat-item">
@@ -190,26 +190,26 @@
           </div>
         </div>
 
-        <!-- Right: Interactive Smartphone Simulator Widget -->
-        <div class="phone-stage">
+        <!-- Right: Interactive Tablet Simulator Widget -->
+        <div class="phone-stage tablet-stage-wrap">
           <div class="stage-sticky">
-            <div class="phone">
+            <div class="phone tablet-device" id="tabletDevice">
               <div class="phone-frame"></div>
               
+              <!-- Tablet Front Camera & Ambient Sensor in Bezel -->
+              <div class="tablet-bezel-camera">
+                <div class="tb-cam"></div>
+                <div class="tb-sensor"></div>
+              </div>
+
               <div class="phone-screen">
                 <div class="app">
                   
-                  <!-- Dynamic Island -->
-                  <div class="dynamic-island">
-                    <div class="di-cam"></div>
-                    <div class="di-sensor"></div>
-                  </div>
-
                   <!-- Status Bar -->
                   <div class="statusbar">
                     <span id="clock">15:15</span>
                     <div class="sb-right">
-                      <span>5G</span>
+                      <span>Tablet 5G</span>
                       <span>📶</span>
                       <span>100% 🔋</span>
                     </div>
@@ -850,13 +850,7 @@
               </div>
 
               <!-- Power Button for interactive Lock/Unlock -->
-              <div class="power-btn" id="powerBtn" title="Click to Lock / Unlock Phone"></div>
-            </div>
-
-            <!-- Device Switcher Segmented Control -->
-            <div class="dev-toggle">
-              <button type="button" class="devseg active" data-dev="iphone">iPhone 17 Pro</button>
-              <button type="button" class="devseg" data-dev="android">Android Phone</button>
+              <div class="power-btn" id="powerBtn" title="Click to Lock / Unlock Tablet"></div>
             </div>
           </div>
         </div>
