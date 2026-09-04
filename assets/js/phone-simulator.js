@@ -527,16 +527,131 @@
           </div>
         `;
         item.addEventListener('click', function () {
-          if (window.EasyAudio) {
-            window.EasyAudio.playClick();
-            var readout = (isOut ? 'Paid ' : 'Received ') + tx.amount + ' Rupees with ' + tx.title + ' on ' + tx.time + '. 100% verified.';
-            window.EasyAudio.speak(readout);
-          }
+          window.openPhoneReceiptModal(tx);
         });
         listEl.appendChild(item);
       });
     }
     renderPassbook();
+
+    // Mobile Phone Digital Receipt Handler
+    var activePhoneReceiptTx = null;
+
+    window.openPhoneReceiptModal = function (tx) {
+      if (!tx) {
+        if (transactions && transactions.length > 0) tx = transactions[0];
+        else return;
+      }
+      activePhoneReceiptTx = tx;
+      var overlay = phoneEl.querySelector('#phoneReceiptOverlay');
+      if (!overlay) return;
+
+      var isOut = tx.type === 'out';
+      var typePill = overlay.querySelector('#pReceiptType');
+      var amtEl = overlay.querySelector('#pReceiptAmt');
+      var partyEl = overlay.querySelector('#pReceiptParty');
+      var purposeEl = overlay.querySelector('#pReceiptPurpose');
+      var timeEl = overlay.querySelector('#pReceiptTime');
+      var txnIdEl = overlay.querySelector('#pReceiptTxnId');
+
+      if (typePill) {
+        typePill.className = 'receipt-type-pill ' + (isOut ? 'out' : 'in');
+        typePill.textContent = isOut ? '🔴 Payment Sent' : '🟢 Deposit Received';
+      }
+      if (amtEl) {
+        amtEl.textContent = (isOut ? '- ' : '+ ') + '₹ ' + tx.amount.toLocaleString('en-IN');
+        amtEl.style.color = isOut ? '#DC2626' : '#16A34A';
+      }
+      if (partyEl) partyEl.textContent = tx.title || 'Bank Transfer';
+      if (purposeEl) purposeEl.textContent = tx.note || (isOut ? 'Direct Payment' : 'Direct Credit');
+      if (timeEl) timeEl.textContent = tx.time || 'Today';
+      if (txnIdEl) {
+        var pseudoId = 'TXN-EC-' + (tx.id ? String(tx.id).slice(-6) : Math.floor(100000 + Math.random() * 900000));
+        txnIdEl.textContent = pseudoId;
+      }
+
+      overlay.classList.add('active');
+
+      if (window.EasyAudio) {
+        window.EasyAudio.playClick();
+        var speech = (isOut ? 'Official receipt: Payment of ' : 'Official receipt: Deposit of ') +
+          tx.amount + ' Rupees with ' + (tx.title || 'recipient') + '. Status: 100% verified.';
+        window.EasyAudio.speak(speech);
+      }
+    };
+
+    window.phoneOpenLatestReceipt = function () {
+      if (!transactions || transactions.length === 0) {
+        if (window.showEasyToast) window.showEasyToast('No transactions found in passbook.', 'info', 'ℹ️');
+        return;
+      }
+      window.openPhoneReceiptModal(transactions[0]);
+    };
+
+    window.closePhoneReceipt = function () {
+      var overlay = phoneEl.querySelector('#phoneReceiptOverlay');
+      if (overlay) overlay.classList.remove('active');
+      if (window.EasyAudio) window.EasyAudio.playClick();
+    };
+
+    window.phoneSpeakReceipt = function () {
+      if (!activePhoneReceiptTx) return;
+      var tx = activePhoneReceiptTx;
+      var isOut = tx.type === 'out';
+      if (window.EasyAudio) {
+        window.EasyAudio.playClick();
+        var speech = 'EasyCoin Official Receipt. ' + (isOut ? 'Payment sent to ' : 'Deposit received from ') +
+          tx.title + '. Amount: ' + tx.amount.toLocaleString('en-IN') + ' Rupees. Purpose: ' + (tx.note || 'Transfer') +
+          '. Date: ' + tx.time + '. 100% Protected and verified by Guardian Shield.';
+        window.EasyAudio.speak(speech);
+      }
+    };
+
+    window.phoneCopyReceipt = function () {
+      if (!activePhoneReceiptTx) return;
+      var tx = activePhoneReceiptTx;
+      var isOut = tx.type === 'out';
+      var pseudoId = 'TXN-EC-' + (tx.id ? String(tx.id).slice(-6) : '889214');
+      var pseudoUtr = 'UTR-EC-2026-' + (tx.id ? (tx.id % 900000 + 100000) : '482910');
+
+      var text = [
+        '====================================',
+        '🪙 EASYCOIN DIGITAL RECEIPT SLIP',
+        '====================================',
+        'Status: ✓ SUCCESSFUL & PROTECTED',
+        'Type: ' + (isOut ? 'Payment Sent (-)' : 'Deposit Received (+)'),
+        'Amount: ₹ ' + tx.amount.toLocaleString('en-IN'),
+        'Party: ' + tx.title,
+        'Purpose: ' + (tx.note || (isOut ? 'Payment' : 'Deposit')),
+        'Time: ' + tx.time,
+        'Txn Reference: ' + pseudoId,
+        'UTR ID: ' + pseudoUtr,
+        'Account: Senior Savings (**** 8921)',
+        'Guardian Shield: 🛡️ Active & Verified',
+        '===================================='
+      ].join('\n');
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text);
+      }
+      if (window.EasyAudio) {
+        window.EasyAudio.playClick();
+        window.EasyAudio.speak('Receipt copied to clipboard.');
+      }
+      if (window.showEasyToast) {
+        window.showEasyToast('📋 Mobile receipt copied to clipboard!', 'success', '🧾');
+      }
+    };
+
+    // Close overlay on clicking backdrop
+    var phoneReceiptOverlayEl = phoneEl.querySelector('#phoneReceiptOverlay');
+    if (phoneReceiptOverlayEl) {
+      phoneReceiptOverlayEl.addEventListener('click', function (e) {
+        if (e.target === phoneReceiptOverlayEl) {
+          window.closePhoneReceipt();
+        }
+      });
+    }
 
     // SOS Emergency Button
     var sosBtn = phoneEl.querySelector('#sosFreezeBtn');

@@ -1288,21 +1288,563 @@ body.standalone-app-body {
   background: #DBEAFE;
 }
 
-/* Receipt Modal Styles */
+/* ==========================================================================
+   Receipt & Passbook Digital Statement Design System
+   ========================================================================== */
+
+/* Enhanced Individual Transaction Receipt Paper */
 .receipt-paper {
   background: #FFFFFF;
-  border-radius: 24px;
-  padding: 24px;
-  max-width: 440px;
-  width: 90%;
-  box-shadow: 0 20px 40px rgba(0, 8, 27, 0.25);
-  border: 2px solid #E2E8F0;
-  animation: receiptSlideUp 0.25s ease;
+  border-radius: 22px;
+  padding: 26px 24px;
+  max-width: 450px;
+  width: 92%;
+  box-shadow: 0 25px 60px rgba(0, 15, 60, 0.28), 0 0 0 1px rgba(0, 0, 0, 0.05);
+  border: 1px solid #E2E8F0;
+  border-top: 6px solid #003DD1;
+  animation: receiptSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 @keyframes receiptSlideUp {
   from { opacity: 0; transform: translateY(20px) scale(0.97); }
   to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.receipt-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 14px;
+  border-bottom: 2px dashed #CBD5E1;
+  padding-bottom: 14px;
+}
+
+.receipt-bank-emblem {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #00174E 0%, #003DD1 100%);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  box-shadow: 0 4px 10px rgba(0, 61, 209, 0.25);
+  flex-shrink: 0;
+}
+
+.receipt-close-btn {
+  background: #F1F5F9;
+  border: 1px solid #CBD5E1;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  font-size: 16px;
+  cursor: pointer;
+  color: #64748B;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+
+.receipt-close-btn:hover {
+  background: #E2E8F0;
+  color: #0F172A;
+}
+
+.receipt-center-hero {
+  text-align: center;
+  padding: 8px 0 16px;
+}
+
+.receipt-type-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 4px 12px;
+  border-radius: 999px;
+  margin-bottom: 6px;
+}
+
+.receipt-type-pill.out {
+  background: #EFF6FF;
+  color: #003DD1;
+  border: 1px solid #BFDBFE;
+}
+
+.receipt-type-pill.in {
+  background: #DCFCE7;
+  color: #15803D;
+  border: 1px solid #86EFAC;
+}
+
+.receipt-amount-display {
+  font-size: 38px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  margin: 4px 0 8px;
+}
+
+.receipt-amount-display.out { color: #003DD1; }
+.receipt-amount-display.in { color: #16A34A; }
+
+.receipt-status-shield {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #F0FDF4;
+  color: #166534;
+  border: 1px solid #BBF7D0;
+  font-size: 11.5px;
+  font-weight: 800;
+  padding: 4px 12px;
+  border-radius: 999px;
+}
+
+.receipt-details-box {
+  background: #F8FAFC;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+.receipt-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.receipt-row-lbl {
+  color: #64748B;
+  font-weight: 600;
+  font-size: 12.5px;
+}
+
+.receipt-row-val {
+  font-weight: 700;
+  color: #0F172A;
+  text-align: right;
+}
+
+.receipt-qr-stamp-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #FFFFFF;
+  border: 1.5px dashed #CBD5E1;
+  border-radius: 14px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+}
+
+.receipt-qr-preview {
+  width: 54px;
+  height: 54px;
+  background: #F1F5F9;
+  border: 1px solid #CBD5E1;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  flex-shrink: 0;
+}
+
+.receipt-actions-grid {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+/* ==========================================================================
+   Full Passbook & Digital Statement Booklet Modal
+   ========================================================================== */
+.statement-paper {
+  background: #FFFFFF;
+  border-radius: 24px;
+  padding: 28px 28px;
+  max-width: 860px;
+  width: 95%;
+  max-height: 88vh;
+  overflow-y: auto;
+  box-shadow: 0 30px 80px rgba(0, 15, 60, 0.32);
+  border: 2px solid #CBD5E1;
+  border-top: 8px solid #00174E;
+  animation: receiptSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+}
+
+.stmt-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 18px;
+  border-bottom: 2px solid #00174E;
+  padding-bottom: 16px;
+}
+
+.stmt-bank-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.stmt-logo-badge {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #00174E 0%, #003DD1 100%);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  box-shadow: 0 4px 12px rgba(0, 61, 209, 0.3);
+  flex-shrink: 0;
+}
+
+.stmt-main-title {
+  font-size: 20px;
+  font-weight: 900;
+  color: #00174E;
+  margin: 0 0 4px;
+  letter-spacing: -0.01em;
+}
+
+.stmt-subtitle {
+  font-size: 12.5px;
+  color: #64748B;
+  font-weight: 600;
+}
+
+.stmt-close-btn {
+  background: #F1F5F9;
+  border: 1px solid #CBD5E1;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  font-size: 18px;
+  cursor: pointer;
+  color: #64748B;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+
+.stmt-close-btn:hover {
+  background: #E2E8F0;
+  color: #0F172A;
+}
+
+/* Account Info Ribbon */
+.stmt-account-ribbon {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  background: #F8FAFC;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 16px;
+  padding: 14px 18px;
+  margin-bottom: 16px;
+}
+
+.stmt-acc-col {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.stmt-acc-lbl {
+  font-size: 11px;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: #64748B;
+  letter-spacing: 0.03em;
+}
+
+.stmt-acc-val {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+.stmt-senior-tag {
+  background: #FEF08A;
+  color: #854D0E;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 6px;
+  margin-left: 4px;
+}
+
+/* Financial Summary KPI Strip */
+.stmt-summary-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.stmt-sum-item {
+  background: #FFFFFF;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 14px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stmt-sum-item.highlight {
+  background: #EFF6FF;
+  border-color: #93C5FD;
+}
+
+.stmt-sum-lbl {
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748B;
+}
+
+.stmt-sum-val {
+  font-size: 18px;
+  font-weight: 800;
+  color: #0F172A;
+}
+
+.stmt-sum-val.green { color: #16A34A; }
+.stmt-sum-val.blue { color: #003DD1; }
+.stmt-sum-val.navy { color: #00174E; }
+
+/* Itemized Statement Table */
+.stmt-table-container {
+  border: 1.5px solid #E2E8F0;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 18px;
+  background: #FFFFFF;
+}
+
+.stmt-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 12.5px;
+}
+
+.stmt-table thead th {
+  background: #F1F5F9;
+  color: #334155;
+  font-weight: 800;
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 12px 14px;
+  border-bottom: 1.5px solid #CBD5E1;
+}
+
+.stmt-table tbody td {
+  padding: 12px 14px;
+  border-bottom: 1px solid #E2E8F0;
+  color: #1E293B;
+  vertical-align: middle;
+}
+
+.stmt-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.stmt-table tbody tr:nth-child(even) {
+  background: #F8FAFC;
+}
+
+.stmt-table tbody tr:hover {
+  background: #EFF6FF;
+}
+
+.stmt-amt-debit {
+  color: #003DD1;
+  font-weight: 800;
+}
+
+.stmt-amt-credit {
+  color: #16A34A;
+  font-weight: 800;
+}
+
+.stmt-row-btn {
+  background: #F1F5F9;
+  border: 1px solid #CBD5E1;
+  border-radius: 6px;
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #003DD1;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.stmt-row-btn:hover {
+  background: #DBEAFE;
+}
+
+/* Security Seal & Certification */
+.stmt-footer-stamp-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #F8FAFC;
+  border: 1.5px dashed #CBD5E1;
+  border-radius: 16px;
+  padding: 12px 18px;
+  margin-bottom: 18px;
+}
+
+.stmt-stamp-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: #0F172A;
+}
+
+.stmt-stamp-icon {
+  font-size: 24px;
+}
+
+.stmt-auth-seal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 2px solid #003DD1;
+  border-radius: 8px;
+  padding: 4px 12px;
+  color: #003DD1;
+  font-weight: 800;
+  text-transform: uppercase;
+  transform: rotate(-2deg);
+  background: #FFFFFF;
+}
+
+.stmt-auth-seal .seal-txt { font-size: 10px; letter-spacing: 0.08em; }
+.stmt-auth-seal .seal-sub { font-size: 8px; color: #16A34A; }
+.stmt-auth-seal .seal-date { font-size: 9px; color: #64748B; font-weight: 700; }
+
+/* Statement Actions */
+.stmt-actions-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.stmt-actions-row .ctrl-btn {
+  padding: 10px 18px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.stmt-actions-row .print-action-btn {
+  background: #003DD1;
+  color: #FFFFFF;
+  border: none;
+}
+
+.stmt-actions-row .print-action-btn:hover {
+  background: #002BB0;
+}
+
+@media (max-width: 768px) {
+  .stmt-account-ribbon {
+    grid-template-columns: 1fr 1fr;
+  }
+  .stmt-summary-strip {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ==========================================================================
+   Print Media Styles (@media print)
+   Ensures pristine official paper receipt & statement printing
+   ========================================================================== */
+@media print {
+  /* Hide all background website elements, headers, sidebars, dock, buttons */
+  body {
+    background: #FFFFFF !important;
+    color: #000000 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  body > *:not(.pay-modal) {
+    display: none !important;
+  }
+
+  .pay-modal {
+    position: static !important;
+    display: none !important;
+    background: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  .pay-modal.active {
+    display: block !important;
+  }
+
+  /* Make receipt and statement papers look authentic on paper */
+  .receipt-paper,
+  .statement-paper {
+    box-shadow: none !important;
+    border: 1px solid #000000 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    border-radius: 0 !important;
+    padding: 20px !important;
+    page-break-inside: avoid;
+    animation: none !important;
+  }
+
+  /* Hide close buttons and interactive action bars during print */
+  .receipt-close-btn,
+  .stmt-close-btn,
+  .receipt-actions-grid,
+  .stmt-actions-row,
+  .stmt-row-btn {
+    display: none !important;
+  }
+
+  /* Force high contrast black and white / official grayscale for printers */
+  .stmt-table-container {
+    border: 1px solid #000000 !important;
+  }
+
+  .stmt-table thead th {
+    background: #F1F5F9 !important;
+    color: #000000 !important;
+    border-bottom: 1.5px solid #000000 !important;
+  }
+
+  .stmt-table tbody td {
+    border-bottom: 1px solid #CCCCCC !important;
+    color: #000000 !important;
+  }
 }
 
 .pb-empty-state {
@@ -1313,5 +1855,6 @@ body.standalone-app-body {
   border: 1.5px dashed #CBD5E1;
   border-radius: 16px;
 }
+
 
 

@@ -1182,4 +1182,92 @@
   box-shadow: 0 0 0 2px rgba(0, 61, 209, 0.15);
 }
 
+/* Phone Passbook Receipt Overlay */
+.phone-receipt-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 15, 60, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 100;
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 14px;
+  box-sizing: border-box;
+}
+
+.phone-receipt-overlay.active {
+  display: flex;
+}
+
+.phone-receipt-sheet {
+  background: #FFFFFF;
+  border-radius: 20px;
+  padding: 16px;
+  width: 100%;
+  box-shadow: 0 -10px 30px rgba(0, 8, 27, 0.25);
+  animation: receiptSlideUp 0.25s ease;
+  border-top: 4px solid #003DD1;
+}
+
+.phone-receipt-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 8px;
+  border-bottom: 1.5px dashed #CBD5E1;
+}
+
+.phone-receipt-close {
+  background: #F1F5F9;
+  border: 1px solid #CBD5E1;
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  font-size: 13px;
+  cursor: pointer;
+  color: #64748B;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.phone-receipt-sheet .receipt-type-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 12px;
+  border-radius: 999px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.phone-receipt-sheet .receipt-type-pill.out {
+  background: #FEE2E2;
+  color: #991B1B;
+  border: 1px solid #FCA5A5;
+}
+
+.phone-receipt-sheet .receipt-type-pill.in {
+  background: #DCFCE7;
+  color: #166534;
+  border: 1px solid #86EFAC;
+}
+
+@keyframes receiptSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+
 

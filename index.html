@@ -621,9 +621,14 @@
                       <div class="app-brand-pill">
                         <span>📖 Senior Passbook</span>
                       </div>
-                      <button class="voice-status-btn" onclick="window.phoneSpeakPassbookSummary ? window.phoneSpeakPassbookSummary() : (window.EasyTransactions ? window.EasyTransactions.speakRecentSummary() : null)">
-                        🔊 Summary
-                      </button>
+                      <div style="display:flex; gap:6px;">
+                        <button class="voice-status-btn" onclick="window.phoneSpeakPassbookSummary ? window.phoneSpeakPassbookSummary() : null">
+                          🔊 Summary
+                        </button>
+                        <button class="voice-status-btn" style="background:#003DD1; color:#fff; border:none;" onclick="window.phoneOpenLatestReceipt ? window.phoneOpenLatestReceipt() : null">
+                          🧾 Slip
+                        </button>
+                      </div>
                     </div>
 
                     <!-- Mini Summary Card in Phone -->
@@ -737,10 +742,60 @@
                       <span class="tab-icon">🛡️</span>
                       <span class="tab-label">Safety</span>
                     </div>
-                  </div>
+                    </div>
 
-                  <!-- Home Bar -->
-                  <div class="home-indicator"></div>
+                    <!-- Mobile Phone Passbook Receipt Slip Overlay -->
+                    <div class="phone-receipt-overlay" id="phoneReceiptOverlay">
+                      <div class="phone-receipt-sheet">
+                        <div class="phone-receipt-header">
+                          <div style="display:flex; align-items:center; gap:8px;">
+                            <span style="font-size:22px;">🪙</span>
+                            <div>
+                              <div style="font-size:13px; font-weight:800; color:#00174E;">EasyCoin Digital Receipt</div>
+                              <div style="font-size:10px; color:#64748B;">Official Senior Banking Slip</div>
+                            </div>
+                          </div>
+                          <button type="button" class="phone-receipt-close" onclick="window.closePhoneReceipt()">✕</button>
+                        </div>
+
+                        <div style="text-align:center; padding:8px 0 10px; border-bottom:1.5px dashed #E2E8F0;">
+                          <span class="receipt-type-pill out" id="pReceiptType">Payment Sent</span>
+                          <div style="font-size:26px; font-weight:900; margin:4px 0;" id="pReceiptAmt">₹ 500</div>
+                          <span style="font-size:10px; font-weight:800; color:#15803D; background:#DCFCE7; padding:2px 8px; border-radius:999px;">✓ PROTECTED &amp; VERIFIED</span>
+                        </div>
+
+                        <div style="padding:10px 0; font-size:12px; display:flex; flex-direction:column; gap:6px;">
+                          <div style="display:flex; justify-content:space-between;">
+                            <span style="color:#64748B;">Party:</span>
+                            <b id="pReceiptParty">Son Rahul</b>
+                          </div>
+                          <div style="display:flex; justify-content:space-between;">
+                            <span style="color:#64748B;">Purpose:</span>
+                            <b style="color:#003DD1;" id="pReceiptPurpose">Family Allowance</b>
+                          </div>
+                          <div style="display:flex; justify-content:space-between;">
+                            <span style="color:#64748B;">Date &amp; Time:</span>
+                            <span id="pReceiptTime">Today, 2:15 PM</span>
+                          </div>
+                          <div style="display:flex; justify-content:space-between;">
+                            <span style="color:#64748B;">Txn ID:</span>
+                            <span style="font-family:monospace; font-weight:700;" id="pReceiptTxnId">TXN-0001</span>
+                          </div>
+                        </div>
+
+                        <div style="display:flex; gap:6px; margin-top:8px;">
+                          <button type="button" class="voice-status-btn" style="flex:1; justify-content:center; padding:8px;" onclick="window.phoneSpeakReceipt()">
+                            🔊 Read
+                          </button>
+                          <button type="button" class="voice-status-btn" style="flex:1; justify-content:center; background:#003DD1; color:#fff; border:none; padding:8px;" onclick="window.phoneCopyReceipt()">
+                            📋 Copy
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Home Bar -->
+                    <div class="home-indicator"></div>
 
                   <!-- Interactive Lockscreen -->
                   <div class="lockscreen" id="lockscreen">

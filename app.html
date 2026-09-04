@@ -306,8 +306,8 @@
           <button type="button" class="ctrl-btn" onclick="window.EasyBanking.speakPassbookSummary()">
             🔊 Read Summary
           </button>
-          <button type="button" class="ctrl-btn" style="background:#F1F5F9; color:#334155;" onclick="window.EasyBanking.downloadStatement()">
-            🖨️ Print
+          <button type="button" class="ctrl-btn" style="background:#003DD1; color:#FFFFFF; border:none;" onclick="window.EasyBanking.openStatementModal()">
+            📄 Official Statement Receipt
           </button>
         </div>
       </div>
@@ -852,62 +852,197 @@
     </div>
   </aside>
 
-  <!-- Digital Passbook Receipt Modal -->
+  <!-- Enhanced Digital Passbook Transaction Receipt Modal -->
   <div class="pay-modal" id="receiptModal" role="dialog" aria-modal="true" aria-labelledby="receiptModalTitle">
     <div class="receipt-paper">
-      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px; border-bottom:1.5px dashed #CBD5E1; padding-bottom:14px;">
-        <div style="display:flex; align-items:center; gap:10px;">
-          <div style="width:42px; height:42px; border-radius:12px; background:#003DD1; color:#fff; display:flex; align-items:center; justify-content:center; font-size:22px;">🪙</div>
+      <!-- Receipt Perforated Header -->
+      <div class="receipt-header-row">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div class="receipt-bank-emblem">🪙</div>
           <div>
-            <h4 id="receiptModalTitle" style="font-size:16px; font-weight:800; color:#0F172A; margin:0;">EasyCoin Digital Receipt</h4>
-            <div style="font-size:11px; color:#64748B;">RBI-Compliant Verified Transaction</div>
+            <h4 id="receiptModalTitle" style="font-size:17px; font-weight:900; color:#00174E; margin:0;">
+              EasyCoin Digital Receipt
+            </h4>
+            <div style="font-size:11.5px; color:#64748B; font-weight:600;">
+              RBI-Compliant Senior Verified Transaction
+            </div>
           </div>
         </div>
-        <button type="button" id="closeReceiptBtn" style="background:none; border:none; font-size:22px; cursor:pointer; color:#64748B;">✕</button>
+        <button type="button" id="closeReceiptBtn" class="receipt-close-btn" title="Close Receipt">✕</button>
       </div>
 
-      <div style="text-align:center; padding:6px 0 16px;">
-        <div style="font-size:13px; font-weight:700; color:#64748B;" id="receiptTypeLabel">Payment Sent</div>
-        <div style="font-size:36px; font-weight:800; letter-spacing:-0.02em; margin:4px 0;" id="receiptAmountVal">₹ 500</div>
-        <div style="display:inline-flex; align-items:center; gap:6px; background:#DCFCE7; color:#15803D; font-size:11.5px; font-weight:800; padding:3px 10px; border-radius:999px;">
-          <span>✓ SUCCESSFUL & PROTECTED</span>
-        </div>
-      </div>
-
-      <!-- Receipt Fields -->
-      <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:16px; padding:14px; display:flex; flex-direction:column; gap:10px; font-size:13px; margin-bottom:16px;">
-        <div style="display:flex; justify-content:space-between;">
-          <span style="color:#64748B;">Party:</span>
-          <span style="font-weight:700; color:#0F172A;" id="receiptPartyName">Son Rahul</span>
-        </div>
-        <div style="display:flex; justify-content:space-between;">
-          <span style="color:#64748B;">Purpose / Memo:</span>
-          <span style="font-weight:700; color:#003DD1;" id="receiptPurpose">Family Allowance</span>
-        </div>
-        <div style="display:flex; justify-content:space-between;">
-          <span style="color:#64748B;">Date & Time:</span>
-          <span style="font-weight:600; color:#0F172A;" id="receiptTime">Today, 2:15 PM</span>
-        </div>
-        <div style="display:flex; justify-content:space-between;">
-          <span style="color:#64748B;">Transaction ID:</span>
-          <span style="font-family:monospace; font-weight:700; color:#475569;" id="receiptTxnId">TXN-8921-01</span>
-        </div>
-        <div style="display:flex; justify-content:space-between;">
-          <span style="color:#64748B;">Account:</span>
-          <span style="font-weight:700; color:#0F172A;">Senior Savings (**** 8921)</span>
-        </div>
-        <div style="display:flex; justify-content:space-between;">
-          <span style="color:#64748B;">Guardian Safety:</span>
-          <span style="font-weight:700; color:#16A34A;">🛡️ 100% Protected</span>
+      <!-- Receipt Center Figure -->
+      <div class="receipt-center-hero">
+        <span class="receipt-type-pill out" id="receiptTypeLabel">Payment Sent</span>
+        <div class="receipt-amount-display out" id="receiptAmountVal">₹ 500</div>
+        <div class="receipt-status-shield">
+          <span>✓ SUCCESSFUL &amp; FRAUD-PROTECTED</span>
         </div>
       </div>
 
-      <div style="display:flex; gap:10px;">
-        <button type="button" class="ctrl-btn" style="flex:1; justify-content:center; padding:12px;" onclick="window.EasyBanking.speakCurrentReceipt()">
-          🔊 Read Aloud
+      <!-- Receipt Particulars Breakdown -->
+      <div class="receipt-details-box">
+        <div class="receipt-row">
+          <span class="receipt-row-lbl">Beneficiary / Party:</span>
+          <span class="receipt-row-val" id="receiptPartyName">Son Rahul</span>
+        </div>
+        <div class="receipt-row">
+          <span class="receipt-row-lbl">Purpose / Memo:</span>
+          <span class="receipt-row-val" style="color:#003DD1;" id="receiptPurpose">Family Allowance</span>
+        </div>
+        <div class="receipt-row">
+          <span class="receipt-row-lbl">Date &amp; Time:</span>
+          <span class="receipt-row-val" id="receiptTime">Today, 2:15 PM</span>
+        </div>
+        <div class="receipt-row">
+          <span class="receipt-row-lbl">Transaction Reference:</span>
+          <span class="receipt-row-val font-mono" id="receiptTxnId">TXN-8921-01</span>
+        </div>
+        <div class="receipt-row">
+          <span class="receipt-row-lbl">UTR / FastPay ID:</span>
+          <span class="receipt-row-val font-mono" id="receiptUtrId">UTR-EC-2026-99214</span>
+        </div>
+        <div class="receipt-row">
+          <span class="receipt-row-lbl">Account Debited:</span>
+          <span class="receipt-row-val">Senior Savings (**** 8921)</span>
+        </div>
+        <div class="receipt-row">
+          <span class="receipt-row-lbl">Guardian Safety Shield:</span>
+          <span class="receipt-row-val" style="color:#16A34A;">🛡️ 100% Protected &amp; Logged</span>
+        </div>
+      </div>
+
+      <!-- Authentic QR Code Verification Stamp -->
+      <div class="receipt-qr-stamp-row">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div class="receipt-qr-preview">📲</div>
+          <div>
+            <b style="font-size:12.5px; color:#0F172A; display:block;">Authentic Bank Seal</b>
+            <span style="font-size:11px; color:#64748B;">Scan to verify ledger entry</span>
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <span style="font-size:10px; font-weight:800; background:#DCFCE7; color:#15803D; padding:3px 8px; border-radius:6px;">VERIFIED</span>
+          <div style="font-size:10px; color:#94A3B8; font-family:monospace; margin-top:2px;">SEC-EASY-8921</div>
+        </div>
+      </div>
+
+      <!-- Action Buttons Row -->
+      <div class="receipt-actions-grid">
+        <button type="button" class="ctrl-btn" style="flex:1; justify-content:center; padding:10px;" onclick="window.EasyBanking.speakCurrentReceipt()">
+          🔊 Read
         </button>
-        <button type="button" class="ctrl-btn" style="background:#003DD1; color:#fff; border:none; padding:12px 18px;" onclick="window.print()">
+        <button type="button" class="ctrl-btn" style="flex:1; justify-content:center; padding:10px;" onclick="window.EasyBanking.copyReceiptText()">
+          📋 Copy
+        </button>
+        <button type="button" class="ctrl-btn" style="flex:1; justify-content:center; background:#003DD1; color:#FFFFFF; border:none; padding:10px;" onclick="window.print()">
           🖨️ Print
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Digital Passbook Statement Booklet Modal -->
+  <div class="pay-modal" id="statementModal" role="dialog" aria-modal="true" aria-labelledby="statementModalTitle">
+    <div class="statement-paper">
+      <!-- Statement Header -->
+      <div class="stmt-header">
+        <div class="stmt-bank-info">
+          <div class="stmt-logo-badge">🏛️</div>
+          <div>
+            <h3 id="statementModalTitle" class="stmt-main-title">EasyCoin Senior Citizen Digital Bank</h3>
+            <div class="stmt-subtitle">Official Certified Passbook &amp; Digital Statement · RBI Senior Citizen Financial Safeguard Guidelines</div>
+          </div>
+        </div>
+        <button type="button" id="closeStatementBtn" class="stmt-close-btn" title="Close Statement">✕</button>
+      </div>
+
+      <!-- Account & Beneficiary Details Ribbon -->
+      <div class="stmt-account-ribbon">
+        <div class="stmt-acc-col">
+          <span class="stmt-acc-lbl">Account Holder</span>
+          <span class="stmt-acc-val">Harish Chandra <span class="stmt-senior-tag">Senior Citizen</span></span>
+        </div>
+        <div class="stmt-acc-col">
+          <span class="stmt-acc-lbl">Account Number</span>
+          <span class="stmt-acc-val font-mono">1092-8834-8921 (Super Savings)</span>
+        </div>
+        <div class="stmt-acc-col">
+          <span class="stmt-acc-lbl">Primary Family Guardian</span>
+          <span class="stmt-acc-val">Daughter Ananya (+91 98112 23344)</span>
+        </div>
+        <div class="stmt-acc-col">
+          <span class="stmt-acc-lbl">Branch &amp; IFSC</span>
+          <span class="stmt-acc-val">Central Priority Hub · <span class="font-mono">EASY0008921</span></span>
+        </div>
+      </div>
+
+      <!-- Financial Statement Summary Ribbon -->
+      <div class="stmt-summary-strip">
+        <div class="stmt-sum-item">
+          <span class="stmt-sum-lbl">Opening Balance</span>
+          <span class="stmt-sum-val" id="stmtOpeningBal">₹ 5,090</span>
+        </div>
+        <div class="stmt-sum-item">
+          <span class="stmt-sum-lbl">Total Credits (+)</span>
+          <span class="stmt-sum-val green" id="stmtTotalIn">+ ₹ 10,000</span>
+        </div>
+        <div class="stmt-sum-item">
+          <span class="stmt-sum-lbl">Total Debits (-)</span>
+          <span class="stmt-sum-val blue" id="stmtTotalOut">- ₹ 840</span>
+        </div>
+        <div class="stmt-sum-item highlight">
+          <span class="stmt-sum-lbl">Available Balance</span>
+          <span class="stmt-sum-val navy" id="stmtClosingBal">₹ 14,250</span>
+        </div>
+      </div>
+
+      <!-- Itemized Passbook Ledger Table -->
+      <div class="stmt-table-container">
+        <table class="stmt-table">
+          <thead>
+            <tr>
+              <th>Date &amp; Time</th>
+              <th>Particulars / To Who</th>
+              <th>Reference / UTR</th>
+              <th>Debit (-)</th>
+              <th>Credit (+)</th>
+              <th>Balance</th>
+              <th>Slip</th>
+            </tr>
+          </thead>
+          <tbody id="stmtTableBody">
+            <!-- Dynamically populated from transactions with live running balances -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Statement Legal Seal & Security Stamp -->
+      <div class="stmt-footer-stamp-row">
+        <div class="stmt-stamp-box">
+          <span class="stmt-stamp-icon">🛡️</span>
+          <div>
+            <b>EasyCoin Guardian Protection Shield</b>
+            <div style="font-size:11px; color:#64748B;">All entries are cryptographically signed &amp; verified against unauthorized withdrawals.</div>
+          </div>
+        </div>
+        <div class="stmt-auth-seal">
+          <span class="seal-txt">EASYCOIN BANK</span>
+          <span class="seal-sub">OFFICIALLY CERTIFIED</span>
+          <span class="seal-date" id="stmtGeneratedDate">Sep 2026</span>
+        </div>
+      </div>
+
+      <!-- Statement Action Bar -->
+      <div class="stmt-actions-row">
+        <button type="button" class="ctrl-btn" onclick="window.EasyBanking.speakStatementSummary()">
+          🔊 Read Statement
+        </button>
+        <button type="button" class="ctrl-btn" onclick="window.EasyBanking.copyStatementSlip()">
+          📋 Copy Summary
+        </button>
+        <button type="button" class="ctrl-btn print-action-btn" onclick="window.print()">
+          🖨️ Print Statement (A4)
         </button>
       </div>
     </div>

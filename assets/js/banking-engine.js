@@ -498,22 +498,66 @@
         var purpose = document.getElementById('receiptPurpose');
         var time = document.getElementById('receiptTime');
         var txnId = document.getElementById('receiptTxnId');
+        var utrId = document.getElementById('receiptUtrId');
 
-        if (typeLabel) typeLabel.textContent = isOut ? 'Payment Sent' : 'Deposit Received';
+        if (typeLabel) {
+          typeLabel.textContent = isOut ? 'Payment Sent' : 'Deposit Received';
+          typeLabel.className = 'receipt-type-pill ' + (isOut ? 'out' : 'in');
+        }
         if (amtVal) {
           amtVal.textContent = (isOut ? '- ' : '+ ') + '₹ ' + tx.amount.toLocaleString('en-IN');
-          amtVal.style.color = isOut ? '#003DD1' : '#16A34A';
+          amtVal.className = 'receipt-amount-display ' + (isOut ? 'out' : 'in');
         }
-        if (partyName) partyName.textContent = tx.name;
+        if (partyName) partyName.textContent = (tx.icon ? tx.icon + ' ' : '') + tx.name;
         if (purpose) purpose.textContent = tx.desc || 'Direct Transfer';
         if (time) time.textContent = tx.time;
         if (txnId) txnId.textContent = 'TXN-' + (tx.id || 100).toString().padStart(4, '0');
+        if (utrId) {
+          var pseudoUtr = 'UTR-EC-2026-' + (((tx.id || 1) * 8921 + 104729) % 900000 + 100000);
+          utrId.textContent = pseudoUtr;
+        }
 
         receiptModal.classList.add('active');
         if (window.EasyAudio) {
           window.EasyAudio.playClick();
-          var desc = (isOut ? 'Paid ' : 'Received ') + tx.amount + ' Rupees with ' + tx.name + '.';
+          var desc = (isOut ? 'Payment of ' : 'Deposit of ') + tx.amount + ' Rupees ' +
+            (isOut ? 'to ' : 'from ') + tx.name + ' for ' + (tx.desc || 'Transfer') + '.';
           window.EasyAudio.speak(desc);
+        }
+      },
+      copyReceiptText: function() {
+        if (!activeReceiptTx) return;
+        var tx = activeReceiptTx;
+        var isOut = tx.type === 'out';
+        var txnId = 'TXN-' + (tx.id || 100).toString().padStart(4, '0');
+        var pseudoUtr = 'UTR-EC-2026-' + (((tx.id || 1) * 8921 + 104729) % 900000 + 100000);
+        var text = [
+          '====================================',
+          '🏦 EASYCOIN DIGITAL BANK RECEIPT',
+          '====================================',
+          'Status: ✓ SUCCESSFUL & PROTECTED',
+          'Type: ' + (isOut ? 'Payment Sent (-)' : 'Deposit Received (+)'),
+          'Amount: ₹ ' + tx.amount.toLocaleString('en-IN'),
+          'Party: ' + tx.name,
+          'Purpose: ' + (tx.desc || 'Direct Transfer'),
+          'Date & Time: ' + tx.time,
+          'Txn Reference: ' + txnId,
+          'UTR ID: ' + pseudoUtr,
+          'Account: Senior Savings (**** 8921)',
+          'IFSC: EASY0008921 · Priority Branch',
+          'Guardian Shield: 🛡️ 100% Verified',
+          '===================================='
+        ].join('\n');
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text);
+        }
+        if (window.EasyAudio) {
+          window.EasyAudio.playClick();
+          window.EasyAudio.speak('Receipt text copied to clipboard.');
+        }
+        if (window.showEasyToast) {
+          window.showEasyToast('📋 Digital receipt copied! Ready to share.', 'success', '🧾');
         }
       },
       speakCurrentReceipt: function() {
@@ -525,6 +569,164 @@
             activeReceiptTx.amount + ' Rupees with ' + activeReceiptTx.name + ' for ' +
             activeReceiptTx.desc + ' on ' + activeReceiptTx.time + '. 100% Protected and verified by Guardian Shield.';
           window.EasyAudio.speak(desc);
+        }
+      },
+      openStatementModal: function() {
+        var stmtModal = document.getElementById('statementModal');
+        if (!stmtModal) return;
+
+        var totalIn = 0, countIn = 0;
+        var totalOut = 0, countOut = 0;
+        transactions.forEach(function (tx) {
+          if (tx.type === 'in') {
+            totalIn += tx.amount;
+            countIn++;
+          } else {
+            totalOut += tx.amount;
+            countOut++;
+          }
+        });
+
+        // Compute starting opening balance
+        var openingBal = appBalance - totalIn + totalOut;
+
+        var elOpening = document.getElementById('stmtOpeningBal');
+        var elIn = document.getElementById('stmtTotalIn');
+        var elOut = document.getElementById('stmtTotalOut');
+        var elClose = document.getElementById('stmtClosingBal');
+        var elDate = document.getElementById('stmtGeneratedDate');
+        var tbody = document.getElementById('stmtTableBody');
+
+        if (elOpening) elOpening.textContent = '₹ ' + openingBal.toLocaleString('en-IN');
+        if (elIn) elIn.textContent = '+ ₹ ' + totalIn.toLocaleString('en-IN') + ' (' + countIn + ')';
+        if (elOut) elOut.textContent = '- ₹ ' + totalOut.toLocaleString('en-IN') + ' (' + countOut + ')';
+        if (elClose) elClose.textContent = '₹ ' + appBalance.toLocaleString('en-IN');
+        if (elDate) {
+          elDate.textContent = new Date().toLocaleDateString('en-IN', { month: 'short', year: 'numeric', day: 'numeric' });
+        }
+
+        // Build itemized table with running balance calculations
+        if (tbody) {
+          tbody.innerHTML = '';
+          var running = openingBal;
+          var chronological = transactions.slice().reverse();
+          var calculatedList = [];
+          chronological.forEach(function (tx) {
+            if (tx.type === 'in') running += tx.amount;
+            else running -= tx.amount;
+            calculatedList.unshift({
+              tx: tx,
+              runningBal: running
+            });
+          });
+
+          calculatedList.forEach(function (item) {
+            var tx = item.tx;
+            var isOut = tx.type === 'out';
+            var tr = document.createElement('tr');
+            var txnId = 'TXN-' + (tx.id || 100).toString().padStart(4, '0');
+            var pseudoUtr = 'UTR-' + (((tx.id || 1) * 8921 + 104729) % 900000 + 100000);
+
+            tr.innerHTML = `
+              <td style="white-space:nowrap; font-weight:600;">${tx.time}</td>
+              <td>
+                <div style="font-weight:700; color:#0F172A;">${tx.icon ? tx.icon + ' ' : ''}${tx.name}</div>
+                <div style="font-size:11px; color:#64748B;">${tx.desc || 'Transfer'}</div>
+              </td>
+              <td style="font-family:monospace; font-size:11px; color:#475569;">${txnId}</td>
+              <td class="stmt-amt-debit">${isOut ? '- ₹ ' + tx.amount.toLocaleString('en-IN') : '—'}</td>
+              <td class="stmt-amt-credit">${!isOut ? '+ ₹ ' + tx.amount.toLocaleString('en-IN') : '—'}</td>
+              <td style="font-weight:800; color:#00174E;">₹ ${item.runningBal.toLocaleString('en-IN')}</td>
+              <td>
+                <button type="button" class="stmt-row-btn" title="View official receipt slip">
+                  🧾 Slip
+                </button>
+              </td>
+            `;
+
+            var slipBtn = tr.querySelector('.stmt-row-btn');
+            if (slipBtn) {
+              slipBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                stmtModal.classList.remove('active');
+                window.EasyBanking.openReceiptModal(tx);
+              });
+            }
+
+            tbody.appendChild(tr);
+          });
+        }
+
+        stmtModal.classList.add('active');
+        if (window.EasyAudio) {
+          window.EasyAudio.playClick();
+          window.EasyAudio.speak('Opening your official certified passbook statement.');
+        }
+      },
+      closeStatementModal: function() {
+        var stmtModal = document.getElementById('statementModal');
+        if (stmtModal) stmtModal.classList.remove('active');
+        if (window.EasyAudio) window.EasyAudio.playClick();
+      },
+      speakStatementSummary: function() {
+        var totalIn = 0, totalOut = 0;
+        transactions.forEach(function (tx) {
+          if (tx.type === 'in') totalIn += tx.amount;
+          else totalOut += tx.amount;
+        });
+        var openingBal = appBalance - totalIn + totalOut;
+        if (window.EasyAudio) {
+          window.EasyAudio.playClick();
+          var summary = 'EasyCoin Official Passbook Statement. Opening balance: ' + openingBal.toLocaleString('en-IN') + ' Rupees. ' +
+            'Total money received: ' + totalIn.toLocaleString('en-IN') + ' Rupees. ' +
+            'Total money spent: ' + totalOut.toLocaleString('en-IN') + ' Rupees. ' +
+            'Current available balance: ' + appBalance.toLocaleString('en-IN') + ' Rupees. Certified and verified by Guardian Shield.';
+          window.EasyAudio.speak(summary);
+        }
+      },
+      copyStatementSlip: function() {
+        var totalIn = 0, totalOut = 0;
+        transactions.forEach(function (tx) {
+          if (tx.type === 'in') totalIn += tx.amount;
+          else totalOut += tx.amount;
+        });
+        var openingBal = appBalance - totalIn + totalOut;
+        var lines = [
+          '====================================================',
+          '🏦 EASYCOIN SENIOR CITIZEN PASSBOOK STATEMENT',
+          '====================================================',
+          'Account Holder: Harish Chandra (Super Senior)',
+          'Account Number: 1092-8834-8921',
+          'Guardian: Daughter Ananya (+91 98112 23344)',
+          'IFSC: EASY0008921 · Senior Priority Hub',
+          '----------------------------------------------------',
+          'Opening Balance: ₹ ' + openingBal.toLocaleString('en-IN'),
+          'Total Credits (+): + ₹ ' + totalIn.toLocaleString('en-IN'),
+          'Total Debits (-): - ₹ ' + totalOut.toLocaleString('en-IN'),
+          'Closing Balance: ₹ ' + appBalance.toLocaleString('en-IN'),
+          '----------------------------------------------------',
+          'RECENT TRANSACTIONS:'
+        ];
+
+        transactions.forEach(function (tx) {
+          var sign = tx.type === 'in' ? '+' : '-';
+          lines.push('• ' + tx.time + ' | ' + tx.name + ' (' + (tx.desc || 'Transfer') + ') | ' + sign + '₹ ' + tx.amount.toLocaleString('en-IN'));
+        });
+
+        lines.push('====================================================');
+        lines.push('Status: 100% Cryptographically Signed & Protected');
+        lines.push('====================================================');
+
+        var text = lines.join('\n');
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text);
+        }
+        if (window.EasyAudio) {
+          window.EasyAudio.playClick();
+          window.EasyAudio.speak('Passbook statement copied to clipboard.');
+        }
+        if (window.showEasyToast) {
+          window.showEasyToast('📋 Passbook statement copied to clipboard!', 'success', '📄');
         }
       },
       speakPassbookSummary: function() {
@@ -542,11 +744,7 @@
         }
       },
       downloadStatement: function() {
-        if (window.EasyAudio) {
-          window.EasyAudio.playClick();
-          window.EasyAudio.speak('Opening printer dialog for your passbook statement.');
-        }
-        window.print();
+        this.openStatementModal();
       }
     };
 
@@ -556,6 +754,16 @@
     if (closeReceiptBtn && receiptModal) {
       closeReceiptBtn.addEventListener('click', function () {
         receiptModal.classList.remove('active');
+        if (window.EasyAudio) window.EasyAudio.playClick();
+      });
+    }
+
+    // Statement Modal Close
+    var statementModal = document.getElementById('statementModal');
+    var closeStatementBtn = document.getElementById('closeStatementBtn');
+    if (closeStatementBtn && statementModal) {
+      closeStatementBtn.addEventListener('click', function () {
+        statementModal.classList.remove('active');
         if (window.EasyAudio) window.EasyAudio.playClick();
       });
     }
