@@ -487,6 +487,10 @@
         renderPassbook();
       },
       openReceiptModal: function(tx) {
+        if (!tx) {
+          if (transactions && transactions.length > 0) tx = transactions[0];
+          else return;
+        }
         activeReceiptTx = tx;
         var receiptModal = document.getElementById('receiptModal');
         if (!receiptModal) return;
@@ -756,6 +760,12 @@
         receiptModal.classList.remove('active');
         if (window.EasyAudio) window.EasyAudio.playClick();
       });
+      receiptModal.addEventListener('click', function (e) {
+        if (e.target === receiptModal) {
+          receiptModal.classList.remove('active');
+          if (window.EasyAudio) window.EasyAudio.playClick();
+        }
+      });
     }
 
     // Statement Modal Close
@@ -765,6 +775,12 @@
       closeStatementBtn.addEventListener('click', function () {
         statementModal.classList.remove('active');
         if (window.EasyAudio) window.EasyAudio.playClick();
+      });
+      statementModal.addEventListener('click', function (e) {
+        if (e.target === statementModal) {
+          statementModal.classList.remove('active');
+          if (window.EasyAudio) window.EasyAudio.playClick();
+        }
       });
     }
 
@@ -1036,27 +1052,29 @@
     renderPassbook();
 
     // Expose Banking Interface for UPI Circle & Modules
-    window.EasyBanking = {
-      getBalance: function () {
-        return appBalance;
-      },
-      updateBalance: function (newBal) {
-        appBalance = Math.max(0, newBal);
-        syncBalanceUI();
-      },
-      addPassbookEntry: function (name, type, amount, icon, desc) {
-        transactions.unshift({
-          id: Date.now(),
-          name: name,
-          type: type || 'out',
-          amount: amount,
-          time: 'Just now',
-          icon: icon || '👤',
-          desc: desc || 'UPI Circle Spend'
-        });
-        renderPassbook();
-      }
-    };
+    if (window.EasyBanking) {
+      Object.assign(window.EasyBanking, {
+        getBalance: function () {
+          return appBalance;
+        },
+        updateBalance: function (newBal) {
+          appBalance = Math.max(0, newBal);
+          syncBalanceUI();
+        },
+        addPassbookEntry: function (name, type, amount, icon, desc) {
+          transactions.unshift({
+            id: Date.now(),
+            name: name,
+            type: type || 'out',
+            amount: amount,
+            time: 'Just now',
+            icon: icon || '👤',
+            desc: desc || 'UPI Circle Spend'
+          });
+          renderPassbook();
+        }
+      });
+    }
   }
 
   document.addEventListener('DOMContentLoaded', initStandaloneApp);
