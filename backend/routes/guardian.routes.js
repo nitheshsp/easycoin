@@ -6,6 +6,16 @@ const express = require('express');
 const router = express.Router();
 const guardianController = require('../controllers/guardianController');
 
+const eventStream = require('../services/eventStream');
+
+// GET /api/guardian/stream (Real-Time SSE Stream for Guardian)
+router.get('/stream', (req, res) => {
+  eventStream.registerClient(req, res, 'guardian');
+});
+
+// GET /api/guardian/audit-logs (RBI-Compliant Security Audit Trail)
+router.get('/audit-logs', guardianController.getAuditLogs);
+
 // POST /api/guardian/freeze
 router.post('/freeze', guardianController.freezeAccount);
 
@@ -22,3 +32,4 @@ router.post('/approve', guardianController.approveTransfer);
 router.post('/sos', guardianController.triggerSOS);
 
 module.exports = router;
+

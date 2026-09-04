@@ -5,9 +5,11 @@
 const express = require('express');
 const router = express.Router();
 const paymentController = require('../controllers/paymentController');
+const fraudGuard = require('../middleware/fraudGuard');
 
-// POST /api/payments/transfer
-router.post('/transfer', paymentController.sendPayment);
+// POST /api/payments/transfer (Protected by Senior Fraud Guard & Idempotency)
+router.post('/transfer', fraudGuard.middleware(), paymentController.sendPayment);
+
 
 // POST /api/payments/voice-pay
 router.post('/voice-pay', paymentController.processVoicePay);

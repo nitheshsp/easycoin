@@ -5,6 +5,8 @@
  */
 const db = require('../config/database');
 const { HIGH_VALUE_THRESHOLD } = require('../config/constants');
+const eventStream = require('../services/eventStream');
+const nlpEngine = require('../services/nlpEngine');
 
 exports.sendPayment = (req, res) => {
   const { recipientName, amount, note, avatar } = req.body;
@@ -48,6 +50,9 @@ exports.sendPayment = (req, res) => {
     };
     db.addGuardianPing(ping);
 
+    // Real-time broadcast to Guardian via SSE Stream
+    eventStream.notifyGuardianApprovalRequired(ping);
+
     return res.status(202).json({
       success: true,
       pendingApproval: true,
@@ -74,6 +79,9 @@ exports.sendPayment = (req, res) => {
   };
   db.addTransaction(tx);
 
+  // Broadcast updated balance across real-time SSE stream
+  eventStream.notifyBalanceUpdated(newBalance);
+
   const spokenSuccess = `Success! ${numAmount} Rupees has been sent to ${tx.title}. Your remaining balance is ${newBalance.toLocaleString('en-IN')} Rupees.`;
 
   return res.status(200).json({
@@ -96,36 +104,11 @@ exports.processVoicePay = (req, res) => {
     });
   }
 
-  const text = voiceText.toLowerCase();
-  
-  // Extract number from speech
-  const numberMatch = text.match(/\d+/);
-  const amount = numberMatch ? parseInt(numberMatch[0], 10) : 500;
-
-  // Match contact name
-  let matchedRecipient = { name: 'Son Rahul', avatar: '👨‍🦱' };
-  if (text.includes('grocery') || text.includes('lakshmi') || text.includes('ration')) {
-    matchedRecipient = { name: 'Lakshmi Grocery', avatar: '🏪' };
-  } else if (text.includes('doctor') || text.includes('sharma')) {
-    matchedRecipient = { name: 'Dr. Sharma', avatar: '👨‍⚕️' };
-  } else if (text.includes('rent') || text.includes('landlord') || text.includes('verma')) {
-    matchedRecipient = { name: 'Landlord Verma', avatar: '👴' };
-  }
-
-  const spokenClarification = `Understood: Send ${amount} Rupees to ${matchedRecipient.name}. Please tap Confirm to send.`;
-
-  return res.status(200).json({
-    success: true,
-    intent: 'TRANSFER_CONFIRMATION',
-    data: {
-      recipientName: matchedRecipient.name,
-      avatar: matchedRecipient.avatar,
-      amount,
-      rawVoiceInput: voiceText,
-      spokenPrompt: spokenClarification
-    }
-  });
+  // Parse voice text using multi-lingual NLP engine (Hindi, Tamil, English)
+  const parseResult = nlpEngine.parseVoiceCommand(voiceText);
+  return res.status(200).json(parseResult);
 };
+
 
 exports.scanQRCode = (req, res) => {
   const { qrPayload } = req.body || {};
@@ -276,6 +259,9 @@ exports.payBillById = (req, res) => {
   };
   db.addTransaction(tx);
 
+  // Broadcast real-time balance update
+  eventStream.notifyBalanceUpdated(newBalance);
+
   return res.status(200).json({
     success: true,
     message: `${bill.title} paid successfully.`,
@@ -337,6 +323,9 @@ exports.payUtilityBill = (req, res) => {
     status: 'SUCCESS'
   };
   db.addTransaction(tx);
+
+  // Broadcast real-time balance update
+  eventStream.notifyBalanceUpdated(newBalance);
 
   return res.status(200).json({
     success: true,

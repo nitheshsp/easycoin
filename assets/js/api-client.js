@@ -452,9 +452,62 @@ class EasyAPIClient {
         return await res.json();
       } catch (e) { console.warn(e); }
     }
-    return { success: true, simulated: true };
+  // Module 6: Real-Time Event Stream (SSE)
+  initEventStream(role = 'senior', onEvent) {
+    if (typeof window === 'undefined' || !window.EventSource) return null;
+    const streamEndpoint = role === 'guardian' ? `${this.baseUrl}/guardian/stream` : `${this.baseUrl}/account/stream`;
+    try {
+      if (this.eventSource) {
+        this.eventSource.close();
+      }
+      this.eventSource = new EventSource(streamEndpoint);
+      
+      const events = [
+        'CONNECTED',
+        'APPROVAL_REQUESTED',
+        'TRANSFER_RESOLVED',
+        'EMERGENCY_SOS_ALERT',
+        'ACCOUNT_STATE_CHANGED',
+        'BALANCE_UPDATED'
+      ];
+
+      events.forEach(evtName => {
+        this.eventSource.addEventListener(evtName, (e) => {
+          try {
+            const data = JSON.parse(e.data);
+            if (typeof onEvent === 'function') {
+              onEvent(evtName, data);
+            }
+          } catch (err) {
+            console.error('Error parsing SSE event data', err);
+          }
+        });
+      });
+
+      this.eventSource.onerror = (err) => {
+        // EventSource will automatically retry connecting
+        console.warn('EasyCoin EventStream reconnecting...', err);
+      };
+
+      return this.eventSource;
+    } catch (e) {
+      console.warn('SSE connection initialization failed', e);
+      return null;
+    }
+  }
+
+  async getAuditLogs(limit = 50) {
+    if (this.isLive) {
+      try {
+        const res = await fetch(`${this.baseUrl}/guardian/audit-logs?limit=${limit}`);
+        const json = await res.json();
+        return json.data;
+      } catch (e) { console.warn(e); }
+    }
+    return [];
   }
 }
 
 window.EasyAPI = new EasyAPIClient();
+
 

@@ -127,6 +127,15 @@ class DatabaseStore {
         timestamp TEXT NOT NULL,
         status TEXT NOT NULL
       );
+
+      CREATE TABLE IF NOT EXISTS audit_logs (
+        id TEXT PRIMARY KEY,
+        user_id TEXT NOT NULL,
+        action TEXT NOT NULL,
+        details_json TEXT NOT NULL,
+        ip TEXT,
+        timestamp TEXT NOT NULL
+      );
     `);
   }
 
@@ -790,6 +799,30 @@ class DatabaseStore {
       recipientName: r.recipient_name,
       timestamp: r.timestamp,
       status: r.status
+    }));
+  }
+
+  // Audit Logs (RBI-Compliant Audit Trail)
+  addAuditLog(action, details = {}, ip = '127.0.0.1', userId = 'usr_senior_01') {
+    const id = `aud_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+    const timestamp = new Date().toISOString();
+    const detailsJson = typeof details === 'string' ? details : JSON.stringify(details);
+    this.db.prepare(`
+      INSERT INTO audit_logs (id, user_id, action, details_json, ip, timestamp)
+      VALUES (?, ?, ?, ?, ?, ?)
+    `).run(id, userId, action, detailsJson, ip, timestamp);
+    return { id, userId, action, details, ip, timestamp };
+  }
+
+  getAuditLogs(limit = 50) {
+    const rows = this.db.prepare('SELECT * FROM audit_logs ORDER BY rowid DESC LIMIT ?').all(limit);
+    return rows.map(r => ({
+      id: r.id,
+      userId: r.user_id,
+      action: r.action,
+      details: JSON.parse(r.details_json || '{}'),
+      ip: r.ip,
+      timestamp: r.timestamp
     }));
   }
 }

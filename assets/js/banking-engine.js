@@ -1215,6 +1215,50 @@
 
     renderPassbook();
 
+    // Real-Time Event Stream (SSE) Integration
+    if (window.EasyAPI && typeof window.EasyAPI.initEventStream === 'function') {
+      window.EasyAPI.initEventStream('senior', function (eventType, data) {
+        console.log('[EasyCoin SSE]', eventType, data);
+        if (eventType === 'TRANSFER_RESOLVED') {
+          if (data.approved) {
+            if (window.EasyAudio) {
+              window.EasyAudio.playCoinSound();
+              window.EasyAudio.speak('Good news! Your guardian approved your transfer of ' + data.amount + ' Rupees to ' + data.recipientName + '.');
+            }
+            if (typeof window.showEasyToast === 'function') {
+              window.showEasyToast('✅ Guardian Approved: ₹' + data.amount + ' sent to ' + data.recipientName);
+            }
+          } else {
+            if (window.EasyAudio) {
+              window.EasyAudio.speak('Notice: Your transfer of ' + data.amount + ' Rupees was declined by your guardian.');
+            }
+            if (typeof window.showEasyToast === 'function') {
+              window.showEasyToast('❌ Transfer Declined by Guardian');
+            }
+          }
+        } else if (eventType === 'ACCOUNT_STATE_CHANGED') {
+          if (data.isFrozen) {
+            if (window.EasyAudio) {
+              window.EasyAudio.speak('Security Alert: Your account has been temporarily locked for your safety.');
+            }
+            if (typeof window.showEasyToast === 'function') {
+              window.showEasyToast('🔒 Account Frozen for Security');
+            }
+          } else {
+            if (window.EasyAudio) {
+              window.EasyAudio.speak('Your EasyCoin account has been safely restored to normal mode.');
+            }
+            if (typeof window.showEasyToast === 'function') {
+              window.showEasyToast('🔓 Account Restored & Unlocked');
+            }
+          }
+        } else if (eventType === 'BALANCE_UPDATED' && typeof data.balance === 'number') {
+          appBalance = data.balance;
+          syncBalanceUI();
+        }
+      });
+    }
+
     // Expose Banking Interface for UPI Circle & Modules
     if (window.EasyBanking) {
       Object.assign(window.EasyBanking, {

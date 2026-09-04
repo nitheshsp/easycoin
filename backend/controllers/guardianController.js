@@ -4,10 +4,22 @@
  * Responsibilities: 1-Tap Emergency Freeze, Guardian Approval Gateway, SOS Dispatch
  */
 const db = require('../config/database');
+const eventStream = require('../services/eventStream');
 
 exports.freezeAccount = (req, res) => {
   db.freezeAccount();
   const user = db.getUser();
+  const clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '127.0.0.1';
+
+  // Broadcast real-time lock across SSE stream
+  eventStream.notifyAccountStateChanged(true);
+
+  // Log in RBI-compliant audit trail
+  db.addAuditLog('ACCOUNT_FROZEN', {
+    triggeredBy: 'Emergency Freeze',
+    guardianName: user.guardian.name,
+    guardianPhone: user.guardian.phone
+  }, clientIp, user.id);
 
   const spokenAlert = `Emergency Lock Activated. All payment withdrawals are now frozen. Your guardian, ${user.guardian.name}, has been alerted.`;
 
@@ -27,6 +39,17 @@ exports.freezeAccount = (req, res) => {
 exports.unfreezeAccount = (req, res) => {
   const { guardianPasscode } = req.body;
   db.unfreezeAccount();
+  const user = db.getUser();
+  const clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '127.0.0.1';
+
+  // Broadcast real-time unlock across SSE stream
+  eventStream.notifyAccountStateChanged(false);
+
+  // Log in audit trail
+  db.addAuditLog('ACCOUNT_UNFROZEN', {
+    action: 'Account restored to normal state',
+    guardianName: user.guardian.name
+  }, clientIp, user.id);
 
   return res.status(200).json({
     success: true,
@@ -55,6 +78,7 @@ exports.approveTransfer = (req, res) => {
   const { pingId, approved } = req.body;
   const pings = db.getGuardianPings();
   const ping = pings.find(p => p.pingId === pingId);
+  const clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '127.0.0.1';
 
   if (!ping) {
     return res.status(404).json({
@@ -81,7 +105,21 @@ exports.approveTransfer = (req, res) => {
       note: 'Guardian Approved Transfer',
       status: 'SUCCESS'
     });
+
+    // Notify real-time stream of approval and new balance
+    eventStream.notifyTransferResolved(ping, true);
+    eventStream.notifyBalanceUpdated(newBal);
+  } else {
+    // Notify real-time stream of rejection
+    eventStream.notifyTransferResolved(ping, false);
   }
+
+  db.addAuditLog('GUARDIAN_TRANSFER_RESOLVED', {
+    pingId,
+    amount: ping.amount,
+    recipientName: ping.recipientName,
+    approved: Boolean(approved)
+  }, clientIp, 'usr_senior_01');
 
   return res.status(200).json({
     success: true,
@@ -92,6 +130,21 @@ exports.approveTransfer = (req, res) => {
 
 exports.triggerSOS = (req, res) => {
   const user = db.getUser();
+  const clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '127.0.0.1';
+
+  const sosPayload = {
+    seniorName: user.name,
+    seniorPhone: user.phone,
+    guardianContacted: user.guardian.name,
+    guardianPhone: user.guardian.phone,
+    timestamp: new Date().toISOString()
+  };
+
+  // Broadcast high-priority emergency siren to Guardian SSE stream
+  eventStream.notifySOSAlert(sosPayload);
+
+  // Record critical emergency event in audit trail
+  db.addAuditLog('EMERGENCY_SOS_TRIGGERED', sosPayload, clientIp, user.id);
   
   return res.status(200).json({
     success: true,
@@ -103,3 +156,15 @@ exports.triggerSOS = (req, res) => {
     }
   });
 };
+
+exports.getAuditLogs = (req, res) => {
+  const limit = parseInt(req.query.limit, 10) || 50;
+  const logs = db.getAuditLogs(limit);
+
+  return res.status(200).json({
+    success: true,
+    count: logs.length,
+    data: logs
+  });
+};
+
