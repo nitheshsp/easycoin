@@ -17,6 +17,8 @@
       avatar: '👴',
       pin: '1234',
       symbols: ['☀️', '🐄', '🪔'],
+      biometricEnabled: true,
+      voicePhrase: 'Harish',
       balance: 14250,
       guardianName: 'Daughter Ananya',
       guardianPhone: '+91 98765 43210',

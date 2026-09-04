@@ -1205,3 +1205,135 @@ body.dark-theme .auth-primary-switcher {
   transform: translateY(-2px);
 }
 
+/* 4-Method Sign Up Setup Card */
+.su-auth-methods-card {
+  background: #F8FAFC;
+  border: 1.5px solid #CBD5E1;
+  border-radius: 24px;
+  padding: 22px;
+  margin-bottom: 24px;
+}
+
+.su-methods-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-top: 14px;
+}
+
+.su-method-tile {
+  background: #FFFFFF;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 18px;
+  padding: 16px 18px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.su-method-tile:hover {
+  border-color: #93C5FD;
+  box-shadow: 0 4px 16px rgba(0, 71, 224, 0.08);
+}
+
+.su-method-tile.highlight {
+  border-color: #10B981;
+  background: #F0FDF4;
+}
+
+.su-method-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.su-method-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text-main, #0F172A);
+}
+
+.su-method-badge {
+  font-size: 11.5px;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: #DCFCE7;
+  color: #15803D;
+  border: 1px solid #86EFAC;
+}
+
+.su-symbol-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 6px;
+  margin-top: 10px;
+}
+
+@media (max-width: 640px) {
+  .su-symbol-picker-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+.su-sym-btn {
+  background: #F8FAFC;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 12px;
+  font-size: 22px;
+  padding: 8px 4px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  transition: all 0.15s;
+}
+
+.su-sym-btn span.sym-lbl {
+  font-size: 10px;
+  font-weight: 700;
+  color: #64748B;
+}
+
+.su-sym-btn:hover {
+  background: #EFF6FF;
+  border-color: #3B82F6;
+  transform: scale(1.05);
+}
+
+.su-sym-btn.selected {
+  background: #ECFDF5;
+  border-color: #10B981;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.3);
+}
+
+.su-slots-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.su-slot {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: #EFF6FF;
+  border: 2px dashed #93C5FD;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 800;
+  transition: all 0.2s;
+}
+
+.su-slot.filled {
+  background: #FFFFFF;
+  border: 2px solid #10B981;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
+}
+
+

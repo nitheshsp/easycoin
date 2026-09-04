@@ -432,26 +432,142 @@
           </div>
         </div>
 
-        <!-- Step 5: Security PIN & Welcome Demo Balance -->
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:14px; margin-bottom:24px;">
-          <div class="su-form-group">
-            <label class="su-label" style="display:block; font-size:15px; font-weight:800; color:var(--text-main, #0F172A); margin-bottom:8px;">
-              🔢 4-Digit Easy PIN
-            </label>
-            <input type="password" id="suPin" required maxlength="4" placeholder="••••" value="1234" class="su-input" style="width:100%; box-sizing:border-box; font-size:20px; font-weight:900; letter-spacing:6px; padding:14px 18px; border-radius:16px; border:2px solid #CBD5E1; text-align:center; background:#FFFFFF;" />
+        <!-- Step 5: Setup All 4 Easy Sign-In Methods -->
+        <div class="su-auth-methods-card">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; flex-wrap:wrap; gap:8px;">
+            <div style="font-size:16px; font-weight:800; color:#1E3A8A; display:flex; align-items:center; gap:8px;">
+              <span>🔐 Setup Your 4 Easy Sign-In Methods</span>
+            </div>
+            <span style="font-size:12px; font-weight:800; color:#15803D; background:#DCFCE7; padding:4px 10px; border-radius:999px;">
+              All 4 Included with Account
+            </span>
+          </div>
+          <div style="font-size:13px; color:#475569; margin-bottom:14px;">
+            Choose and configure how you wish to sign in. Every method is accessible anytime.
           </div>
 
-          <div class="su-form-group">
-            <label class="su-label" style="display:block; font-size:15px; font-weight:800; color:var(--text-main, #0F172A); margin-bottom:8px;">
-              🪙 Welcome Demo Credit (₹)
-            </label>
-            <input type="number" id="suBalance" required min="1000" max="100000" value="10000" class="su-input" style="width:100%; box-sizing:border-box; font-size:17px; font-weight:800; padding:14px 18px; border-radius:16px; border:2px solid #CBD5E1; background:#FFFFFF;" />
+          <div class="su-methods-grid">
+            <!-- 1. Biometric -->
+            <div class="su-method-tile highlight">
+              <div class="su-method-head">
+                <div class="su-method-title">
+                  <span style="font-size:22px;">👆</span>
+                  <div>
+                    <div>1. Biometric Sensor (Touch Fingerprint / Face ID)</div>
+                    <div style="font-size:12px; color:#64748B; font-weight:500;">Zero-password 1-tap entry using your phone sensor</div>
+                  </div>
+                </div>
+                <span class="su-method-badge">✓ Activated</span>
+              </div>
+              <div style="display:flex; align-items:center; justify-content:space-between; margin-top:8px;">
+                <span style="font-size:13px; color:#047857; font-weight:700;">
+                  🟢 Ready for 1-tap fingerprint sign-in
+                </span>
+                <button type="button" class="acc-tool-btn" onclick="window.EasyLogin && window.EasyLogin.testSignUpBiometric()" style="font-size:12px; padding:6px 12px; background:#ECFDF5; border-color:#86EFAC; color:#065F46;">
+                  ✨ Test Sensor
+                </button>
+              </div>
+            </div>
+
+            <!-- 2. Voice Code / Keypad PIN -->
+            <div class="su-method-tile">
+              <div class="su-method-head">
+                <div class="su-method-title">
+                  <span style="font-size:22px;">🔢</span>
+                  <div>
+                    <div>2. Voice Code (4-Digit Tactile PIN & Phone Call Readout)</div>
+                    <div style="font-size:12px; color:#64748B; font-weight:500;">Can be entered on jumbo keypad or spoken over phone call</div>
+                  </div>
+                </div>
+                <span class="su-method-badge">PIN Protected</span>
+              </div>
+              <div style="display:grid; grid-template-columns: 1fr auto; gap:12px; align-items:center; margin-top:8px;">
+                <div>
+                  <label style="font-size:12px; font-weight:700; color:#475569; display:block; margin-bottom:4px;">Set 4-Digit PIN</label>
+                  <input type="password" id="suPin" required maxlength="4" placeholder="••••" value="1234" class="su-input" style="width:100%; box-sizing:border-box; font-size:20px; font-weight:900; letter-spacing:6px; padding:10px 14px; border-radius:12px; border:2px solid #CBD5E1; text-align:center; background:#FFFFFF;" />
+                </div>
+                <button type="button" class="acc-tool-btn" onclick="window.EasyLogin && window.EasyLogin.testSignUpPinAudio()" style="font-size:12px; padding:10px 14px; background:#EFF6FF; border-color:#93C5FD; color:#1D4ED8; margin-top:18px;">
+                  🔊 Hear Code
+                </button>
+              </div>
+            </div>
+
+            <!-- 3. Picture Lock -->
+            <div class="su-method-tile">
+              <div class="su-method-head">
+                <div class="su-method-title">
+                  <span style="font-size:22px;">🎨</span>
+                  <div>
+                    <div>3. Picture Lock (3 Secret Pictures for Non-Readers)</div>
+                    <div style="font-size:12px; color:#64748B; font-weight:500;">Tap 3 pictures you recognize to log in without reading</div>
+                  </div>
+                </div>
+                <button type="button" class="acc-tool-btn" onclick="window.EasyLogin && window.EasyLogin.resetSignUpSymbols()" style="font-size:11px; padding:4px 8px; color:#EF4444;">
+                  🔄 Reset
+                </button>
+              </div>
+              
+              <div style="font-size:12px; color:#475569; margin-bottom:6px;">Your 3 Secret Sign-In Pictures:</div>
+              <div class="su-slots-row">
+                <div class="su-slot filled" id="suSymbolSlot0">☀️</div>
+                <div class="su-slot filled" id="suSymbolSlot1">🐄</div>
+                <div class="su-slot filled" id="suSymbolSlot2">🪔</div>
+              </div>
+              <input type="hidden" id="suSymbols" value='["☀️","🐄","🪔"]' />
+
+              <div style="font-size:11.5px; color:#64748B; margin-top:10px; margin-bottom:4px;">
+                Tap any picture below to change your 3 secret pictures:
+              </div>
+              <div class="su-symbol-picker-grid" id="suSymbolPicker">
+                <button type="button" class="su-sym-btn selected" data-sym="☀️" onclick="window.EasyLogin && window.EasyLogin.toggleSignUpSymbol('☀️', this)"><span class="sym-em">☀️</span><span class="sym-lbl">Sun</span></button>
+                <button type="button" class="su-sym-btn selected" data-sym="🐄" onclick="window.EasyLogin && window.EasyLogin.toggleSignUpSymbol('🐄', this)"><span class="sym-em">🐄</span><span class="sym-lbl">Cow</span></button>
+                <button type="button" class="su-sym-btn selected" data-sym="🪔" onclick="window.EasyLogin && window.EasyLogin.toggleSignUpSymbol('🪔', this)"><span class="sym-em">🪔</span><span class="sym-lbl">Diya</span></button>
+                <button type="button" class="su-sym-btn" data-sym="🌾" onclick="window.EasyLogin && window.EasyLogin.toggleSignUpSymbol('🌾', this)"><span class="sym-em">🌾</span><span class="sym-lbl">Wheat</span></button>
+                <button type="button" class="su-sym-btn" data-sym="🚜" onclick="window.EasyLogin && window.EasyLogin.toggleSignUpSymbol('🚜', this)"><span class="sym-em">🚜</span><span class="sym-lbl">Tractor</span></button>
+                <button type="button" class="su-sym-btn" data-sym="🐘" onclick="window.EasyLogin && window.EasyLogin.toggleSignUpSymbol('🐘', this)"><span class="sym-em">🐘</span><span class="sym-lbl">Elephant</span></button>
+                <button type="button" class="su-sym-btn" data-sym="🏠" onclick="window.EasyLogin && window.EasyLogin.toggleSignUpSymbol('🏠', this)"><span class="sym-em">🏠</span><span class="sym-lbl">House</span></button>
+                <button type="button" class="su-sym-btn" data-sym="🌸" onclick="window.EasyLogin && window.EasyLogin.toggleSignUpSymbol('🌸', this)"><span class="sym-em">🌸</span><span class="sym-lbl">Lotus</span></button>
+                <button type="button" class="su-sym-btn" data-sym="🔔" onclick="window.EasyLogin && window.EasyLogin.toggleSignUpSymbol('🔔', this)"><span class="sym-em">🔔</span><span class="sym-lbl">Bell</span></button>
+              </div>
+            </div>
+
+            <!-- 4. Speak Name / Voice Phrase -->
+            <div class="su-method-tile">
+              <div class="su-method-head">
+                <div class="su-method-title">
+                  <span style="font-size:22px;">🎙️</span>
+                  <div>
+                    <div>4. Speak Name (Voice Phrase Recognition)</div>
+                    <div style="font-size:12px; color:#64748B; font-weight:500;">Speak your name or secret phrase into the microphone to sign in</div>
+                  </div>
+                </div>
+                <span class="su-method-badge">Voice Ready</span>
+              </div>
+              <div style="display:grid; grid-template-columns: 1fr auto; gap:12px; align-items:center; margin-top:8px;">
+                <div>
+                  <label style="font-size:12px; font-weight:700; color:#475569; display:block; margin-bottom:4px;">Secret Spoken Word (Defaults to your name)</label>
+                  <input type="text" id="suVoicePhrase" placeholder="e.g. My Name or Namaste" class="su-input" style="width:100%; box-sizing:border-box; font-size:15px; font-weight:700; padding:10px 14px; border-radius:12px; border:2px solid #CBD5E1; background:#FFFFFF;" />
+                </div>
+                <button type="button" class="acc-tool-btn" onclick="window.EasyLogin && window.EasyLogin.testSignUpVoicePhrase()" style="font-size:12px; padding:10px 14px; background:#EFF6FF; border-color:#93C5FD; color:#1D4ED8; margin-top:18px;">
+                  🎙️ Test Voice
+                </button>
+              </div>
+            </div>
           </div>
+        </div>
+
+        <!-- Step 6: Welcome Demo Balance & Submit -->
+        <div class="su-form-group" style="margin-bottom:24px;">
+          <label class="su-label" style="display:block; font-size:15px; font-weight:800; color:var(--text-main, #0F172A); margin-bottom:8px;">
+            🪙 Welcome Demo Banking Credit (₹)
+          </label>
+          <input type="number" id="suBalance" required min="1000" max="100000" value="10000" class="su-input" style="width:100%; box-sizing:border-box; font-size:17px; font-weight:800; padding:14px 18px; border-radius:16px; border:2px solid #CBD5E1; background:#FFFFFF;" />
+          <span style="font-size:12px; color:#64748B; margin-top:5px; display:block;">Starting balance deposited safely into your new EasyCoin account.</span>
         </div>
 
         <!-- Submit Button -->
         <button type="submit" class="btn-jumbo-action" style="background:linear-gradient(135deg, #059669 0%, #10B981 100%); box-shadow:0 8px 24px rgba(16,185,129,0.35); font-size:18px; padding:18px;">
-          <span>✓ Create My Safe Account &amp; Open Banking</span>
+          <span>✓ Create My Safe Account with All 4 Sign-In Methods</span>
           <span>→</span>
         </button>
       </form>
