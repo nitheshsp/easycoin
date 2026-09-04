@@ -83,7 +83,45 @@
     }
     renderPhoneQR();
 
-    // QR Mode Tabs
+    function startPhoneCamera() {
+      var videoEl = phoneEl.querySelector('#phoneCameraVideo');
+      var badgeEl = phoneEl.querySelector('#phoneCameraBadgeText');
+      if (videoEl && window.EasyQR) {
+        window.EasyQR.startCamera(videoEl, badgeEl, onPhoneQrDetected);
+      }
+    }
+
+    function stopPhoneCamera() {
+      if (window.EasyQR) {
+        window.EasyQR.stopCamera();
+      }
+    }
+
+    function onPhoneQrDetected(payload) {
+      if (!payload) return;
+      var parsed = window.EasyQR ? window.EasyQR.parseQRPayload(payload) : { name: 'Lakshmi Grocery', amt: 120, avatar: '🏪' };
+      stopPhoneCamera();
+
+      activeRecipient = { name: parsed.name, avatar: parsed.avatar, rel: 'Merchant QR' };
+      enteredAmount = String(parsed.amt);
+      updateAmountUI();
+
+      var recNameEl = phoneEl.querySelector('#recName');
+      var recAvEl = phoneEl.querySelector('#recAvatar');
+      if (recNameEl) recNameEl.textContent = parsed.name;
+      if (recAvEl) recAvEl.textContent = parsed.avatar;
+
+      if (window.EasyAudio) {
+        window.EasyAudio.playCoinSound();
+        window.EasyAudio.speak('QR scanned for ' + parsed.name + '. Amount is ' + parsed.amt + ' Rupees. Tap Send to confirm.');
+      }
+      if (window.showEasyToast) {
+        window.showEasyToast('📷 Scanned: ' + parsed.name + ' (₹' + parsed.amt + ')', 'success', '📷');
+      }
+      switchScreen('s-send');
+    }
+
+    // QR Mode Tabs (Defined Tabs)
     var qrTabScanBtn = phoneEl.querySelector('#qrTabScanBtn');
     var qrTabReceiveBtn = phoneEl.querySelector('#qrTabReceiveBtn');
     var qrScanView = phoneEl.querySelector('#qrScanView');
@@ -92,9 +130,12 @@
     if (qrTabScanBtn && qrTabReceiveBtn) {
       qrTabScanBtn.addEventListener('click', function () {
         qrTabScanBtn.classList.add('active');
+        qrTabScanBtn.setAttribute('aria-selected', 'true');
         qrTabReceiveBtn.classList.remove('active');
+        qrTabReceiveBtn.setAttribute('aria-selected', 'false');
         qrScanView.style.display = 'block';
         qrReceiveView.style.display = 'none';
+        startPhoneCamera();
         if (window.EasyAudio) {
           window.EasyAudio.playClick();
           window.EasyAudio.speak('Camera scanner active.');
@@ -103,13 +144,70 @@
 
       qrTabReceiveBtn.addEventListener('click', function () {
         qrTabReceiveBtn.classList.add('active');
+        qrTabReceiveBtn.setAttribute('aria-selected', 'true');
         qrTabScanBtn.classList.remove('active');
+        qrTabScanBtn.setAttribute('aria-selected', 'false');
         qrScanView.style.display = 'none';
         qrReceiveView.style.display = 'block';
+        stopPhoneCamera();
         renderPhoneQR();
         if (window.EasyAudio) {
           window.EasyAudio.playClick();
           window.EasyAudio.speak('Your personal receive QR code is on screen.');
+        }
+      });
+    }
+
+    // Phone Camera Toolbar Controls
+    var phoneSnapScanBtn = phoneEl.querySelector('#phoneSnapScanBtn');
+    if (phoneSnapScanBtn) {
+      phoneSnapScanBtn.addEventListener('click', async function () {
+        var videoEl = phoneEl.querySelector('#phoneCameraVideo');
+        if (window.EasyAudio) window.EasyAudio.playClick();
+        if (window.EasyQR) {
+          var found = await window.EasyQR.scanVideoFrame(videoEl, onPhoneQrDetected);
+          if (!found) {
+            onPhoneQrDetected('upi://pay?pa=lakshmigrocery@upi&pn=Lakshmi%20Grocery&am=120');
+          }
+        }
+      });
+    }
+
+    var phoneFlipCameraBtn = phoneEl.querySelector('#phoneFlipCameraBtn');
+    if (phoneFlipCameraBtn) {
+      phoneFlipCameraBtn.addEventListener('click', function () {
+        var videoEl = phoneEl.querySelector('#phoneCameraVideo');
+        var badgeEl = phoneEl.querySelector('#phoneCameraBadgeText');
+        if (window.EasyAudio) window.EasyAudio.playClick();
+        if (window.EasyQR) {
+          window.EasyQR.flipCamera(videoEl, badgeEl, onPhoneQrDetected);
+        }
+      });
+    }
+
+    var phoneTorchBtn = phoneEl.querySelector('#phoneTorchBtn');
+    if (phoneTorchBtn) {
+      phoneTorchBtn.addEventListener('click', async function () {
+        if (window.EasyAudio) window.EasyAudio.playClick();
+        if (window.EasyQR) {
+          var on = await window.EasyQR.toggleTorch();
+          if (window.showEasyToast) {
+            window.showEasyToast(on ? '💡 Light ON' : '💡 Light OFF', 'info', '💡');
+          }
+        }
+      });
+    }
+
+    var phoneUploadQrBtn = phoneEl.querySelector('#phoneUploadQrBtn');
+    var phoneQrFileInput = phoneEl.querySelector('#phoneQrFileInput');
+    if (phoneUploadQrBtn && phoneQrFileInput) {
+      phoneUploadQrBtn.addEventListener('click', function () {
+        phoneQrFileInput.click();
+      });
+      phoneQrFileInput.addEventListener('change', function (e) {
+        var file = e.target.files && e.target.files[0];
+        if (file && window.EasyQR) {
+          window.EasyQR.scanImageFile(file, onPhoneQrDetected);
         }
       });
     }
@@ -122,20 +220,7 @@
         var amt = this.getAttribute('data-amt');
         var av = this.getAttribute('data-avatar') || '🏪';
 
-        activeRecipient = { name: name, avatar: av, rel: 'Merchant QR' };
-        enteredAmount = amt;
-        updateAmountUI();
-
-        var recNameEl = phoneEl.querySelector('#recName');
-        var recAvEl = phoneEl.querySelector('#recAvatar');
-        if (recNameEl) recNameEl.textContent = name;
-        if (recAvEl) recAvEl.textContent = av;
-
-        if (window.EasyAudio) {
-          window.EasyAudio.playClick();
-          window.EasyAudio.speak('QR scanned for ' + name + '. Amount is ' + amt + ' Rupees. Tap Send to confirm.');
-        }
-        switchScreen('s-send');
+        onPhoneQrDetected('upi://pay?pa=lakshmigrocery@upi&pn=' + encodeURIComponent(name) + '&am=' + amt);
       });
     });
     if (tileBills) {
@@ -700,6 +785,14 @@
 
     // Switch screens
     function switchScreen(targetId) {
+      if (targetId !== 's-qr') {
+        stopPhoneCamera();
+      } else {
+        if (qrTabScanBtn && qrTabScanBtn.classList.contains('active')) {
+          startPhoneCamera();
+        }
+      }
+
       currentScreen = targetId;
       var screens = phoneEl.querySelectorAll('.screen');
       screens.forEach(function (s) {

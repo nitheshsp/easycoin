@@ -468,26 +468,58 @@
                       </button>
                     </div>
 
-                    <!-- QR Mode Toggle Tabs -->
-                    <div class="qr-tab-nav">
-                      <button class="qr-tab-btn active" id="qrTabScanBtn">📷 Scan Camera</button>
-                      <button class="qr-tab-btn" id="qrTabReceiveBtn">📲 My Receive QR</button>
+                    <!-- QR Mode Toggle Tabs (Defined Tabs) -->
+                    <div class="qr-tab-nav" role="tablist">
+                      <button type="button" class="qr-tab-btn active" id="qrTabScanBtn" role="tab" aria-selected="true">
+                        <span class="qr-tab-icon">📷</span>
+                        <div class="qr-tab-text">
+                          <span class="qr-tab-title">Scan Merchant QR</span>
+                          <span class="qr-tab-sub">Point phone camera</span>
+                        </div>
+                      </button>
+                      <button type="button" class="qr-tab-btn" id="qrTabReceiveBtn" role="tab" aria-selected="false">
+                        <span class="qr-tab-icon">📲</span>
+                        <div class="qr-tab-text">
+                          <span class="qr-tab-title">My Receive QR</span>
+                          <span class="qr-tab-sub">Show to receive</span>
+                        </div>
+                      </button>
                     </div>
 
-                    <!-- View 1: Camera Scanner Simulation -->
+                    <!-- View 1: Camera Scanner -->
                     <div id="qrScanView">
-                      <div class="camera-viewfinder">
+                      <div class="camera-viewfinder" id="phoneCameraViewfinder">
+                        <video id="phoneCameraVideo" class="camera-video-feed" playsinline autoplay muted></video>
+
+                        <div class="camera-live-badge" id="phoneCameraBadge">
+                          <span class="camera-indicator-dot live"></span>
+                          <span id="phoneCameraBadgeText">Phone Camera Active</span>
+                        </div>
+
                         <div class="viewfinder-reticle">
                           <span class="viewfinder-corner tl"></span>
                           <span class="viewfinder-corner tr"></span>
                           <span class="viewfinder-corner bl"></span>
                           <span class="viewfinder-corner br"></span>
                           <div class="laser-scanner-line"></div>
-                          <span style="font-size:32px; opacity:0.6;">🏪</span>
+                          <div class="viewfinder-crosshair"></div>
+                        </div>
+
+                        <div class="viewfinder-actions-toolbar">
+                          <button type="button" class="vf-tool-btn" id="phoneFlipCameraBtn" title="Flip Camera">🔄</button>
+                          <button type="button" class="vf-tool-btn" id="phoneTorchBtn" title="Flashlight">💡</button>
+                          <button type="button" class="vf-tool-btn" id="phoneUploadQrBtn" title="Upload Photo">📁</button>
+                          <input type="file" id="phoneQrFileInput" accept="image/*" style="display:none;">
                         </div>
                       </div>
 
-                      <div style="font-size:13px; font-weight:700; color:var(--dlr900); margin-bottom:8px;">
+                      <div class="camera-action-strip">
+                        <button type="button" class="camera-snap-btn" id="phoneSnapScanBtn">
+                          📸 Scan Visible QR Code
+                        </button>
+                      </div>
+
+                      <div style="font-size:12px; font-weight:700; color:var(--dlr900); margin:8px 0 6px;">
                         Point Camera or Tap Sample Merchant:
                       </div>
 

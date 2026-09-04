@@ -128,22 +128,50 @@ exports.processVoicePay = (req, res) => {
 };
 
 exports.scanQRCode = (req, res) => {
-  const { qrPayload } = req.body;
+  const { qrPayload } = req.body || {};
   
-  // Simulated QR Code parsing
-  const merchant = {
-    storeName: 'Lakshmi Daily Essentials & Dairy',
-    merchantVpa: 'lakshmigrocery@upi',
-    suggestedAmount: 120,
-    category: 'Groceries'
-  };
+  let storeName = 'Lakshmi Daily Essentials & Dairy';
+  let merchantVpa = 'lakshmigrocery@upi';
+  let suggestedAmount = 120;
+  let category = 'Groceries';
 
-  const spokenDescription = `QR Code detected for ${merchant.storeName}. Suggested amount is 120 Rupees.`;
+  if (qrPayload && typeof qrPayload === 'string') {
+    try {
+      if (qrPayload.startsWith('upi://pay')) {
+        const url = new URL(qrPayload);
+        const pn = url.searchParams.get('pn');
+        const pa = url.searchParams.get('pa');
+        const am = url.searchParams.get('am');
+        if (pn) storeName = decodeURIComponent(pn);
+        if (pa) merchantVpa = pa;
+        if (am) suggestedAmount = parseFloat(am) || 120;
+      } else if (qrPayload.toLowerCase().includes('sharma')) {
+        storeName = 'Dr. Sharma Health Clinic';
+        merchantVpa = 'drsharma@upi';
+        suggestedAmount = 350;
+        category = 'Healthcare';
+      } else if (qrPayload.toLowerCase().includes('apollo')) {
+        storeName = 'Apollo Pharmacy & Meds';
+        merchantVpa = 'apollopharmacy@upi';
+        suggestedAmount = 480;
+        category = 'Pharmacy';
+      } else if (qrPayload.trim().length > 0) {
+        storeName = qrPayload.trim();
+      }
+    } catch (e) {
+      if (qrPayload.trim().length > 0) storeName = qrPayload.trim();
+    }
+  }
+
+  const spokenDescription = `QR Code detected for ${storeName}. Suggested amount is ${suggestedAmount} Rupees.`;
 
   return res.status(200).json({
     success: true,
     data: {
-      ...merchant,
+      storeName,
+      merchantVpa,
+      suggestedAmount,
+      category,
       spokenDescription
     }
   });

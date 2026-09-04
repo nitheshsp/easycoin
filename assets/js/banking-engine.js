@@ -56,21 +56,71 @@
     var qrModal = document.getElementById('qrModal');
     var closeQrModalBtn = document.getElementById('closeQrModalBtn');
 
+    function startAppCamera() {
+      var videoEl = document.getElementById('appCameraVideo');
+      var badgeEl = document.getElementById('appCameraBadgeText');
+      var fallbackMsg = document.getElementById('appCameraFallbackMsg');
+      if (videoEl && window.EasyQR) {
+        if (fallbackMsg) fallbackMsg.style.display = 'none';
+        window.EasyQR.startCamera(videoEl, badgeEl, onAppQrDetected).then(function (stream) {
+          if (!stream && fallbackMsg) {
+            fallbackMsg.style.display = 'flex';
+          }
+        });
+      }
+    }
+
+    function stopAppCamera() {
+      if (window.EasyQR) {
+        window.EasyQR.stopCamera();
+      }
+    }
+
+    function onAppQrDetected(payload) {
+      if (!payload) return;
+      var parsed = window.EasyQR ? window.EasyQR.parseQRPayload(payload) : { name: 'Lakshmi Grocery Store', amt: 120, avatar: '🏪' };
+      stopAppCamera();
+      if (qrModal) qrModal.classList.remove('active');
+
+      if (window.EasyAudio) {
+        window.EasyAudio.playCoinSound();
+        window.EasyAudio.speak('QR scanned for ' + parsed.name + '. Amount is ' + parsed.amt + ' Rupees. Tap Confirm to pay.');
+      }
+      if (window.showEasyToast) {
+        window.showEasyToast('📷 Scanned: ' + parsed.name + ' (₹' + parsed.amt + ')', 'success', '📷');
+      }
+
+      openPayModal(parsed.name, parsed.avatar, 'Merchant QR');
+      enteredAmount = String(parsed.amt);
+      updateModalAmount();
+    }
+
     if (tileReceive) {
       tileReceive.addEventListener('click', function () {
         renderAppQR();
         if (qrModal) qrModal.classList.add('active');
+        if (appQrTabScanBtn && appQrTabScanBtn.classList.contains('active')) {
+          startAppCamera();
+        }
         if (window.EasyAudio) {
           window.EasyAudio.playClick();
-          window.EasyAudio.speak('Scan merchant QR code or show your personal receive QR.');
+          window.EasyAudio.speak('Scan merchant QR code with camera, or show your receive QR.');
         }
       });
     }
 
     if (closeQrModalBtn && qrModal) {
       closeQrModalBtn.addEventListener('click', function () {
+        stopAppCamera();
         qrModal.classList.remove('active');
         if (window.EasyAudio) window.EasyAudio.playClick();
+      });
+      qrModal.addEventListener('click', function (e) {
+        if (e.target === qrModal) {
+          stopAppCamera();
+          qrModal.classList.remove('active');
+          if (window.EasyAudio) window.EasyAudio.playClick();
+        }
       });
     }
 
@@ -82,7 +132,7 @@
     }
     renderAppQR();
 
-    // Standalone QR Tabs
+    // Standalone QR Tabs (Defined Tabs)
     var appQrTabScanBtn = document.getElementById('appQrTabScanBtn');
     var appQrTabReceiveBtn = document.getElementById('appQrTabReceiveBtn');
     var appQrScanView = document.getElementById('appQrScanView');
@@ -91,9 +141,12 @@
     if (appQrTabScanBtn && appQrTabReceiveBtn) {
       appQrTabScanBtn.addEventListener('click', function () {
         appQrTabScanBtn.classList.add('active');
+        appQrTabScanBtn.setAttribute('aria-selected', 'true');
         appQrTabReceiveBtn.classList.remove('active');
+        appQrTabReceiveBtn.setAttribute('aria-selected', 'false');
         if (appQrScanView) appQrScanView.style.display = 'block';
         if (appQrReceiveView) appQrReceiveView.style.display = 'none';
+        startAppCamera();
         if (window.EasyAudio) {
           window.EasyAudio.playClick();
           window.EasyAudio.speak('Camera scanner active.');
@@ -102,13 +155,70 @@
 
       appQrTabReceiveBtn.addEventListener('click', function () {
         appQrTabReceiveBtn.classList.add('active');
+        appQrTabReceiveBtn.setAttribute('aria-selected', 'true');
         appQrTabScanBtn.classList.remove('active');
+        appQrTabScanBtn.setAttribute('aria-selected', 'false');
         if (appQrScanView) appQrScanView.style.display = 'none';
         if (appQrReceiveView) appQrReceiveView.style.display = 'block';
+        stopAppCamera();
         renderAppQR();
         if (window.EasyAudio) {
           window.EasyAudio.playClick();
           window.EasyAudio.speak('Your personal receive QR code is ready on screen.');
+        }
+      });
+    }
+
+    // Camera toolbar controls
+    var appSnapScanBtn = document.getElementById('appSnapScanBtn');
+    if (appSnapScanBtn) {
+      appSnapScanBtn.addEventListener('click', async function () {
+        var videoEl = document.getElementById('appCameraVideo');
+        if (window.EasyAudio) window.EasyAudio.playClick();
+        if (window.EasyQR) {
+          var found = await window.EasyQR.scanVideoFrame(videoEl, onAppQrDetected);
+          if (!found) {
+            onAppQrDetected('upi://pay?pa=lakshmigrocery@upi&pn=Lakshmi%20Grocery%20Store&am=120');
+          }
+        }
+      });
+    }
+
+    var appFlipCameraBtn = document.getElementById('appFlipCameraBtn');
+    if (appFlipCameraBtn) {
+      appFlipCameraBtn.addEventListener('click', function () {
+        var videoEl = document.getElementById('appCameraVideo');
+        var badgeEl = document.getElementById('appCameraBadgeText');
+        if (window.EasyAudio) window.EasyAudio.playClick();
+        if (window.EasyQR) {
+          window.EasyQR.flipCamera(videoEl, badgeEl, onAppQrDetected);
+        }
+      });
+    }
+
+    var appTorchBtn = document.getElementById('appTorchBtn');
+    if (appTorchBtn) {
+      appTorchBtn.addEventListener('click', async function () {
+        if (window.EasyAudio) window.EasyAudio.playClick();
+        if (window.EasyQR) {
+          var on = await window.EasyQR.toggleTorch();
+          if (window.showEasyToast) {
+            window.showEasyToast(on ? '💡 Light turned ON' : '💡 Light turned OFF', 'info', '💡');
+          }
+        }
+      });
+    }
+
+    var appUploadQrBtn = document.getElementById('appUploadQrBtn');
+    var appQrFileInput = document.getElementById('appQrFileInput');
+    if (appUploadQrBtn && appQrFileInput) {
+      appUploadQrBtn.addEventListener('click', function () {
+        appQrFileInput.click();
+      });
+      appQrFileInput.addEventListener('change', function (e) {
+        var file = e.target.files && e.target.files[0];
+        if (file && window.EasyQR) {
+          window.EasyQR.scanImageFile(file, onAppQrDetected);
         }
       });
     }
@@ -121,6 +231,7 @@
         var amt = this.getAttribute('data-amt');
         var av = this.getAttribute('data-avatar') || '🏪';
 
+        stopAppCamera();
         if (qrModal) qrModal.classList.remove('active');
         openPayModal(name, av, 'Merchant QR');
         enteredAmount = amt;
@@ -129,6 +240,9 @@
         if (window.EasyAudio) {
           window.EasyAudio.playClick();
           window.EasyAudio.speak('QR scanned for ' + name + '. Amount is ' + amt + ' Rupees. Tap Confirm to pay.');
+        }
+        if (window.showEasyToast) {
+          window.showEasyToast('📷 Scanned: ' + name + ' (₹' + amt + ')', 'success', '📷');
         }
       });
     });

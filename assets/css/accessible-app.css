@@ -1856,5 +1856,316 @@ body.standalone-app-body {
   border-radius: 16px;
 }
 
+/* ==========================================================================
+   Scan & Receive QR Defined Tabs & Live Camera Scanner (Standalone App)
+   ========================================================================== */
+.qr-tab-nav {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  background: #F1F5F9;
+  border: 2px solid #CBD5E1;
+  border-radius: 20px;
+  padding: 6px;
+  margin-bottom: 20px;
+  box-shadow: inset 0 2px 5px rgba(0, 8, 27, 0.04);
+}
+
+.qr-tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 15px;
+  border: 2px solid transparent;
+  background: transparent;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: left;
+  user-select: none;
+  position: relative;
+}
+
+.qr-tab-btn:hover {
+  background: rgba(255, 255, 255, 0.7);
+  color: #0F172A;
+}
+
+.qr-tab-btn.active {
+  background: #FFFFFF;
+  color: #00174E;
+  border-color: #003DD1;
+  box-shadow: 0 6px 18px rgba(0, 61, 209, 0.16), 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.qr-tab-icon {
+  font-size: 26px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.qr-tab-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.qr-tab-title {
+  font-size: 14px;
+  font-weight: 900;
+  color: #1E293B;
+  letter-spacing: -0.01em;
+}
+
+.qr-tab-btn.active .qr-tab-title {
+  color: #003DD1;
+}
+
+.qr-tab-sub {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #64748B;
+}
+
+.qr-tab-status-dot {
+  margin-left: auto;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #CBD5E1;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.qr-tab-btn.active .qr-tab-status-dot {
+  background: #16A34A;
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.25);
+}
+
+/* Camera Live Viewfinder */
+.camera-viewfinder {
+  position: relative;
+  width: 100%;
+  height: 250px;
+  background: #00081B;
+  border-radius: 22px;
+  overflow: hidden;
+  border: 2px solid #003DD1;
+  box-shadow: 0 10px 30px rgba(0, 61, 209, 0.2), inset 0 0 30px rgba(0, 0, 0, 0.9);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.camera-video-feed {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  inset: 0;
+  background: #00081B;
+  z-index: 1;
+}
+
+.camera-video-feed.mirrored {
+  transform: scaleX(-1);
+}
+
+.camera-live-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: rgba(0, 8, 27, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #FFFFFF;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.camera-indicator-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #EAB308;
+  display: inline-block;
+}
+
+.camera-indicator-dot.live {
+  background: #22C55E;
+  box-shadow: 0 0 8px #22C55E;
+  animation: pulseDot 1.5s infinite;
+}
+
+.camera-indicator-dot.error {
+  background: #EF4444;
+}
+
+.viewfinder-reticle {
+  position: relative;
+  width: 170px;
+  height: 170px;
+  border: 2px dashed rgba(56, 189, 248, 0.6);
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  box-shadow: 0 0 0 9999px rgba(0, 8, 27, 0.35);
+}
+
+.viewfinder-corner {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-color: #38BDF8;
+  border-style: solid;
+}
+.viewfinder-corner.tl { top: -2px; left: -2px; border-width: 3.5px 0 0 3.5px; border-top-left-radius: 10px; }
+.viewfinder-corner.tr { top: -2px; right: -2px; border-width: 3.5px 3.5px 0 0; border-top-right-radius: 10px; }
+.viewfinder-corner.bl { bottom: -2px; left: -2px; border-width: 0 0 3.5px 3.5px; border-bottom-left-radius: 10px; }
+.viewfinder-corner.br { bottom: -2px; right: -2px; border-width: 0 3.5px 3.5px 0; border-bottom-right-radius: 10px; }
+
+.viewfinder-crosshair {
+  position: absolute;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.laser-scanner-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #22C55E, #38BDF8, transparent);
+  box-shadow: 0 0 14px #22C55E;
+  animation: scanLaser 2s infinite alternate ease-in-out;
+  z-index: 6;
+}
+
+@keyframes scanLaser {
+  0% { top: 12%; }
+  100% { top: 88%; }
+}
+
+@keyframes pulseDot {
+  0% { transform: scale(0.9); opacity: 0.8; }
+  50% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(0.9); opacity: 0.8; }
+}
+
+.viewfinder-actions-toolbar {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  display: flex;
+  gap: 6px;
+  z-index: 10;
+}
+
+.vf-tool-btn {
+  background: rgba(0, 8, 27, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #FFFFFF;
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.vf-tool-btn:hover {
+  background: rgba(0, 61, 209, 0.9);
+  border-color: #38BDF8;
+}
+
+.camera-action-strip {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.camera-snap-btn {
+  flex: 1;
+  background: linear-gradient(135deg, #003DD1 0%, #001F6E 100%);
+  color: #FFFFFF;
+  border: none;
+  padding: 12px 16px;
+  border-radius: 14px;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 14px rgba(0, 61, 209, 0.25);
+  transition: all 0.2s;
+}
+
+.camera-snap-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(0, 61, 209, 0.35);
+}
+
+.camera-fallback-msg {
+  background: #FEF2F2;
+  border: 1.5px solid #FECACA;
+  color: #991B1B;
+  border-radius: 14px;
+  padding: 10px 14px;
+  font-size: 12.5px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.merchant-select-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.merchant-select-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #F8FAFC;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 14px;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.merchant-select-item:hover {
+  background: #EFF6FF;
+  border-color: #93C5FD;
+  transform: translateY(-1px);
+}
+
+
 
 

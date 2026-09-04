@@ -953,30 +953,72 @@
    Screen: Scan & Pay / Receive QR (Phone Simulator)
    ========================================================================== */
 .qr-tab-nav {
-  display: flex;
-  background: #E2E8F0;
-  border-radius: 14px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  background: #EEF2F6;
+  border: 1.5px solid #CBD5E1;
+  border-radius: 16px;
   padding: 4px;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .qr-tab-btn {
-  flex: 1;
-  background: none;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 10px;
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--text2);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  border: 1.5px solid transparent;
+  background: transparent;
+  color: #475569;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: left;
+  user-select: none;
+}
+
+.qr-tab-btn:hover {
+  background: rgba(255, 255, 255, 0.6);
+  color: #0F172A;
 }
 
 .qr-tab-btn.active {
   background: #FFFFFF;
-  color: var(--dlr500);
-  box-shadow: 0 2px 8px rgba(0, 8, 27, 0.08);
+  color: #00174E;
+  border-color: #003DD1;
+  box-shadow: 0 4px 12px rgba(0, 61, 209, 0.15), 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.qr-tab-icon {
+  font-size: 20px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.qr-tab-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.qr-tab-title {
+  font-size: 11.5px;
+  font-weight: 800;
+  color: #1E293B;
+  white-space: nowrap;
+}
+
+.qr-tab-btn.active .qr-tab-title {
+  color: #003DD1;
+}
+
+.qr-tab-sub {
+  font-size: 9.5px;
+  font-weight: 600;
+  color: #64748B;
+  white-space: nowrap;
 }
 
 .qr-box-wrap {
@@ -1017,26 +1059,121 @@
 .camera-viewfinder {
   position: relative;
   width: 100%;
-  height: 220px;
+  height: 200px;
   background: #00081B;
-  border-radius: 20px;
+  border-radius: 18px;
   overflow: hidden;
+  border: 2px solid #003DD1;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 16px;
-  box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+  margin-bottom: 10px;
+  box-shadow: 0 6px 18px rgba(0, 61, 209, 0.18), inset 0 0 20px rgba(0,0,0,0.8);
+}
+
+.camera-video-feed {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  inset: 0;
+  background: #00081B;
+  z-index: 1;
+}
+
+.camera-video-feed.mirrored {
+  transform: scaleX(-1);
+}
+
+.camera-live-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: rgba(0, 8, 27, 0.8);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #FFFFFF;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 9.5px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  z-index: 10;
+}
+
+.camera-indicator-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #EAB308;
+  display: inline-block;
+}
+
+.camera-indicator-dot.live {
+  background: #22C55E;
+  box-shadow: 0 0 6px #22C55E;
+  animation: pulseDot 1.5s infinite;
+}
+
+.camera-indicator-dot.error {
+  background: #EF4444;
+}
+
+.viewfinder-actions-toolbar {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  display: flex;
+  gap: 4px;
+  z-index: 10;
+}
+
+.vf-tool-btn {
+  background: rgba(0, 8, 27, 0.8);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #FFFFFF;
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.camera-action-strip {
+  display: flex;
+  margin-bottom: 8px;
+}
+
+.camera-snap-btn {
+  flex: 1;
+  background: linear-gradient(135deg, #003DD1 0%, #001F6E 100%);
+  color: #FFFFFF;
+  border: none;
+  padding: 10px;
+  border-radius: 12px;
+  font-size: 12.5px;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-shadow: 0 3px 10px rgba(0, 61, 209, 0.25);
 }
 
 .viewfinder-reticle {
   position: relative;
-  width: 150px;
-  height: 150px;
+  width: 130px;
+  height: 130px;
   border: 2px dashed rgba(56, 189, 248, 0.6);
-  border-radius: 16px;
+  border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 5;
 }
 
 .viewfinder-corner {
@@ -1051,6 +1188,15 @@
 .viewfinder-corner.bl { bottom: -2px; left: -2px; border-width: 0 0 3px 3px; border-bottom-left-radius: 8px; }
 .viewfinder-corner.br { bottom: -2px; right: -2px; border-width: 0 3px 3px 0; border-bottom-right-radius: 8px; }
 
+.viewfinder-crosshair {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
 .laser-scanner-line {
   position: absolute;
   left: 0;
@@ -1059,6 +1205,7 @@
   background: linear-gradient(90deg, transparent, #22c55e, #38bdf8, transparent);
   box-shadow: 0 0 12px #22c55e;
   animation: scanLaser 2s infinite alternate ease-in-out;
+  z-index: 6;
 }
 
 @keyframes scanLaser {
